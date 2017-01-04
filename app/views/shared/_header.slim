@@ -1,0 +1,17 @@
+nav.navbar.navbar-dark.bg-inverse
+  .container
+    / button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"
+    /   span.icon-bar
+    /   span.icon-bar
+    /   span.icon-bar
+    = link_to "Mango", root_path, class: "navbar-brand"
+    ul.nav.navbar-nav
+      li.nav-item
+        = link_to "test", root_path, class: "nav-link"
+      li.nav-item
+        = link_to "test2", root_path, class: "nav-link"
+
+    / .collapse.navbar-collapse
+    /   - if current_user
+    /     ul.nav.navbar-nav.navbar-right
+    /       li = link_to "退出", destroy_user_session_path, method: :delete

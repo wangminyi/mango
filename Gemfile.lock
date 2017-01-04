@@ -41,8 +41,13 @@ GEM
     airbrussh (1.1.2)
       sshkit (>= 1.6.1, != 1.7.0)
     arel (7.1.4)
+    autoprefixer-rails (6.6.1)
+      execjs
     bcrypt (3.1.11)
     binding.repl (3.0.0)
+    bootstrap (4.0.0.alpha5)
+      autoprefixer-rails (>= 6.0.3)
+      sass (>= 3.4.19)
     builder (3.2.2)
     byebug (9.0.6)
     capistrano (3.7.1)
@@ -276,6 +281,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bootstrap
   byebug
   capistrano-rails
   devise

@@ -37,6 +37,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'capistrano-rails', group: :development
 
 # Custom
+gem 'bootstrap'
 gem 'figaro'
 gem 'slim-rails'
 gem 'simple_form'
