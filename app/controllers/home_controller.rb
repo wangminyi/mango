@@ -5,7 +5,4 @@ class HomeController < ApplicationController
       redirect_to root_path
     end
   end
-
-  def sign_in
-  end
 end
