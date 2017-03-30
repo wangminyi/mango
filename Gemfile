@@ -47,7 +47,7 @@ gem 'simple_form'
 gem 'gon'
 gem 'devise'
 gem 'enumerize'
-gem 'rest_client'
+gem 'rest-client'
 gem 'redis-rails'
 gem 'redis-objects'
 

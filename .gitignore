@@ -4,3 +4,5 @@
 log/development.log
 
 .byebug_history
+
+public/assets/*
