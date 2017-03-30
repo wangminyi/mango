@@ -1,8 +1,10 @@
 h1 hello world!
 
+textarea#markdown-container style="margin-top: 2000px;"
+
 javascript:
   $(function(){
-    test = App.cable.subscriptions.create("TestChannel", {
+    App.cable.subscriptions.create("TestChannel", {
       connected: function(){
         var that = this;
         $(document).on("keypress", function(){
@@ -12,5 +14,9 @@ javascript:
       received: function(data){
         console.log(data);
       }
+    });
+
+    var markdown = new SimpleMDE({
+      element: $("#markdown-container")[0],
     });
   });
