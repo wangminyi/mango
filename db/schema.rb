@@ -10,11 +10,59 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170103080448) do
+ActiveRecord::Schema.define(version: 20170331160120) do
+
+  create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "categories_ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "category_id"
+    t.integer "ingredient_id"
+    t.index ["category_id"], name: "index_categories_ingredients_on_category_id", using: :btree
+    t.index ["ingredient_id"], name: "index_categories_ingredients_on_ingredient_id", using: :btree
+  end
+
+  create_table "dish_ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "dish_id"
+    t.integer  "ingredient_id"
+    t.integer  "weight"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["dish_id"], name: "index_dish_ingredients_on_dish_id", using: :btree
+    t.index ["ingredient_id"], name: "index_dish_ingredients_on_ingredient_id", using: :btree
+  end
+
+  create_table "dishes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.string   "image"
+    t.text     "description", limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_dishes_on_name", using: :btree
+  end
+
+  create_table "ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.string   "image"
+    t.integer  "price"
+    t.integer  "weight"
+    t.text     "description", limit: 65535
+    t.integer  "stock"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_ingredients_on_name", using: :btree
+    t.index ["stock"], name: "index_ingredients_on_stock", using: :btree
+  end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "nickname",               default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "nickname",               default: ""
+    t.string   "encrypted_password",     default: ""
+    t.string   "open_id"
+    t.string   "phone"
+    t.string   "user_name"
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -25,7 +73,8 @@ ActiveRecord::Schema.define(version: 20170103080448) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.index ["nickname"], name: "index_users_on_nickname", unique: true, using: :btree
+    t.index ["nickname"], name: "index_users_on_nickname", using: :btree
+    t.index ["open_id"], name: "index_users_on_open_id", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
