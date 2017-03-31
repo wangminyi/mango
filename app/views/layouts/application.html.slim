@@ -5,10 +5,14 @@ html
     title Mango
     = csrf_meta_tags
 
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
-    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = stylesheet_link_tag    'application', media: 'all'
+
+    = yield :page_css
+
+    = javascript_include_tag 'application'
 
   body
-    = render "shared/header"
 
     = yield
+
+    = yield :page_js
