@@ -12,6 +12,5 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
 //= require simplemde/dist/simplemde.min
 //= require_tree .
