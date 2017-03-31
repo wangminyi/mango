@@ -1,10 +1,16 @@
 - content_for :page_js
-  = stylesheet_link_tag    'page/shop'
+  = javascript_include_tag 'page/shop'
 
 - content_for :page_css
-  = javascript_include_tag 'page/shop'
+  = stylesheet_link_tag    'page/shop'
 
 #shop-vue-anchor
 
 template#shop-template
   .goods-container
+    .categories-container
+      .category-label v-for="category in categories" v-bind:class="{ selected: selected_category === category.name }"
+        | {{ category.name }}
+    .ingredients-container
+      .ingredients-panel v-for="ingredient in selected_ingredients"
+        | {{ ingredient.name}}
