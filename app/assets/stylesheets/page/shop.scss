@@ -1,0 +1,160 @@
+@import "macro";
+
+html, body, .shop-page-container {
+  height: 100%;
+}
+
+.shop-page-container {
+  color: $theme-black;
+  .order-type-container {
+    .order-type {
+      display: inline-block;
+      width: 50%;
+      line-height: 50px;
+      text-align: center;
+      font-size: 18px;
+
+      background-color: $bg-gray;
+      &.selected {
+        background-color: $theme-green;
+        color: $theme-white;
+      }
+    }
+  }
+
+  .goods-container {
+    height: 100%;
+    margin: -50px 0;
+    padding: 50px 0;
+
+    @include flex-container;
+
+    .categories-container {
+      @include flex(none);
+      width: 100px;
+      background-color: $bg-light-gray;
+      .category-label {
+        background-color: #F6F6F6;
+        border-bottom: 1px solid $border-color;
+        text-align: center;
+        line-height: 50px;
+        font-size: 14px;
+
+        &.selected {
+          border-left: 5px solid $theme-green;
+          background-color: $theme-white;
+          color: $theme-green;
+          font-size: 16px;
+        }
+      }
+    }
+
+    .ingredients-container {
+      @include flex(1);
+      .ingredients-panel {
+        margin-left: 10px;
+        padding: 10px 10px 10px 0;
+        border-bottom: 1px solid $border-color;
+
+        @include flex-container;
+        .image-container {
+          @include flex(none);
+          img {
+            width: 100px;
+          }
+        }
+
+        .ingredient-info-container {
+          @include flex(1);
+          padding-left: 10px;
+          position: relative;
+
+          .name-container {
+            .name, .tag {
+              display: inline-block;
+              vertical-align: middle;
+            }
+
+            .name {
+              font-size: 18px;
+            }
+            .tag {
+              padding: 0 2px;
+              margin-left: 10px;
+              border-radius: 10px;
+              line-height: 15px;
+              font-size: 14px;
+              color: $theme-orange;
+              border: 1px solid $theme-orange;
+            }
+          }
+
+          .relate-dishes-container {
+            margin-top: 5px;
+            font-size: 14px;
+            color: $theme-gray;
+            line-height: 18px;
+            min-height: 36px;
+          }
+
+          .price-container {
+            margin-top: 5px;
+            .price, .weight {
+              display: inline-block;
+              vertical-align: bottom;
+            }
+
+            .price {
+              font-size: 16px;
+              color: $price-red;
+            }
+
+            .weight {
+              margin-left: 10px;
+              font-size: 14px;
+              color: $theme-light-gray;
+            }
+          }
+
+          .operation-container {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            line-height: 1;
+
+            .decrease, .increase, .count {
+              display: inline-block;
+              vertical-align: middle;
+            }
+
+            .count {
+              margin: 0 15px;
+            }
+
+            .decrease, .increase {
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              color: white;
+              text-align: center;
+              line-height: 18px;
+
+              &.decrease {
+                background-color: $bg-gray;
+              }
+
+              &.increase {
+                background-color: $theme-green;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .shopping-info-container {
+    height: 50px;
+    background-color: #333333;
+  }
+}

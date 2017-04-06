@@ -7,10 +7,38 @@
 #shop-vue-anchor
 
 template#shop-template
-  .goods-container
-    .categories-container
-      .category-label v-for="category in categories" v-bind:class="{ selected: selected_category === category.name }"
-        | {{ category.name }}
-    .ingredients-container
-      .ingredients-panel v-for="ingredient in selected_ingredients"
-        | {{ ingredient.name}}
+  .shop-page-container
+    .order-type-container
+      .order-type v-bind:class="{ selected: order_type === 'immediately'}" v-on:click="order_type = 'immediately'"
+        | 今日配送
+      .order-type v-bind:class="{ selected: order_type === 'schedule'}" v-on:click="order_type = 'schedule'"
+        | 预定配送
+    .goods-container
+      .categories-container
+        .category-label v-for="category in categories" v-bind:class="{ selected: selected_category === category.name }" v-on:click="selected_category = category.name"
+          | {{ category.name }}
+      .ingredients-container
+        .ingredients-panel v-for="ingredient in selected_ingredients"
+          .image-container
+            img v-bind:src="ingredient.image"
+          .ingredient-info-container
+            .name-container
+              .name = "{{ ingredient.name}}"
+              .tag v-if="ingredient.discount"
+                | 优惠
+            .relate-dishes-container
+              span = "{{ ingredient.relate_dishes | relate_dishes_text }}"
+            .price-container
+              .price = "{{ ingredient.price | price_text }}"
+              .weight = "{{ ingredient.weight | weight_text }}"
+            .operation-container
+              .decrease v-show="ingredient.count > 0" v-on:click=" ingredient.count -= 1 " -
+              .count v-show="ingredient.count > 0" = "{{ ingredient.count }}"
+              .increase v-on:click=" ingredient.count += 1 " +
+
+
+    .shopping-info-container
+      .shopping-car
+        i.fa.fa-shopping-cart
+        span = "{{ total_count }}"
+      .total-price = "{{ total_price | price_text }}"
