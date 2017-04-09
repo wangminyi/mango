@@ -10,35 +10,88 @@ template#shop-template
   .shop-page-container
     .order-type-container
       .order-type v-bind:class="{ selected: order_type === 'immediately'}" v-on:click="order_type = 'immediately'"
-        | 今日配送
+        | 今日送货
       .order-type v-bind:class="{ selected: order_type === 'schedule'}" v-on:click="order_type = 'schedule'"
-        | 预定配送
+        | 预定送货
     .goods-container
       .categories-container
         .category-label v-for="category in categories" v-bind:class="{ selected: selected_category === category.name }" v-on:click="selected_category = category.name"
+          .category-count v-if="category_count(category) > 0"
+            | {{ category_count(category) }}
           | {{ category.name }}
       .ingredients-container
-        .ingredients-panel v-for="ingredient in selected_ingredients"
+        .ingredients-panel v-for="item in selected_items"
           .image-container
-            img v-bind:src="ingredient.image"
+            img v-bind:src="item.image"
           .ingredient-info-container
             .name-container
-              .name = "{{ ingredient.name}}"
-              .tag v-if="ingredient.discount"
+              .name
+                | {{ item.name }}
+              .tag v-if="item.discount"
                 | 优惠
             .relate-dishes-container
-              span = "{{ ingredient.relate_dishes | relate_dishes_text }}"
+              span
+                | {{ item.label }}
             .price-container
-              .price = "{{ ingredient.price | price_text }}"
-              .weight = "{{ ingredient.weight | weight_text }}"
-            .operation-container
-              .decrease v-show="ingredient.count > 0" v-on:click=" ingredient.count -= 1 " -
-              .count v-show="ingredient.count > 0" = "{{ ingredient.count }}"
-              .increase v-on:click=" ingredient.count += 1 " +
-
+              .price
+                | {{ item.price | price_text }}
+              .weight v-if="item.weight"
+                | {{ item.weight | weight_text }}
+            .operation-container v-if="item.type == 'ingredient'"
+              .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
+                | -
+              .count v-show="item.count > 0"
+                | {{ item.count }}
+              .increase v-on:click="increase_item(item)"
+                | +
+            .operation-container v-if="item.type == 'dish'"
+              .increase v-on:click="add_dish(item)"
+                | +
 
     .shopping-info-container
-      .shopping-car
+      .shopping-cart-empty v-if="total_count === 0"
         i.fa.fa-shopping-cart
-        span = "{{ total_count }}"
-      .total-price = "{{ total_price | price_text }}"
+        span 购物车为空
+      .shopping-cart v-else=true
+        .shopping-cart-container v-on:click="show_shopping_cart = true"
+          i.fa.fa-shopping-cart
+          span
+            | {{ total_count }}
+        .shopping-price-container
+          .total-price
+            span
+              | {{ total_price | price_text }}
+            span.need-distribution v-if="total_price < free_distribution"
+              |（另需支付运费4元）
+          .distribute-hint
+            | 满{{free_distribution / 100}}元免配送费
+        .shopping-pay-container
+          | 去结算
+
+    .shopping-cart-detail-container v-show="show_shopping_cart" v-on:click.self="show_shopping_cart = false"
+      .shopping-cart-detail-panel
+        .shopping-cart-detail-header
+          / .title 购物车
+          .clear-container v-on:click="clear_shopping_cart"
+            i.fa.fa-trash-o
+            span 清空购物车
+        .shopping-item-container
+          .shopping-item-box v-for="item in shopping_cart_list"
+            .image-container
+              img v-bind:src="item.image"
+            .ingredient-info-container
+              .name-container
+                .name
+                  | {{ item.name }}
+              .price-container
+                .price
+                  | {{ item.price | price_text }}
+                .weight
+                  | {{ item.weight | weight_text }}
+              .operation-container v-if="item.count > 0"
+                .decrease v-on:click="decrease_item(item)"
+                  | -
+                .count
+                  | {{ item.count }}
+                .increase v-on:click="increase_item(item)"
+                  | +

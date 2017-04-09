@@ -1,13 +1,12 @@
-$bg-gray: #888888;
-$bg-light-gray: #F6F6F6;
+$bg-gray: #E4E4E4;
+$bg-light-gray: #F8F8F8;
 
-$theme-green: #24AAA1;
+$theme-green: #24B6B1;
 $theme-white: #FFFFFF;
-$theme-black: #000000;
+$theme-black: #4A4A4A;
 $theme-gray: #888888;
 $theme-light-gray: #A6A6A6;
-$theme-orange: #B3561B;
-$price-red: #CE4C1C;
+$theme-orange: #F05911;
 
 $border-color: #E2E2E2;
 
@@ -21,4 +20,20 @@ $border-color: #E2E2E2;
           flex: $value;
   -webkit-flex: $value;
      -moz-flex: $value;
+}
+
+@mixin transform($property){
+  transform: $property;
+  -webkit-transform: $property;
+  -moz-transform: $property;
+  -o-transform: $property;
+  -ms-transform: $property;
+}
+
+@mixin transform-origin($property) {
+  transform-origin: $property;
+  -ms-transform-origin: $property;
+  -webkit-transform-origin: $property;
+  -moz-transform-origin: $property;
+  -o-transform-origin: $property;
 }
