@@ -117,7 +117,7 @@ $(function(){
       selected_items: function() {
         var that = this;
         return this.categories.find(function(obj) {
-          obj.name === that.selected_category;
+          return obj.name === that.selected_category;
         }).items
       },
       // 所有食材对象的hash
