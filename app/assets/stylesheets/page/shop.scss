@@ -90,6 +90,16 @@ $footer-height: 50px;
     .ingredients-container {
       @include flex(1);
       overflow: auto;
+
+      .unsellhint-container {
+        background-color: $bg-gray;
+        font-size: 12px;
+        margin: 10px;
+        padding: 10px;
+        color: $theme-green;
+        white-space: pre-wrap;
+      }
+
       .ingredients-panel {
         margin-left: 10px;
         padding: 10px 10px 10px 0;
@@ -150,6 +160,9 @@ $footer-height: 50px;
             .price {
               font-size: 16px;
               color: $theme-orange;
+              &.unsellable {
+                font-size: 12px;
+              }
             }
 
             .weight {
