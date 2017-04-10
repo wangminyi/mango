@@ -41,7 +41,9 @@ $footer-height: 50px;
     margin-top: -36px;
     padding: 36px 0 50px;
 
-    @include flex-container;
+    .items-container {
+      @include flex-container;
+    }
 
     .categories-container {
       @include flex(none);

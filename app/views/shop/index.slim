@@ -14,46 +14,50 @@ template#shop-template
       .order-type v-bind:class="{ selected: order_type === 'schedule'}" v-on:click="order_type = 'schedule'"
         | 预定送货
     .goods-container
-      .categories-container
-        .category-label v-for="category in categories" v-bind:class="{ selected: selected_category === category.name }" v-on:click="selected_category = category.name"
-          .category-count v-if="category_count(category) > 0"
-            | {{ category_count(category) }}
-          | {{ category.name }}
-      .ingredients-container
-        .ingredients-panel v-for="item in selected_items"
-          .image-container
-            img v-bind:src="item.image"
-          .ingredient-info-container
-            .name-container
-              .name
-                | {{ item.name }}
-              .tag v-if="item.discount"
-                | 优惠
-            .relate-dishes-container
-              span
-                | {{ item.label }}
-            .price-container
-              .price
-                | {{ item.price | price_text }}
-              .weight v-if="item.weight"
-                | {{ item.weight | weight_text }}
-            .operation-container v-if="item.type == 'ingredient'"
-              .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
-                | -
-              .count v-show="item.count > 0"
-                | {{ item.count }}
-              .increase v-on:click="increase_item(item)"
-                | +
-            .operation-container v-if="item.type == 'dish'"
-              .increase v-on:click="add_dish(item)"
-                | +
+      /.event-message-contaienr
+        | 下单即可成为会员；首次下单满10元赠送围裙，满30元赠送洗菜篮；
+        span &times;
+      .items-container
+        .categories-container
+          .category-label v-for="category in categories" v-bind:class="{ selected: selected_category === category.name }" v-on:click="selected_category = category.name"
+            .category-count v-if="category_count(category) > 0"
+              | {{ category_count(category) }}
+            | {{ category.name }}
+        .ingredients-container
+          .ingredients-panel v-for="item in selected_items"
+            .image-container
+              img v-bind:src="item.image"
+            .ingredient-info-container
+              .name-container
+                .name
+                  | {{ item.name }}
+                .tag v-if="item.discount"
+                  | 优惠
+              .relate-dishes-container
+                span
+                  | {{ item.label }}
+              .price-container
+                .price
+                  | {{ item.price | price_text }}
+                .weight v-if="item.weight"
+                  | {{ item.weight | weight_text }}
+              .operation-container v-if="item.type == 'ingredient'"
+                .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
+                  | -
+                .count v-show="item.count > 0"
+                  | {{ item.count }}
+                .increase v-on:click="increase_item(item)"
+                  | +
+              .operation-container v-if="item.type == 'dish'"
+                .increase v-on:click="add_dish(item)"
+                  | +
 
     .shopping-info-container
       .shopping-cart-empty v-if="total_count === 0"
         i.fa.fa-shopping-cart
         span 购物车为空
       .shopping-cart v-else=true
-        .shopping-cart-container v-on:click="show_shopping_cart = true"
+        .shopping-cart-container v-on:click="show_shopping_cart = !show_shopping_cart"
           i.fa.fa-shopping-cart
           span
             | {{ total_count }}

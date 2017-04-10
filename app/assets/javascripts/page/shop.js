@@ -115,7 +115,10 @@ $(function(){
     computed: {
       // 选中类型的商品
       selected_items: function() {
-        return this.categories.find(obj => obj.name === this.selected_category).items
+        var that = this;
+        return this.categories.find(function(obj) {
+          obj.name === that.selected_category;
+        }).items
       },
       // 所有食材对象的hash
       items_hash: function(){
