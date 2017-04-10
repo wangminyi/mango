@@ -8,7 +8,8 @@ $(function(){
       order_type: "immediately",
       selected_category: "蔬菜",
       free_distribution: 1000,
-      show_shopping_cart: true,
+      show_shopping_cart: false,
+      show_header_hint: ($.cookie("show_header_hint") === undefined),
       categories: [
         {
           name: "每日推荐",
@@ -45,6 +46,7 @@ $(function(){
               price: 350,
               weight: 500,
               count: 1,
+              texture: "口感不错"
             },{
               id: 2,
               name: "小白菜",
@@ -203,6 +205,10 @@ $(function(){
         if (this.shopping_cart_list.length === 0) {
           this.show_shopping_cart = false;
         }
+      },
+      hide_header_hint: function(){
+        this.show_header_hint = false;
+        $.cookie("show_header_hint", true);
       }
     }
   })

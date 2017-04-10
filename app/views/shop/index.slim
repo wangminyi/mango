@@ -14,8 +14,8 @@ template#shop-template
       .order-type v-bind:class="{ selected: order_type === 'schedule'}" v-on:click="order_type = 'schedule'"
         | 预定送货
     .goods-container
-      /.event-message-contaienr
-        | 下单即可成为会员；首次下单满10元赠送围裙，满30元赠送洗菜篮；
+      .event-message-container v-if="show_header_hint" v-on:click="hide_header_hint"
+        | 首次下单满10元赠送围裙，满30元赠送洗菜篮；
         span &times;
       .items-container
         .categories-container
@@ -33,6 +33,8 @@ template#shop-template
                   | {{ item.name }}
                 .tag v-if="item.discount"
                   | 优惠
+              .texture v-if="item.texture"
+                | {{item.texture}}
               .relate-dishes-container
                 span
                   | {{ item.label }}
@@ -75,7 +77,7 @@ template#shop-template
     .shopping-cart-detail-container v-show="show_shopping_cart" v-on:click.self="show_shopping_cart = false"
       .shopping-cart-detail-panel
         .shopping-cart-detail-header
-          / .title 购物车
+          .title 购物车
           .clear-container v-on:click="clear_shopping_cart"
             i.fa.fa-trash-o
             span 清空购物车

@@ -12,5 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.cookie/jquery.cookie
 //= require simplemde/dist/simplemde.min
 //= require_directory .
