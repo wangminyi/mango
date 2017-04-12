@@ -11,14 +11,77 @@
   // @include transform(scale(.5, .5));
 }
 
-html, body, .shop-page-container {
+html, body, .yylife-wrapper, .yylife-wrapper > * {
+  width: 100%;
   height: 100%;
+}
+
+.yylife-wrapper > * {
+  position: absolute;
+  color: $theme-black;
 }
 
 $footer-height: 50px;
 
+.modal-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, .5);
+}
+
+.page-header {
+  height: 50px;
+  line-height: 50px;
+  background-color: white;
+  position: relative;
+  font-size: 18px;
+  text-align: center;
+  .fa-chevron-left {
+    position: absolute;
+    left: 20px;
+    top: 18px;
+  }
+}
+
+.page-panel {
+  background-color: white;
+  margin-top: 20px;
+  .panel-block {
+    border-top: 1px solid $border-color;
+    padding: 20px;
+    position: relative;
+    white-space: pre-wrap;
+    &:first-child {
+      border-top: none;
+    }
+  }
+}
+
+.selectable-input {
+  .fa-chevron-right {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    @include transform(translateY(-50%));
+  }
+}
+
+.slide-left-enter-active, .slide-left-leave-active, .slide-right-enter-active, .slide-right-leave-active {
+  @include transition(all, .3s, ease);
+}
+
+.slide-left-leave-active, .slide-right-enter, {
+  @include transform(translateX(100%));
+}
+
+.slide-left-enter, .slide-right-leave-active {
+  @include transform(translateX(-100%));
+}
+
 .shop-page-container {
-  color: $theme-black;
   .order-type-container {
     .order-type {
       display: inline-block;
@@ -36,31 +99,39 @@ $footer-height: 50px;
     }
   }
 
-  .goods-container {
-    height: 100%;
-    margin-top: -36px;
-    padding: 36px 0 50px;
+  .event-message-container {
+    line-height: 30px;
+    background-color: #FFFDE2;
+    color: #953609;
+    font-size: 12px;
+    padding-left: 15px;
+    position: relative;
+    span {
+      position: absolute;
+      right: 15px;
+    }
+  }
 
-    .event-message-container {
-      line-height: 30px;
-      background-color: #FFFDE2;
-      color: #953609;
-      font-size: 12px;
-      padding-left: 15px;
-      position: relative;
-      span {
-        position: absolute;
-        right: 15px;
-      }
+  .goods-container {
+    position: absolute;
+    top: 36px;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+
+    &.with_message {
+      top: 66px;
     }
 
     .items-container {
       @include flex-container;
+      height: 100%;
     }
 
     .categories-container {
       @include flex(none);
       width: 80px;
+      height: 100%;
       background-color: $bg-light-gray;
       overflow: auto;
       .category-label {
@@ -89,6 +160,7 @@ $footer-height: 50px;
 
     .ingredients-container {
       @include flex(1);
+      height: 100%;
       overflow: auto;
 
       .unsellhint-container {
@@ -290,12 +362,7 @@ $footer-height: 50px;
   }
 
   .shopping-cart-detail-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
     bottom: $footer-height;
-    background-color: rgba(0,0,0,.5);
 
     .shopping-cart-detail-panel {
       position: absolute;
@@ -412,6 +479,46 @@ $footer-height: 50px;
                 }
               }
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+.order-page-container {
+  background-color: $bg-light-gray;
+  .color-split {
+    width: 100%;
+    height: 4px;
+    background-image: asset_url("shop/color_split.png");
+    background-repeat: repeat-x;
+  }
+
+  .select-time-container {
+    .time-selector {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      .time-selector-header {
+        height: 40px;
+        background-color: $theme-green;
+        .cancel-btn {
+          float: left;
+        }
+        .submit-btn {
+          float: right;
+        }
+      }
+
+      .time-selector-body {
+        height: 230px;
+        background-color: white;
+        overflow: auto;
+
+        .option {
+          &.selected {
+            color: red;
           }
         }
       }

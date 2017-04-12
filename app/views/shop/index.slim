@@ -7,106 +7,158 @@
 #shop-vue-anchor
 
 template#shop-template
-  .shop-page-container
-    .order-type-container
-      .order-type v-bind:class="{ selected: order_type === 'immediately'}" v-on:click="order_type = 'immediately'"
-        | 今日送货
-      .order-type v-bind:class="{ selected: order_type === 'schedule'}" v-on:click="order_type = 'schedule'"
-        | 预定送货
-    .goods-container
-      .event-message-container v-if="show_header_hint" v-on:click="hide_header_hint"
-        | 首次下单满10元赠送围裙，满30元赠送洗菜篮；
-        span &times;
-      .items-container
-        .categories-container
-          .category-label v-for="category in categories" v-bind:class="{ selected: selected_category === category }" v-on:click="selected_category = category"
-            .category-count v-if="category_count(category) > 0"
-              | {{ category_count(category) }}
-            | {{ category.name }}
-        .ingredients-container
-          .unsellhint-container v-if="selected_category.unsellable"
-            | {{selected_category.unsellhint}}
-          .ingredients-panel v-for="item in selected_items"
-            .image-container
-              img v-bind:src="item.image"
-            .ingredient-info-container
-              .name-container
-                .name
-                  | {{ item.name }}
-                .tag v-if="item.discount"
-                  | 优惠
-              .texture v-if="item.texture"
-                | {{item.texture}}
-              .relate-dishes-container
+  .yylife-wrapper
+    transition v-bind:name="slide_direction"
+      .shop-page-container v-if="current_page === 'shopping'" key="shopping_page"
+        .order-type-container
+          .order-type v-bind:class="{ selected: order_type === 'today'}" v-on:click="order_type = 'today'"
+            | 今日送货
+          .order-type v-bind:class="{ selected: order_type === 'schedule'}" v-on:click="order_type = 'schedule'"
+            | 预定送货
+        .event-message-container v-if="show_header_hint" v-on:click="hide_header_hint"
+            | 首次下单满10元赠送围裙，满30元赠送洗菜篮；
+            span &times;
+        .goods-container v-bind:class="{with_message: show_header_hint}"
+          .items-container
+            .categories-container
+              .category-label v-for="category in categories" v-bind:class="{ selected: selected_category === category }" v-on:click="selected_category = category"
+                .category-count v-if="category_count(category) > 0"
+                  | {{ category_count(category) }}
+                | {{ category.name }}
+            .ingredients-container
+              .unsellhint-container v-if="selected_category.unsellable"
+                | {{selected_category.unsellhint}}
+              .ingredients-panel v-for="item in selected_items"
+                .image-container
+                  img v-bind:src="item.image"
+                .ingredient-info-container
+                  .name-container
+                    .name
+                      | {{ item.name }}
+                    .tag v-if="item.discount"
+                      | 优惠
+                  .texture v-if="item.texture"
+                    | {{item.texture}}
+                  .relate-dishes-container
+                    span
+                      | {{ item.label }}
+                  template v-if="selected_category.unsellable"
+                    .price-container
+                      .price.unsellable
+                        | 以实价为准
+                      .weight v-if="item.weight"
+                        | {{ item | unsellable_text }}
+                  template v-else=true
+                    .price-container
+                      .price
+                        | {{ item.price | price_text }}
+                      .weight v-if="item.weight"
+                        | {{ item.weight | weight_text }}
+                    .operation-container v-if="item.type == 'ingredient'"
+                      .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
+                        | -
+                      .count v-show="item.count > 0"
+                        | {{ item.count }}
+                      .increase v-on:click="increase_item(item)"
+                        | +
+                    .operation-container v-if="item.type == 'dish'"
+                      .increase v-on:click="add_dish(item)"
+                        | +
+
+        .shopping-info-container
+          .shopping-cart-empty v-if="total_count === 0"
+            i.fa.fa-shopping-cart
+            span 购物车为空
+          .shopping-cart v-else=true
+            .shopping-cart-container v-on:click="show_shopping_cart = !show_shopping_cart"
+              i.fa.fa-shopping-cart
+              span
+                | {{ total_count }}
+            .shopping-price-container
+              .total-price
                 span
-                  | {{ item.label }}
-              template v-if="selected_category.unsellable"
-                .price-container
-                  .price.unsellable
-                    | 以实价为准
-                  .weight v-if="item.weight"
-                    | {{ item | unsellable_text }}
-              template v-else=true
-                .price-container
-                  .price
-                    | {{ item.price | price_text }}
-                  .weight v-if="item.weight"
-                    | {{ item.weight | weight_text }}
-                .operation-container v-if="item.type == 'ingredient'"
-                  .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
-                    | -
-                  .count v-show="item.count > 0"
-                    | {{ item.count }}
-                  .increase v-on:click="increase_item(item)"
-                    | +
-                .operation-container v-if="item.type == 'dish'"
-                  .increase v-on:click="add_dish(item)"
-                    | +
+                  | {{ total_price | price_text }}
+                span.need-distribution v-if="total_price < free_distribution"
+                  |（另需支付运费4元）
+              .distribute-hint
+                | 满{{free_distribution / 100}}元免配送费
+            .shopping-pay-container v-on:click="forward_to('order')"
+              | 去结算
 
-    .shopping-info-container
-      .shopping-cart-empty v-if="total_count === 0"
-        i.fa.fa-shopping-cart
-        span 购物车为空
-      .shopping-cart v-else=true
-        .shopping-cart-container v-on:click="show_shopping_cart = !show_shopping_cart"
-          i.fa.fa-shopping-cart
-          span
-            | {{ total_count }}
-        .shopping-price-container
-          .total-price
-            span
-              | {{ total_price | price_text }}
-            span.need-distribution v-if="total_price < free_distribution"
-              |（另需支付运费4元）
-          .distribute-hint
-            | 满{{free_distribution / 100}}元免配送费
-        .shopping-pay-container
-          | 去结算
+        .shopping-cart-detail-container.modal-panel v-show="show_shopping_cart" v-on:click.self="show_shopping_cart = false"
+          .shopping-cart-detail-panel
+            .shopping-cart-detail-header
+              .title 购物车
+              .clear-container v-on:click="clear_shopping_cart"
+                i.fa.fa-trash-o
+                span 清空购物车
+            .shopping-item-container
+              .shopping-item-box v-for="item in shopping_cart_list"
+                .image-container
+                  img v-bind:src="item.image"
+                .ingredient-info-container
+                  .name-container
+                    .name
+                      | {{ item.name }}
+                  .price-container
+                    .price
+                      | {{ item.price | price_text }}
+                    .weight
+                      | {{ item.weight | weight_text }}
+                  .operation-container v-if="item.count > 0"
+                    .decrease v-on:click="decrease_item(item)"
+                      | -
+                    .count
+                      | {{ item.count }}
+                    .increase v-on:click="increase_item(item)"
+                      | +
 
-    .shopping-cart-detail-container v-show="show_shopping_cart" v-on:click.self="show_shopping_cart = false"
-      .shopping-cart-detail-panel
-        .shopping-cart-detail-header
-          .title 购物车
-          .clear-container v-on:click="clear_shopping_cart"
-            i.fa.fa-trash-o
-            span 清空购物车
-        .shopping-item-container
-          .shopping-item-box v-for="item in shopping_cart_list"
-            .image-container
-              img v-bind:src="item.image"
-            .ingredient-info-container
-              .name-container
-                .name
-                  | {{ item.name }}
-              .price-container
-                .price
-                  | {{ item.price | price_text }}
-                .weight
-                  | {{ item.weight | weight_text }}
-              .operation-container v-if="item.count > 0"
-                .decrease v-on:click="decrease_item(item)"
-                  | -
-                .count
-                  | {{ item.count }}
-                .increase v-on:click="increase_item(item)"
-                  | +
+      .order-page-container v-else-if="current_page === 'order'" key="order_page"
+        .page-header
+          i.fa.fa-chevron-left v-on:click="back_to('shopping')"
+          | 提交订单
+
+        .page-panel.personal-info
+          .color-split
+          .panel-block.selectable-input v-on:click="forward_to('address')"
+            span v-if="selected_address === undefined"
+              | 添加送货地址
+            span v-else=true
+              | {{selected_address | address_text}}
+            i.fa.fa-chevron-right
+          .panel-block.selectable-input v-on:click="show_time_selector = true"
+            span v-if="selected_date_time_text === undefined"
+              | 选择送货时间
+            span v-else=true
+              | {{selected_date_time_text}}
+            i.fa.fa-chevron-right
+          .color-split
+
+        .page-panel.address-info
+        .page-panel.default-address
+
+        .select-time-container.modal-panel v-show="show_time_selector"
+          .time-selector
+            .time-selector-header
+              .cancel-btn v-on:click="cancel_time_handler"
+                | 取消
+              .submit-btn v-on:click="submit_time_handler"
+                | 完成
+            .time-selector-body
+              .date
+                .option v-for="date in selectable_date()" v-on:click="date_option_handler(date)" v-bind:class="{ selected: date_selected(date) }"
+                  | {{ date[0]}}
+              .time
+                .option v-for="time in selectable_time()" v-on:click="time_option_handler(time)" v-bind:class="{ selected: time_selected(time) }"
+                  | {{ time[0] }}
+
+      .address-page-container v-else-if="current_page === 'address'" key="address_page"
+        .page-header
+          i.fa.fa-chevron-left v-on:click="back_to('order')"
+          | 我的送货地址
+        .add-address-btn 添加送货地址
+
+      .edit-address-page-container v-else-if="current_page === 'edit_address'" key="edit_address"
+        .page-header
+          i.fa.fa-chevron-left v-on:click="back_to('address')"
+          | 添加送货地址

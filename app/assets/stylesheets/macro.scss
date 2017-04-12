@@ -37,3 +37,10 @@ $border-color: #E2E2E2;
   -moz-transform-origin: $property;
   -o-transform-origin: $property;
 }
+
+@mixin transition($property, $duration, $timing, $delay: 0s){
+  transition: $property $duration $timing $delay;
+  -webkit-transition: $property $duration $timing $delay;
+  -moz-transition: $property $duration $timing $delay;
+  -o-transition: $property $duration $timing $delay;
+}
