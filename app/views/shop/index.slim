@@ -11,9 +11,9 @@ template#shop-template
     transition v-bind:name="slide_direction"
       .shop-page-container v-if="current_page === 'shopping'" key="shopping_page"
         .order-type-container
-          .order-type v-bind:class="{ selected: order_type === 'today'}" v-on:click="order_type = 'today'"
+          .order-type v-bind:class="{ selected: order_type === 'today'}" v-on:click="change_order_type('today')"
             | 今日送货
-          .order-type v-bind:class="{ selected: order_type === 'schedule'}" v-on:click="order_type = 'schedule'"
+          .order-type v-bind:class="{ selected: order_type === 'schedule'}" v-on:click="change_order_type('schedule')"
             | 预定送货
         .event-message-container v-if="show_header_hint" v-on:click="hide_header_hint"
             | 首次下单满10元赠送围裙，满30元赠送洗菜篮；

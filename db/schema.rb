@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170331160120) do
+ActiveRecord::Schema.define(version: 20170416110708) do
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
@@ -25,7 +25,17 @@ ActiveRecord::Schema.define(version: 20170331160120) do
     t.index ["ingredient_id"], name: "index_categories_ingredients_on_ingredient_id", using: :btree
   end
 
-  create_table "dish_ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "dishes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.string   "image"
+    t.text     "description",    limit: 65535
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.text     "cooking_method", limit: 65535
+    t.index ["name"], name: "index_dishes_on_name", using: :btree
+  end
+
+  create_table "dishes_ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "dish_id"
     t.integer  "ingredient_id"
     t.integer  "weight"
@@ -33,15 +43,6 @@ ActiveRecord::Schema.define(version: 20170331160120) do
     t.datetime "updated_at",    null: false
     t.index ["dish_id"], name: "index_dish_ingredients_on_dish_id", using: :btree
     t.index ["ingredient_id"], name: "index_dish_ingredients_on_ingredient_id", using: :btree
-  end
-
-  create_table "dishes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "name"
-    t.string   "image"
-    t.text     "description", limit: 65535
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.index ["name"], name: "index_dishes_on_name", using: :btree
   end
 
   create_table "ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -53,6 +54,9 @@ ActiveRecord::Schema.define(version: 20170331160120) do
     t.integer  "stock"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.string   "discount"
+    t.string   "texture"
+    t.index ["discount"], name: "index_ingredients_on_discount", using: :btree
     t.index ["name"], name: "index_ingredients_on_name", using: :btree
     t.index ["stock"], name: "index_ingredients_on_stock", using: :btree
   end

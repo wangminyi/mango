@@ -6,111 +6,113 @@ $(function(){
   moment.locale("zh-CN");
   Vue.config.devtools = true;
 
-  var categories = [
-    {
-      name: "每日推荐",
-      items: [
-        {
-          name: "糖醋排骨",
-          type: "dish",
-          image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-          label: "所需食材：猪小排、生姜",
-          price: 2850,
-          items: [
-            {
-              id: 1,
-              count: 1,
-            },
-            {
-              id: 5,
-              count: 2,
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: "蔬菜",
-      items: [
-        {
-          id: 1,
-          name: "小白菜",
-          type: "ingredient",
-          image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-          label: "推荐食谱：蒜蓉青菜、香菇青菜、百叶青菜",
-          discount: true,
-          price: 350,
-          weight: 500,
-          count: 1,
-          texture: "口感不错"
-        },{
-          id: 2,
-          name: "小白菜",
-          image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-          type: "ingredient",
-          relate_dishes: ["蒜蓉青菜", "香菇青菜", "百叶青菜"],
-          discount: true,
-          price: 350,
-          weight: 500,
-          count: 0,
-        },{
-          id: 3,
-          name: "小白菜",
-          type: "ingredient",
-          image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-          relate_dishes: ["蒜蓉青菜", "香菇青菜", "百叶青菜"],
-          discount: true,
-          price: 350,
-          weight: 500,
-          count: 0,
-        },{
-          id: 4,
-          name: "小白菜",
-          type: "ingredient",
-          image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-          relate_dishes: ["蒜蓉青菜", "香菇青菜", "百叶青菜"],
-          discount: true,
-          price: 350,
-          weight: 500,
-          count: 0,
-        }
-      ]
-    },
-    {
-      name: "肉禽",
-      items: [
-        {
-          id: 5,
-          name: "猪肉",
-          type: "ingredient",
-          image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-          relate_dishes: ["A", "B", "C"],
-          discount: false,
-          price: 350,
-          weight: 500,
-          count: 0,
-        }
-      ]
-    },
-    {
-      name: "水产",
-      unsellable: true,
-      unsellhint: "水产品价格每日变动较大，且为保证鲜活，仅支持微信预订和货到付款，望谅解。\n加店主微信（Sthaboutlinda）预订，送货上门。",
-      items: [
-        {
-          id: 6,
-          name: "龙虾",
-          type: "ingredient",
-          image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-          relate_dishes: ["蒜蓉青菜", "香菇青菜", "百叶青菜"],
-          discount: true,
-          price: 5000,
-          weight: 500,
-          count: 0,
-        }
-      ]
-    }
-  ];
+  // demo
+  // var categories = [
+  //   {
+  //     name: "每日推荐",
+  //     items: [
+  //       {
+  //         name: "糖醋排骨",
+  //         type: "dish",
+  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
+  //         label: "所需食材：猪小排、生姜",
+  //         price: 2850,
+  //         items: [
+  //           {
+  //             id: 1,
+  //             count: 1,
+  //           },
+  //           {
+  //             id: 5,
+  //             count: 2,
+  //           }
+  //         ]
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     name: "蔬菜",
+  //     items: [
+  //       {
+  //         id: 1,
+  //         name: "小白菜",
+  //         type: "ingredient",
+  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
+  //         label: "推荐食谱：蒜蓉青菜、香菇青菜、百叶青菜",
+  //         discount: true,
+  //         price: 350,
+  //         weight: 500,
+  //         count: 1,
+  //         texture: "口感不错"
+  //       },{
+  //         id: 2,
+  //         name: "小白菜",
+  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
+  //         type: "ingredient",
+  //         relate_dishes: ["蒜蓉青菜", "香菇青菜", "百叶青菜"],
+  //         discount: true,
+  //         price: 350,
+  //         weight: 500,
+  //         count: 0,
+  //       },{
+  //         id: 3,
+  //         name: "小白菜",
+  //         type: "ingredient",
+  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
+  //         relate_dishes: ["蒜蓉青菜", "香菇青菜", "百叶青菜"],
+  //         discount: true,
+  //         price: 350,
+  //         weight: 500,
+  //         count: 0,
+  //       },{
+  //         id: 4,
+  //         name: "小白菜",
+  //         type: "ingredient",
+  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
+  //         relate_dishes: ["蒜蓉青菜", "香菇青菜", "百叶青菜"],
+  //         discount: true,
+  //         price: 350,
+  //         weight: 500,
+  //         count: 0,
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     name: "肉禽",
+  //     items: [
+  //       {
+  //         id: 5,
+  //         name: "猪肉",
+  //         type: "ingredient",
+  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
+  //         relate_dishes: ["A", "B", "C"],
+  //         discount: false,
+  //         price: 350,
+  //         weight: 500,
+  //         count: 0,
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     name: "水产",
+  //     unsellable: true,
+  //     unsellhint: "水产品价格每日变动较大，且为保证鲜活，仅支持微信预订和货到付款，望谅解。\n加店主微信（Sthaboutlinda）预订，送货上门。",
+  //     items: [
+  //       {
+  //         id: 6,
+  //         name: "龙虾",
+  //         type: "ingredient",
+  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
+  //         relate_dishes: ["蒜蓉青菜", "香菇青菜", "百叶青菜"],
+  //         discount: true,
+  //         price: 5000,
+  //         weight: 500,
+  //         count: 0,
+  //       }
+  //     ]
+  //   }
+  // ];
+  var categories = gon.categories;
 
   window.vue = new Vue({
     el: "#shop-vue-anchor",
@@ -245,6 +247,13 @@ $(function(){
       }
     },
     methods: {
+      change_order_type: function(type) {
+        this.selected_date = undefined;
+        this.selected_time = undefined;
+        this.temp_selected_date = undefined;
+        this.temp_selected_time = undefined;
+        this.order_type = type;
+      },
       add_dish: function(dish) {
         var that = this;
         $.each(dish.items, function(index, item) {
@@ -381,8 +390,8 @@ $(function(){
         }
       },
       cancel_time_handler: function() {
-        this.selected_date = this.selected_date;
-        this.selected_time = this.selected_time;
+        this.temp_selected_date = this.selected_date;
+        this.temp_selected_time = this.selected_time;
         this.show_time_selector = false;
       },
       submit_time_handler: function() {

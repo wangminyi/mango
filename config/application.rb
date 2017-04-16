@@ -20,5 +20,7 @@ module Mango
     config.generators do |g|
       g.test_framework false
     end
+
+    require "data_factory"
   end
 end
