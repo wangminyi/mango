@@ -22,6 +22,15 @@ $border-color: #E2E2E2;
      -moz-flex: $value;
 }
 
+@mixin flex-center {
+      -webkit-align-items: center;
+         -moz-align-items: center;
+              align-items: center;
+  -webkit-justify-content: center;
+     -moz-justify-content: center;
+          justify-content: center;
+}
+
 @mixin transform($property){
   transform: $property;
   -webkit-transform: $property;
@@ -43,4 +52,11 @@ $border-color: #E2E2E2;
   -webkit-transition: $property $duration $timing $delay;
   -moz-transition: $property $duration $timing $delay;
   -o-transition: $property $duration $timing $delay;
+}
+
+@mixin box-shadow($x, $y, $blur, $spread, $color){
+  box-shadow: $x $y $blur $spread $color;
+  -moz-box-shadow: $x $y $blur $spread $color;
+  -webkit-box-shadow: $x $y $blur $spread $color;
+  -o-box-shadow: $x $y $blur $spread $color;
 }

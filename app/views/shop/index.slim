@@ -125,38 +125,65 @@ template#shop-template
               | 添加送货地址
             span v-else=true
               | {{selected_address | address_text}}
-            i.fa.fa-chevron-right
+            i.fa.fa-chevron-right.right-side
           .panel-block.selectable-input v-on:click="show_time_selector = true"
             span v-if="selected_date_time_text === undefined"
               | 选择送货时间
             span v-else=true
               | {{selected_date_time_text}}
-            i.fa.fa-chevron-right
+            i.fa.fa-chevron-right.right-side
           .color-split
 
-        .page-panel.address-info
+        .page-panel.items-info
+          .panel-block
+            | 商品清单 （共{{total_count}}件）
+          .panel-block.scrollable
+            .item-box v-for="gift in gift_list"
+              img v-bind:src="gift.image"
+              .hint
+                | 赠品
+            .item-box v-for="item in shopping_cart_list"
+              img v-bind:src="item.image"
+              .hint
+                | x{{item.count}}
+
+        .page-panel.additional-info
+          .panel-block
+            | 优惠券
+            .checkbox-btn.right-side v-bind:class="coupon_enable ? 'enable' : 'disable'" v-on:click="coupon_enable = !coupon_enable"
+              .btn-circle
+          .panel-block
+            | 支付方式
+            .pay-mode-container.right-side
+              - {"cod" => "货到付款", "wechat" => "微信支付"}.each do |type, label|
+                .pay-mode-block v-bind:class="{ selected: pay_mode === '#{type}' }" v-on:click="pay_mode = '#{type}'"
+                  = label
+
         .page-panel.default-address
 
-        .select-time-container.modal-panel v-show="show_time_selector"
-          .time-selector
-            .time-selector-header
-              .cancel-btn v-on:click="cancel_time_handler"
-                | 取消
-              .submit-btn v-on:click="submit_time_handler"
-                | 完成
-            .time-selector-body
-              .date
-                .option v-for="date in selectable_date()" v-on:click="date_option_handler(date)" v-bind:class="{ selected: date_selected(date) }"
-                  | {{ date[0]}}
-              .time
-                .option v-for="time in selectable_time()" v-on:click="time_option_handler(time)" v-bind:class="{ selected: time_selected(time) }"
-                  | {{ time[0] }}
+        .select-time-container.modal-panel v-show="show_time_selector" v-on:click.self="show_time_selector = false"
+          transition name="slide-up"
+            .time-selector v-show="show_time_selector"
+              .time-selector-header
+                .cancel-btn v-on:click="cancel_time_handler"
+                  | 取消
+                .submit-btn v-on:click="submit_time_handler"
+                  | 完成
+              .time-selector-body
+                .date
+                  .option v-for="date in selectable_date()" v-on:click="date_option_handler(date)" v-bind:class="{ selected: date_selected(date) }"
+                    | {{ date[0]}}
+                .time
+                  .option v-for="time in selectable_time()" v-on:click="time_option_handler(time)" v-bind:class="{ selected: time_selected(time) }"
+                    | {{ time[0] }}
+
 
       .address-page-container v-else-if="current_page === 'address'" key="address_page"
         .page-header
           i.fa.fa-chevron-left v-on:click="back_to('order')"
           | 我的送货地址
         .add-address-btn 添加送货地址
+
 
       .edit-address-page-container v-else-if="current_page === 'edit_address'" key="edit_address"
         .page-header

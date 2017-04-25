@@ -13,7 +13,7 @@ class Ingredient < ApplicationRecord
       discount: self.discount.present?,
       price:    self.price || 350,
       weight:   self.weight || 500,
-      count:    0,
+      count:    (self.id % 10) === 0 ? 1 : 0,
       texture:  self.texture || "口感不错",
     }
   end

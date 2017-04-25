@@ -26,5 +26,19 @@ class ShopController < ApplicationController
     end
 
     gon.categories = categories
+    gon.gifts = [
+      {
+        image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
+        limit: "1000",
+        name: "菜篮子",
+        count: 1,
+      },
+      {
+        image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
+        limit: "2000",
+        name: "拖把",
+        count: 2,
+      }
+    ]
   end
 end

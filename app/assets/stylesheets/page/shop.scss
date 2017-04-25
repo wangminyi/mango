@@ -54,22 +54,23 @@ $footer-height: 50px;
     padding: 20px;
     position: relative;
     white-space: pre-wrap;
+    .right-side {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      @include transform(translateY(-50%));
+    }
     &:first-child {
       border-top: none;
+    }
+    &.scrollable {
+      overflow-x: auto;
+      white-space: nowrap;
     }
   }
 }
 
-.selectable-input {
-  .fa-chevron-right {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    @include transform(translateY(-50%));
-  }
-}
-
-.slide-left-enter-active, .slide-left-leave-active, .slide-right-enter-active, .slide-right-leave-active {
+.slide-left-enter-active, .slide-left-leave-active, .slide-right-enter-active, .slide-right-leave-active, .slide-up-enter-active, .slide-up-leave-active, .slide-down-enter-active, .slide-down-leave-active,  {
   @include transition(all, .3s, ease);
 }
 
@@ -79,6 +80,14 @@ $footer-height: 50px;
 
 .slide-left-enter, .slide-right-leave-active {
   @include transform(translateX(-100%));
+}
+
+.slide-up-leave-active, .slide-down-enter, {
+  @include transform(translateY(-100%));
+}
+
+.slide-up-enter, .slide-down-leave-active {
+  @include transform(translateY(100%));
 }
 
 .shop-page-container {
@@ -495,6 +504,78 @@ $footer-height: 50px;
     background-repeat: repeat-x;
   }
 
+  .items-info {
+    .item-box {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      position: relative;
+      margin-right: 10px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+      .hint {
+        position: absolute;
+        right: 2px;
+        bottom: 2px;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .checkbox-btn {
+    width: 50px;
+    height: 30px;
+    border: 1px solid $border-color;
+    border-radius: 15px;
+    @include transition(all, .3s, ease);
+
+    .btn-circle {
+      background-color: white;
+      width: 28px;
+      height: 28px;
+      border: 1px solid $border-color;
+      border-radius: 50%;
+      @include box-shadow(0, 2px, -2px, 2px, $border-color);  
+    }
+
+    &.disable, {
+      padding-left: 0;
+      background-color: white;
+    }
+
+    &.enable {
+      padding-left: 20px;
+      background-color: $theme-green;
+    }
+  }
+
+  .pay-mode-container {
+    .pay-mode-block {
+      width: 70px;
+      height: 30px;
+      border: 1px solid $border-color;
+      border-radius: 5px;
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 14px;
+      text-align: center;
+      line-height: 30px;
+      
+      &.selected {
+        border-color: $theme-green;
+        color: $theme-green;
+      }
+    }
+  }
+
+  // 时间选择框
   .select-time-container {
     .time-selector {
       position: absolute;
@@ -503,22 +584,52 @@ $footer-height: 50px;
       .time-selector-header {
         height: 40px;
         background-color: $theme-green;
+        color: white;
         .cancel-btn {
           float: left;
+          margin-left: 20px;
+          line-height: 40px;
         }
         .submit-btn {
           float: right;
+          margin-right: 20px;
+          line-height: 40px;
         }
       }
 
       .time-selector-body {
         height: 230px;
         background-color: white;
-        overflow: auto;
+        font-size: 16px;
+        @include flex-container;
+        @include flex-center;
+
+        .date, .time {
+          text-align: center;
+          overflow: auto;
+        }
 
         .option {
           &.selected {
-            color: red;
+            color: $theme-green;
+          }
+        }
+
+        .date {
+          @include flex(none);
+          width: 150px;
+          height: 120px;
+          padding: 40px 0;
+          .option {
+            padding: 15px 0;
+          }
+        }
+
+        .time {
+          @include flex(1);
+          height: 200px;
+          .option {
+            padding: 10px 0;
           }
         }
       }

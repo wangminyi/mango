@@ -137,9 +137,11 @@ $(function(){
       selected_address: undefined, // 选择的地址
       selected_date: undefined, // 选择的送货日期 2017-04-06
       selected_time: undefined, // 选择的送货时间 16:00
-      temp_selected_date: undefined,
-      temp_selected_time: undefined,
-      show_time_selector: false,
+      temp_selected_date: undefined, // 选择控件的日期值
+      temp_selected_time: undefined, // 选择控件的时间值
+      show_time_selector: false, // 是否显示时间控件
+      coupon_enable: true,  // 是否使用优惠券
+      pay_mode: "cod", // cod(cash on delivery) || wechat
 
       // 地址页面
       support_gardens: [ // 支持的小区名称
@@ -212,6 +214,17 @@ $(function(){
         });
         return price;
       },
+      // 赠品计算逻辑
+      gift_list: function(){
+        var result = [],
+            that = this;
+        $.each(gon.gifts, function(index, gift) {
+          if (that.total_price >= gift.limit) {
+            result.push(gift);
+          }
+        });
+        return result;
+      },
       selected_date_time_text: function() {
         if (this.selected_date !== undefined && this.selected_time !== undefined) {
           if (this.selected_date[1] === moment().format("YYYY-MM-DD")) {
@@ -230,7 +243,7 @@ $(function(){
         } else {
           return undefined;
         }
-      }
+      },
     },
     filters: {
       price_text: function(price) {
@@ -302,6 +315,8 @@ $(function(){
         this.slide_direction = "slide-left";
         this.current_page = page;
       },
+
+      // 可选择日期 @Array [label, value]
       selectable_date: function() {
         var result = [],
             date  = moment();
@@ -327,6 +342,8 @@ $(function(){
 
         return result;
       },
+
+      // 可选择时间 @Array [label, value]
       selectable_time: function() {
         if (this.temp_selected_date === undefined) {
           return [];
@@ -372,28 +389,34 @@ $(function(){
 
         return result;
       },
+      // 是否选择了某日期
       date_selected: function(date) {
         return this.temp_selected_date !== undefined && this.temp_selected_date[0] === date[0];
       },
+      // 是否选择了某时间
       time_selected: function(time) {
         return this.temp_selected_time !== undefined && this.temp_selected_time[0] === time[0];
       },
+      // 处理选择日期事件
       date_option_handler: function(_selected_date) {
         if (!this.date_selected(_selected_date)) {
           this.temp_selected_date = _selected_date;
           this.temp_selected_time = undefined;
         }
       },
+      // 处理选择时间事件
       time_option_handler: function(_selected_time) {
         if (!this.time_selected(_selected_time)) {
           this.temp_selected_time = _selected_time;
         }
       },
+      // 取消选择
       cancel_time_handler: function() {
         this.temp_selected_date = this.selected_date;
         this.temp_selected_time = this.selected_time;
         this.show_time_selector = false;
       },
+      // 确认选择
       submit_time_handler: function() {
         this.selected_date = this.temp_selected_date;
         this.selected_time = this.temp_selected_time;
