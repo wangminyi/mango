@@ -120,9 +120,11 @@ $(function(){
     data: {
       // 全局变量
       order_type: "today", // 今日送货 today 预订送货 schedule
-      free_distribution: 1000, // 满减金额
+      distribution_price: 400, // 配送费
+      free_distribution: 1000, // 免配送费金额
       current_page: "order", // 当前所在页面 shopping order address
-      can_immediately: true, // 能否可以立即送
+      can_immediately: false, // 能否可以立即送
+      preferential_price: 300, // 优惠金额
 
       // 过渡相关
       slide_direction: "slide-right",
@@ -134,14 +136,17 @@ $(function(){
       categories: categories, // 商品对象
 
       // 订单页面
-      selected_address: undefined, // 选择的地址
+        // 表单字段
+      selected_address: undefined, // 选择的地址 json
       selected_date: undefined, // 选择的送货日期 2017-04-06
       selected_time: undefined, // 选择的送货时间 16:00
+      coupon_enable: true,  // 是否使用优惠券
+      pay_mode: "cod", // cod(cash on delivery) || wechat
+      remark: undefined, // 备注
+        // 局部变量
       temp_selected_date: undefined, // 选择控件的日期值
       temp_selected_time: undefined, // 选择控件的时间值
       show_time_selector: false, // 是否显示时间控件
-      coupon_enable: true,  // 是否使用优惠券
-      pay_mode: "cod", // cod(cash on delivery) || wechat
 
       // 地址页面
       support_gardens: [ // 支持的小区名称
@@ -244,6 +249,24 @@ $(function(){
           return undefined;
         }
       },
+      // 免运费原因
+      free_distribution_reason: function() {
+        if (this.total_price >= this.free_distribution) {
+          return "满10元免配送费";
+        } else if (this.can_immediately) {
+          return "会员权益";
+        }
+      },
+      order_price: function() {
+        var result = this.total_price;
+        if (!this.free_distribution_reason) {
+          result += this.distribution_price;
+        }
+        if (this.coupon_enable) {
+          result -= this.preferential_price;
+        }
+        return Math.max( result, 0 );
+      }
     },
     filters: {
       price_text: function(price) {

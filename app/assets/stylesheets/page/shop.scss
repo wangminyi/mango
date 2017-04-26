@@ -22,6 +22,7 @@ html, body, .yylife-wrapper, .yylife-wrapper > * {
 }
 
 $footer-height: 50px;
+$header-height: 50px;
 
 .modal-panel {
   position: fixed;
@@ -33,8 +34,8 @@ $footer-height: 50px;
 }
 
 .page-header {
-  height: 50px;
-  line-height: 50px;
+  height: $header-height;
+  line-height: $header-height;
   background-color: white;
   position: relative;
   font-size: 18px;
@@ -43,6 +44,36 @@ $footer-height: 50px;
     position: absolute;
     left: 20px;
     top: 18px;
+  }
+}
+
+.page-body-wrapper {
+  position: absolute;
+  top: $header-height;
+  bottom: $footer-height;
+  width: 100%;
+  overflow: auto;
+}
+
+.page-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: $footer-height;
+  background-color: #333333;
+  padding-left: 20px;
+  z-index: 1;
+  .footer-btn {
+    height: $footer-height;
+    width: 100px;
+    line-height: $footer-height;
+    text-align: center;
+    background-color: $theme-green;
+    color: white;
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 }
 
@@ -60,6 +91,11 @@ $footer-height: 50px;
       top: 50%;
       @include transform(translateY(-50%));
     }
+
+    input[type=text], textarea {
+      @include theme-input-border;
+    }
+
     &:first-child {
       border-top: none;
     }
@@ -293,14 +329,6 @@ $footer-height: 50px;
   }
 
   .shopping-info-container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: $footer-height;
-    background-color: #333333;
-    padding-left: 20px;
-    z-index: 1;
     .shopping-cart-empty {
       color: #B8B8B8;
       line-height: $footer-height;
@@ -497,6 +525,7 @@ $footer-height: 50px;
 
 .order-page-container {
   background-color: $bg-light-gray;
+  position: relative;
   .color-split {
     width: 100%;
     height: 4px;
@@ -542,7 +571,7 @@ $footer-height: 50px;
       height: 28px;
       border: 1px solid $border-color;
       border-radius: 50%;
-      @include box-shadow(0, 2px, -2px, 2px, $border-color);  
+      @include box-shadow(0, 2px, -2px, 2px, $border-color);
     }
 
     &.disable, {
@@ -567,7 +596,7 @@ $footer-height: 50px;
       font-size: 14px;
       text-align: center;
       line-height: 30px;
-      
+
       &.selected {
         border-color: $theme-green;
         color: $theme-green;
@@ -575,6 +604,33 @@ $footer-height: 50px;
     }
   }
 
+  .remark-input {
+    input {
+      width: 270px;
+      text-align: right;
+    }
+  }
+
+  .order-detail {
+    .price-label {
+      color: $theme-gray;
+    }
+    .price-tag {
+      color: $theme-orange;
+    }
+  }
+
+  .order-price-container {
+    color: #B8B8B8;
+    line-height: $footer-height;
+    .fa-shopping-cart {
+      font-size: 20px;
+    }
+    span {
+      font-size: 14px;
+      margin-left: 10px;
+    }
+  }
   // 时间选择框
   .select-time-container {
     .time-selector {

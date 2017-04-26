@@ -60,3 +60,14 @@ $border-color: #E2E2E2;
   -webkit-box-shadow: $x $y $blur $spread $color;
   -o-box-shadow: $x $y $blur $spread $color;
 }
+
+@mixin theme-input-border {
+  @include transition(border, .2s, ease-in);
+  border: none;
+  box-shadow: none;
+  resize: none;
+  &:focus {
+    box-shadow: none;
+    outline: none !important;
+  }
+}

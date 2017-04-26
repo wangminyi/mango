@@ -65,7 +65,7 @@ template#shop-template
                       .increase v-on:click="add_dish(item)"
                         | +
 
-        .shopping-info-container
+        .shopping-info-container.page-footer
           .shopping-cart-empty v-if="total_count === 0"
             i.fa.fa-shopping-cart
             span 购物车为空
@@ -82,7 +82,7 @@ template#shop-template
                   |（另需支付运费4元）
               .distribute-hint
                 | 满{{free_distribution / 100}}元免配送费
-            .shopping-pay-container v-on:click="forward_to('order')"
+            .footer-btn v-on:click="forward_to('order')"
               | 去结算
 
         .shopping-cart-detail-container.modal-panel v-show="show_shopping_cart" v-on:click.self="show_shopping_cart = false"
@@ -118,49 +118,85 @@ template#shop-template
           i.fa.fa-chevron-left v-on:click="back_to('shopping')"
           | 提交订单
 
-        .page-panel.personal-info
-          .color-split
-          .panel-block.selectable-input v-on:click="forward_to('address')"
-            span v-if="selected_address === undefined"
-              | 添加送货地址
-            span v-else=true
-              | {{selected_address | address_text}}
-            i.fa.fa-chevron-right.right-side
-          .panel-block.selectable-input v-on:click="show_time_selector = true"
-            span v-if="selected_date_time_text === undefined"
-              | 选择送货时间
-            span v-else=true
-              | {{selected_date_time_text}}
-            i.fa.fa-chevron-right.right-side
-          .color-split
+        .page-body-wrapper
+          .page-panel.personal-info
+            .color-split
+            .panel-block.selectable-input v-on:click="forward_to('address')"
+              span v-if="selected_address === undefined"
+                | 添加送货地址
+              span v-else=true
+                | {{selected_address | address_text}}
+              i.fa.fa-chevron-right.right-side
+            .panel-block.selectable-input v-on:click="show_time_selector = true"
+              span v-if="selected_date_time_text === undefined"
+                | 选择送货时间
+              span v-else=true
+                | {{selected_date_time_text}}
+              i.fa.fa-chevron-right.right-side
+            .color-split
 
-        .page-panel.items-info
-          .panel-block
-            | 商品清单 （共{{total_count}}件）
-          .panel-block.scrollable
-            .item-box v-for="gift in gift_list"
-              img v-bind:src="gift.image"
-              .hint
-                | 赠品
-            .item-box v-for="item in shopping_cart_list"
-              img v-bind:src="item.image"
-              .hint
-                | x{{item.count}}
+          .page-panel.items-info
+            .panel-block
+              | 商品清单 （共{{total_count}}件）
+            .panel-block.scrollable
+              .item-box v-for="gift in gift_list"
+                img v-bind:src="gift.image"
+                .hint
+                  | 赠品
+              .item-box v-for="item in shopping_cart_list"
+                img v-bind:src="item.image"
+                .hint
+                  | x{{item.count}}
 
-        .page-panel.additional-info
-          .panel-block
-            | 优惠券
-            .checkbox-btn.right-side v-bind:class="coupon_enable ? 'enable' : 'disable'" v-on:click="coupon_enable = !coupon_enable"
-              .btn-circle
-          .panel-block
-            | 支付方式
-            .pay-mode-container.right-side
-              - {"cod" => "货到付款", "wechat" => "微信支付"}.each do |type, label|
-                .pay-mode-block v-bind:class="{ selected: pay_mode === '#{type}' }" v-on:click="pay_mode = '#{type}'"
-                  = label
+          .page-panel.additional-info
+            .panel-block
+              | 优惠券
+              .checkbox-btn.right-side v-bind:class="coupon_enable ? 'enable' : 'disable'" v-on:click="coupon_enable = !coupon_enable"
+                .btn-circle
+            .panel-block
+              | 支付方式
+              .pay-mode-container.right-side
+                - {"cod" => "货到付款", "wechat" => "微信支付"}.each do |type, label|
+                  .pay-mode-block v-bind:class="{ selected: pay_mode === '#{type}' }" v-on:click="pay_mode = '#{type}'"
+                    = label
 
-        .page-panel.default-address
+          .page-panel.remark-container
+            .panel-block
+              | 备注
+              .remark-input.right-side
+                = text_field_tag "remark", nil, "v-model.trim" => "remark", class: "remark-input", placeholder: "若对订单有特殊要求，请在此填写"
 
+          .page-panel.order-detail
+            .panel-block
+              | 价格清单
+            .panel-block
+              span.price-label
+                | 商品金额
+              .price-tag.right-side
+                | {{ total_price | price_text }}
+            .panel-block
+              span.price-label
+                | 运费
+              .price-tag.right-side
+                span v-if="free_distribution_reason"
+                  | （{{ free_distribution_reason }}）{{ 0 | price_text}}
+                span v-else=true
+                  | {{ distribution_price | price_text }}
+            .panel-block v-show="coupon_enable"
+              span.price-label
+                | 优惠
+              .price-tag.right-side
+                | {{ (-preferential_price) | price_text }}
+            .panel-block
+              span.price-label
+                | 应付金额
+              .price-tag.right-side
+                | {{ order_price | price_text }}
+
+        .page-footer.order-price-container
+          | 应付：{{ order_price | price_text }}
+          .footer-btn v-on:click="forward_to('order')"
+            | {{ pay_mode === "cod" ? "提交订单" : "微信支付" }}
         .select-time-container.modal-panel v-show="show_time_selector" v-on:click.self="show_time_selector = false"
           transition name="slide-up"
             .time-selector v-show="show_time_selector"
