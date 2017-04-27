@@ -18,10 +18,13 @@
 html, body, .yylife-wrapper, .yylife-wrapper > * {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .yylife-wrapper > * {
   position: absolute;
+  left: 0;
+  top: 0;
   color: $theme-black;
 }
 
