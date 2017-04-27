@@ -11,6 +11,10 @@
   // @include transform(scale(.5, .5));
 }
 
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
 html, body, .yylife-wrapper, .yylife-wrapper > * {
   width: 100%;
   height: 100%;
