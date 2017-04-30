@@ -42,9 +42,28 @@ class DataFactory
         4 => 100..117,
         5 => 62..68,
       }.each do |category_id, ingredient_ids|
-        c = Category.find category_id
-        Ingredient.where(id: ingredient_ids).each do |i|
-          i.category_ids = [c.id]
+        Ingredient.where(id: ingredient_ids).update_all(category_id: category_id)
+      end
+    end
+
+    def import_dishes_img
+      dir_path = File.join(Rails.root + "app/assets/images")
+      Dish.all.each do |dish|
+        relative_path = "dishes/#{dish.name}.jpg"
+        file = File.join(dir_path, relative_path)
+        if File.exists? file
+          dish.update_attribute(:image, relative_path)
+        end
+      end
+    end
+
+    def import_ingredients_img
+      dir_path = File.join(Rails.root + "app/assets/images")
+      Ingredient.preload(:category).all.each do |ingredient|
+        relative_path = "ingredients/#{ingredient.category.name}/#{ingredient.name}.jpg"
+        file = File.join(dir_path, relative_path)
+        if File.exists? file
+          ingredient.update_attribute(:image, relative_path)
         end
       end
     end
