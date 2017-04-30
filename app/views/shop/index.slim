@@ -295,7 +295,7 @@ template#shop-template
 
           .submit-address-container
             .submit-address-btn v-on:click="submit_address"
-              | 保存地址
+              | {{ submitting_address ? "保存中..." : "保存地址" }}
 
         .select-garden-container.modal-panel v-show="show_garden_selector" v-on:click.self="show_garden_selector = false"
           transition name="slide-up"

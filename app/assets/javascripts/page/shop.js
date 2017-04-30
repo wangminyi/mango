@@ -16,7 +16,7 @@ $(function(){
       order_type: "today", // 今日送货 today 预订送货 schedule
       distribution_price: 400, // 配送费
       free_distribution: 1000, // 免配送费金额
-      current_page: "address", // 当前所在页面 shopping order address edit_address
+      current_page: "shopping", // 当前所在页面 shopping order address edit_address
       can_immediately: false, // 能否可以立即送
       preferential_price: 300, // 优惠金额
 
@@ -46,6 +46,7 @@ $(function(){
 
       // 编辑地址页面
       show_garden_selector: false,
+      submitting_address: false,
       address_attributes: [
         "id",
         "name",
@@ -389,8 +390,9 @@ $(function(){
         this.show_garden_selector = false;
       },
 
-      copy_address: function(from, to) {
-        $.each(address_attributes, function(attr, value){
+      clear_editing_address: function() {
+        var that = this;
+        $.each(this.address_attributes, function(attr, value){
           if(typeof that.editing_address[attr] === "boolean") {
             that.editing_address[attr] = false;
           }else{
@@ -399,6 +401,11 @@ $(function(){
         })
       },
       submit_address: function() {
+        if (this.submitting_address) {
+          return;
+        } else {
+          this.submitting_address = true;
+        }
         var that = this,
             url = (this.editing_address.id === undefined ? "addresses/create" : "addresses/update");
         $.post(url, {
@@ -406,9 +413,12 @@ $(function(){
           address: this.editing_address,
         }).done(function(data){
           that.address_info = data.addresses;
+          that.clear_editing_address();
           that.back_to("address");
         }).fail(function(){
           alert("地址信息不完整");
+        }).always(function(){
+          that.submitting_address = false;
         })
       }
     },
