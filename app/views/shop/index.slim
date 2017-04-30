@@ -86,32 +86,33 @@ template#shop-template
               | 去结算
 
         .shopping-cart-detail-container.modal-panel v-show="show_shopping_cart" v-on:click.self="show_shopping_cart = false"
-          .shopping-cart-detail-panel
-            .shopping-cart-detail-header
-              .title 购物车
-              .clear-container v-on:click="clear_shopping_cart"
-                i.fa.fa-trash-o
-                span 清空购物车
-            .shopping-item-container
-              .shopping-item-box v-for="item in shopping_cart_list"
-                .image-container
-                  img v-bind:src="item.image"
-                .ingredient-info-container
-                  .name-container
-                    .name
-                      | {{ item.name }}
-                  .price-container
-                    .price
-                      | {{ item.price | price_text }}
-                    .weight
-                      | {{ item.weight | weight_text }}
-                  .operation-container v-if="item.count > 0"
-                    .decrease v-on:click="decrease_item(item)"
-                      | -
-                    .count
-                      | {{ item.count }}
-                    .increase v-on:click="increase_item(item)"
-                      | +
+          transition name="slide-up"
+            .shopping-cart-detail-panel v-show="show_shopping_cart"
+              .shopping-cart-detail-header
+                .title 购物车
+                .clear-container v-on:click="clear_shopping_cart"
+                  i.fa.fa-trash-o
+                  span 清空购物车
+              .shopping-item-container
+                .shopping-item-box v-for="item in shopping_cart_list"
+                  .image-container
+                    img v-bind:src="item.image"
+                  .ingredient-info-container
+                    .name-container
+                      .name
+                        | {{ item.name }}
+                    .price-container
+                      .price
+                        | {{ item.price | price_text }}
+                      .weight
+                        | {{ item.weight | weight_text }}
+                    .operation-container v-if="item.count > 0"
+                      .decrease v-on:click="decrease_item(item)"
+                        | -
+                      .count
+                        | {{ item.count }}
+                      .increase v-on:click="increase_item(item)"
+                        | +
 
       .order-page-container v-else-if="current_page === 'order'" key="order_page"
         .page-header
