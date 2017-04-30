@@ -374,13 +374,7 @@ $(function(){
       },
       add_address: function() {
         var that = this;
-        $.each(this.address_attributes, function(attr, value){
-          if(typeof that.editing_address[attr] === "boolean") {
-            that.editing_address[attr] = false;
-          }else{
-            that.editing_address[attr] = undefined;
-          }
-        })
+        this.clear_editing_address();
         this.forward_to("edit_address");
       },
 
@@ -392,7 +386,7 @@ $(function(){
 
       clear_editing_address: function() {
         var that = this;
-        $.each(this.address_attributes, function(attr, value){
+        $.each(this.address_attributes, function(index, attr){
           if(typeof that.editing_address[attr] === "boolean") {
             that.editing_address[attr] = false;
           }else{
@@ -413,7 +407,6 @@ $(function(){
           address: this.editing_address,
         }).done(function(data){
           that.address_info = data.addresses;
-          that.clear_editing_address();
           that.back_to("address");
         }).fail(function(){
           alert("地址信息不完整");
