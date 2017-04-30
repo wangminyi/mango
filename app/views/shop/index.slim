@@ -218,10 +218,87 @@ template#shop-template
         .page-header
           i.fa.fa-chevron-left v-on:click="back_to('order')"
           | 我的送货地址
-        .add-address-btn 添加送货地址
+
+        .page-body-wrapper
+          transition-group name="fade-out" tag="div"
+            .address-info-container v-for="address in address_info" v-bind:key="address"
+              .page-panel
+                .panel-block v-on:click.self="select_address(address)"
+                  | {{address | address_text}}
+                .panel-block.address-operation
+                  .left-side
+                    template v-if="address.is_default"
+                      i.fa.fa-check-circle
+                      span
+                        | 默认地址
+                    template v-else=true
+                      | &nbsp;
+                  .right-side
+                    span v-on:click="edit_address(address)"
+                      i.fa.fa-edit
+                      | 编辑
+                    span v-on:click="delete_address(address)"
+                      i.fa.fa-trash-o
+                      | 删除
+
+        .add-address-container
+          .add-address-btn v-on:click="add_address"
+            | 添加送货地址
 
 
-      .edit-address-page-container v-else-if="current_page === 'edit_address'" key="edit_address"
+      .edit-address-page v-else-if="current_page === 'edit_address'" key="edit_address"
         .page-header
           i.fa.fa-chevron-left v-on:click="back_to('address')"
           | 添加送货地址
+        .page-body-wrapper
+          .page-panel
+            .panel-block
+              | 姓名
+              .right-side
+                = text_field_tag nil, nil, "v-model.trim" => "editing_address.name", placeholder: "请填写姓名"
+            .panel-block
+              | 性别
+              .right-side
+                .radiobox-container v-on:click="editing_address.gender = 'female'"
+                  .custom-radio-btn v-bind:class="{ selected: editing_address.gender == 'female' }"
+                    i.fa.fa-check
+                  label for="male"
+                    | 女士
+                .radiobox-container v-on:click="editing_address.gender = 'male'"
+                  .custom-radio-btn v-bind:class="{ selected: editing_address.gender == 'male' }"
+                    i.fa.fa-check
+                  label for="female"
+                    | 先生
+            .panel-block
+              | 联系电话
+              .right-side
+                = text_field_tag nil, nil, "v-model.trim" => "editing_address.phone", placeholder: "请输入您的手机号码"
+
+          .page-panel
+            .panel-block v-on:click="show_garden_selector = true"
+              | 小区名称
+              .right-side
+                span
+                  | {{ editing_address.garden || " " }}
+                i.fa.fa-chevron-right
+            .panel-block
+              | 门牌号
+              .right-side
+                = text_field_tag nil, nil, "v-model.trim" => "editing_address.house_number", placeholder: "如5幢802"
+
+          .page-panel
+            .panel-block
+              | 设为默认地址
+              .checkbox-btn.right-side v-bind:class="editing_address.is_default ? 'enable' : 'disable'" v-on:click="editing_address.is_default = !editing_address.is_default"
+                .btn-circle
+
+          .submit-address-container
+            .submit-address-btn v-on:click="submit_address"
+              | 保存地址
+
+        .select-garden-container.modal-panel v-show="show_garden_selector" v-on:click.self="show_garden_selector = false"
+          transition name="slide-up"
+            .garden-selector v-show="show_garden_selector"
+              .garden-selector-body
+                .option v-for="garden in support_gardens" v-on:click="select_garden_handler(garden)"
+                  | {{ garden }}

@@ -7,4 +7,10 @@ Rails.application.routes.draw do
   namespace :shop do
 
   end
+
+  namespace :addresses do
+    post :destroy
+    post :create
+    post :update
+  end
 end

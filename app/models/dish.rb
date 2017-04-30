@@ -2,11 +2,12 @@ class Dish < ApplicationRecord
   has_many :dishes_ingredients, dependent: :destroy
   has_many :ingredients, through: :dishes_ingredients
 
+
   def as_json
     {
       name: self.name,
       type: "dish",
-      image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
+      image: ActionController::Base.helpers.asset_url(self.image || "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg"),
       label: "所需食材：#{self.ingredients.map(&:name).join("、")}",
       price: self.price,
       items: self.items_json,

@@ -110,11 +110,72 @@ $header-height: 50px;
       overflow-x: auto;
       white-space: nowrap;
     }
+
+    // 滑动选择框
+    .checkbox-btn {
+      width: 50px;
+      height: 30px;
+      border: 1px solid $border-color;
+      border-radius: 15px;
+      @include transition(all, .3s, ease);
+
+      .btn-circle {
+        background-color: white;
+        width: 28px;
+        height: 28px;
+        border: 1px solid $border-color;
+        border-radius: 50%;
+        @include box-shadow(0, 2px, -2px, 2px, $border-color);
+      }
+
+      &.disable, {
+        padding-left: 0;
+        background-color: white;
+      }
+
+      &.enable {
+        padding-left: 20px;
+        background-color: $theme-green;
+      }
+    }
+
+    // 单选框
+    .radiobox-container {
+      display: inline-block;
+      margin-right: 50px;
+      .custom-radio-btn, label {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .custom-radio-btn {
+        width: 20px;
+        border-radius: 50%;
+        border: 1px solid $border-color;
+        line-height: 20px;
+        font-size: 12px;
+        color: white;
+        text-align: center;
+        margin-right: 5px;
+        &.selected {
+          background-color: $theme-green;
+          border: none;
+        }
+      }
+
+      label {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 
-.slide-left-enter-active, .slide-left-leave-active, .slide-right-enter-active, .slide-right-leave-active, .slide-up-enter-active, .slide-up-leave-active, .slide-down-enter-active, .slide-down-leave-active,  {
+.slide-left-enter-active, .slide-left-leave-active, .slide-right-enter-active, .slide-right-leave-active, .slide-up-enter-active, .slide-up-leave-active, .slide-down-enter-active, .slide-down-leave-active {
   @include transition(all, .3s, ease);
+}
+
+.fade-out-leave-active {
+  @include transition(all, .8s, ease);
 }
 
 .slide-left-leave-active, .slide-right-enter, {
@@ -131,6 +192,10 @@ $header-height: 50px;
 
 .slide-up-enter, .slide-down-leave-active {
   @include transform(translateY(100%));
+}
+
+.fade-out-leave-active {
+  opacity: 0;
 }
 
 .shop-page-container {
@@ -565,33 +630,6 @@ $header-height: 50px;
     }
   }
 
-  .checkbox-btn {
-    width: 50px;
-    height: 30px;
-    border: 1px solid $border-color;
-    border-radius: 15px;
-    @include transition(all, .3s, ease);
-
-    .btn-circle {
-      background-color: white;
-      width: 28px;
-      height: 28px;
-      border: 1px solid $border-color;
-      border-radius: 50%;
-      @include box-shadow(0, 2px, -2px, 2px, $border-color);
-    }
-
-    &.disable, {
-      padding-left: 0;
-      background-color: white;
-    }
-
-    &.enable {
-      padding-left: 20px;
-      background-color: $theme-green;
-    }
-  }
-
   .pay-mode-container {
     .pay-mode-block {
       width: 70px;
@@ -643,7 +681,7 @@ $header-height: 50px;
     .time-selector {
       position: absolute;
       width: 100%;
-      bottom: 0;
+      bottom: $footer-height;
       .time-selector-header {
         height: 40px;
         background-color: $theme-green;
@@ -691,9 +729,108 @@ $header-height: 50px;
         .time {
           @include flex(1);
           height: 200px;
+          padding: 40px 0;
           .option {
             padding: 10px 0;
           }
+        }
+      }
+    }
+  }
+}
+
+.address-page-container {
+  background-color: $bg-light-gray;
+
+  .page-body-wrapper {
+    bottom: 90px;
+  }
+
+  .address-info-container {
+    .address-operation {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      i.fa {
+        margin-right: 5px;
+      }
+      .left-side {
+        i.fa {
+          color: #E24E1E;
+        }
+      }
+      .right-side {
+        .fa-trash-o {
+          margin-left: 15px;
+        }
+      }
+    }
+  }
+
+  .add-address-container {
+    position: fixed;
+    height: 50px;
+    left: 0;
+    right: 0;
+    bottom: 20px;
+    padding: 0 40px;
+    .add-address-btn {
+      background-color: $theme-green;
+      line-height: 50px;
+      text-align: center;
+      color: white;
+    }
+  }
+}
+
+.edit-address-page {
+  background-color: $bg-light-gray;
+  .panel-block {
+    .right-side {
+      left: 100px;
+      .fa-chevron-right {
+        position: absolute;
+        right: 0;
+        top: 3px;
+      }
+
+      &.checkbox-btn {
+        left: auto;
+      }
+    }
+  }
+
+  .submit-address-container {
+    margin-top: 40px;
+    padding: 0 40px;
+    .submit-address-btn {
+      background-color: $theme-green;
+      line-height: 50px;
+      text-align: center;
+      color: white;
+    }
+  }
+
+  .select-garden-container {
+    .garden-selector {
+      height: 240px;
+      overflow: auto;
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      background-color: white;
+      &:after {
+        content: "";
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+      }
+      .garden-selector-body {
+        width: 100%;
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+        .option {
+          padding: 10px 0;
         }
       }
     }

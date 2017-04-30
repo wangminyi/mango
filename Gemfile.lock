@@ -170,6 +170,10 @@ GEM
     orm_adapter (0.5.0)
     os (0.9.6)
     paint (1.0.1)
+    pry (0.10.4)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     puma (3.6.2)
     rack (2.0.1)
     rack-test (0.6.3)
@@ -247,6 +251,7 @@ GEM
       actionpack (>= 3.1)
       railties (>= 3.1)
       slim (~> 3.0)
+    slop (3.6.0)
     spoon (0.0.6)
       ffi
     spring (2.0.0)
@@ -307,6 +312,7 @@ DEPENDENCIES
   jquery-rails
   listen (~> 3.0.5)
   mysql2
+  pry
   puma (~> 3.0)
   rails (~> 5.0.1)
   redis-objects

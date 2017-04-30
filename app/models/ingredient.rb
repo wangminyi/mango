@@ -1,5 +1,5 @@
 class Ingredient < ApplicationRecord
-  has_and_belongs_to_many :categories
+  belongs_to :category
   has_many :dishes_ingredients, dependent: :destroy
   has_many :dishes, through: :dishes_ingredients
 
@@ -8,7 +8,7 @@ class Ingredient < ApplicationRecord
       id:     self.id,
       name:   self.name,
       type:   "ingredient",
-      image:  "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
+      image:  ActionController::Base.helpers.asset_url(self.image || "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg"),
       label:  self.dishes.present? ? "推荐食谱：#{self.dishes.first(3).map(&:name).join('、')}" : "",
       discount: self.discount.present?,
       price:    self.price || 350,

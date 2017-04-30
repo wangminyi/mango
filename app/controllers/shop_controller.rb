@@ -26,6 +26,7 @@ class ShopController < ApplicationController
     end
 
     gon.categories = categories
+    gon.addresses = current_user.addresses_json
     gon.gifts = [
       {
         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",

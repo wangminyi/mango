@@ -5,114 +5,8 @@
 $(function(){
   moment.locale("zh-CN");
   Vue.config.devtools = true;
-
-  // demo
-  // var categories = [
-  //   {
-  //     name: "每日推荐",
-  //     items: [
-  //       {
-  //         name: "糖醋排骨",
-  //         type: "dish",
-  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-  //         label: "所需食材：猪小排、生姜",
-  //         price: 2850,
-  //         items: [
-  //           {
-  //             id: 1,
-  //             count: 1,
-  //           },
-  //           {
-  //             id: 5,
-  //             count: 2,
-  //           }
-  //         ]
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     name: "蔬菜",
-  //     items: [
-  //       {
-  //         id: 1,
-  //         name: "小白菜",
-  //         type: "ingredient",
-  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-  //         label: "推荐食谱：蒜蓉青菜、香菇青菜、百叶青菜",
-  //         discount: true,
-  //         price: 350,
-  //         weight: 500,
-  //         count: 1,
-  //         texture: "口感不错"
-  //       },{
-  //         id: 2,
-  //         name: "小白菜",
-  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-  //         type: "ingredient",
-  //         relate_dishes: ["蒜蓉青菜", "香菇青菜", "百叶青菜"],
-  //         discount: true,
-  //         price: 350,
-  //         weight: 500,
-  //         count: 0,
-  //       },{
-  //         id: 3,
-  //         name: "小白菜",
-  //         type: "ingredient",
-  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-  //         relate_dishes: ["蒜蓉青菜", "香菇青菜", "百叶青菜"],
-  //         discount: true,
-  //         price: 350,
-  //         weight: 500,
-  //         count: 0,
-  //       },{
-  //         id: 4,
-  //         name: "小白菜",
-  //         type: "ingredient",
-  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-  //         relate_dishes: ["蒜蓉青菜", "香菇青菜", "百叶青菜"],
-  //         discount: true,
-  //         price: 350,
-  //         weight: 500,
-  //         count: 0,
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     name: "肉禽",
-  //     items: [
-  //       {
-  //         id: 5,
-  //         name: "猪肉",
-  //         type: "ingredient",
-  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-  //         relate_dishes: ["A", "B", "C"],
-  //         discount: false,
-  //         price: 350,
-  //         weight: 500,
-  //         count: 0,
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     name: "水产",
-  //     unsellable: true,
-  //     unsellhint: "水产品价格每日变动较大，且为保证鲜活，仅支持微信预订和货到付款，望谅解。\n加店主微信（Sthaboutlinda）预订，送货上门。",
-  //     items: [
-  //       {
-  //         id: 6,
-  //         name: "龙虾",
-  //         type: "ingredient",
-  //         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-  //         relate_dishes: ["蒜蓉青菜", "香菇青菜", "百叶青菜"],
-  //         discount: true,
-  //         price: 5000,
-  //         weight: 500,
-  //         count: 0,
-  //       }
-  //     ]
-  //   }
-  // ];
-  var categories = gon.categories;
+  var categories = gon.categories,
+      addresses = gon.addresses;
 
   window.vue = new Vue({
     el: "#shop-vue-anchor",
@@ -122,7 +16,7 @@ $(function(){
       order_type: "today", // 今日送货 today 预订送货 schedule
       distribution_price: 400, // 配送费
       free_distribution: 1000, // 免配送费金额
-      current_page: "order", // 当前所在页面 shopping order address
+      current_page: "address", // 当前所在页面 shopping order address edit_address
       can_immediately: false, // 能否可以立即送
       preferential_price: 300, // 优惠金额
 
@@ -148,32 +42,33 @@ $(function(){
       temp_selected_time: undefined, // 选择控件的时间值
       show_time_selector: false, // 是否显示时间控件
 
-      // 地址页面
+      address_info: addresses,
+
+      // 编辑地址页面
+      show_garden_selector: false,
+      address_attributes: [
+        "id",
+        "name",
+        "gender",
+        "phone",
+        "garden",
+        "house_number",
+        "is_default",
+      ],
+      editing_address: {
+        id: undefined,
+        name: undefined,
+        gender: undefined,
+        phone: undefined,
+        garden: undefined,
+        house_number: undefined,
+        is_default: false,
+      }, // 正在编辑的地址 json
       support_gardens: [ // 支持的小区名称
         "周浦印象春城",
         "周浦逸亭佳苑",
         "周浦兰亭-九龙仓",
         "周浦惠康公寓",
-      ],
-      address_info: [
-        {
-          id: 1,
-          name: "一二三",
-          gender: "female",
-          phone: "13888888888",
-          garden: "周浦印象春城",
-          house_number: "72幢301",
-          is_default: false,
-        },
-        {
-          id: 2,
-          name: "四五六",
-          gender: "female",
-          phone: "13666666688",
-          garden: "周浦逸亭佳苑",
-          house_number: "27幢101",
-          is_default: false,
-        }
       ],
     },
     computed: {
@@ -444,6 +339,77 @@ $(function(){
         this.selected_date = this.temp_selected_date;
         this.selected_time = this.temp_selected_time;
         this.show_time_selector = false;
+      },
+
+      // ====== 地址列表 ======
+      select_address: function(address) {
+        this.selected_address = address;
+        this.back_to("order");
+      },
+      edit_address: function(address) {
+        var that = this;
+        $.each(this.address_attributes, function(index, attr){
+          that.editing_address[attr] = address[attr];
+        });
+
+        this.forward_to("edit_address");
+      },
+      delete_address: function(address) {
+        var that = this;
+        if(confirm("您确定要删除该地址？")){
+          $.post("/addresses/destroy", {
+            address_id: address.id
+          }).done(function(){
+            if ((index = that.address_info.indexOf(address)) >= 0) {
+              that.address_info.splice(index, 1);
+              if (that.selected_address === address) {
+                that.selected_address = undefined;
+              }
+            }
+          }).fail(function(){
+            alert("操作失败");
+          })
+        }
+      },
+      add_address: function() {
+        var that = this;
+        $.each(this.address_attributes, function(attr, value){
+          if(typeof that.editing_address[attr] === "boolean") {
+            that.editing_address[attr] = false;
+          }else{
+            that.editing_address[attr] = undefined;
+          }
+        })
+        this.forward_to("edit_address");
+      },
+
+      // ====== 编辑地址 ======
+      select_garden_handler: function(garden) {
+        this.editing_address.garden = garden;
+        this.show_garden_selector = false;
+      },
+
+      copy_address: function(from, to) {
+        $.each(address_attributes, function(attr, value){
+          if(typeof that.editing_address[attr] === "boolean") {
+            that.editing_address[attr] = false;
+          }else{
+            that.editing_address[attr] = undefined;
+          }
+        })
+      },
+      submit_address: function() {
+        var that = this,
+            url = (this.editing_address.id === undefined ? "addresses/create" : "addresses/update");
+        $.post(url, {
+          address_id: this.editing_address.id,
+          address: this.editing_address,
+        }).done(function(data){
+          that.address_info = data.addresses;
+          that.back_to("address");
+        }).fail(function(){
+          alert("地址信息不完整");
+        })
       }
     },
     mounted: function () {

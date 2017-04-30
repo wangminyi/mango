@@ -10,19 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170416110708) do
+ActiveRecord::Schema.define(version: 20170430085113) do
+
+  create_table "addresses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.string   "gender"
+    t.string   "phone"
+    t.string   "garden"
+    t.string   "house_number"
+    t.boolean  "is_default"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["user_id"], name: "index_addresses_on_user_id", using: :btree
+  end
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "categories_ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "category_id"
-    t.integer "ingredient_id"
-    t.index ["category_id"], name: "index_categories_ingredients_on_category_id", using: :btree
-    t.index ["ingredient_id"], name: "index_categories_ingredients_on_ingredient_id", using: :btree
   end
 
   create_table "dishes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -47,6 +53,7 @@ ActiveRecord::Schema.define(version: 20170416110708) do
 
   create_table "ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
+    t.string   "alias"
     t.string   "image"
     t.integer  "price"
     t.integer  "weight"
@@ -56,6 +63,9 @@ ActiveRecord::Schema.define(version: 20170416110708) do
     t.datetime "updated_at",                null: false
     t.string   "discount"
     t.string   "texture"
+    t.integer  "category_id"
+    t.index ["alias"], name: "index_ingredients_on_alias", using: :btree
+    t.index ["category_id"], name: "index_ingredients_on_category_id", using: :btree
     t.index ["discount"], name: "index_ingredients_on_discount", using: :btree
     t.index ["name"], name: "index_ingredients_on_name", using: :btree
     t.index ["stock"], name: "index_ingredients_on_stock", using: :btree
