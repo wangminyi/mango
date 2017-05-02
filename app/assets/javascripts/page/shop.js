@@ -197,7 +197,7 @@ $(function(){
         this.selected_category = category;
         $(".ingredients-container").scrollTop(0);
       },
-      show_dish_method(dish) {
+      show_dish_method: function(dish) {
         this.selected_dish = dish;
       },
       add_dish: function(dish) {
