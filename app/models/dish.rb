@@ -11,6 +11,7 @@ class Dish < ApplicationRecord
       label: "所需食材：#{self.ingredients.map(&:name).join("、")}",
       price: self.price,
       items: self.items_json,
+      cooking_method: self.cooking_method,
     }
   end
 

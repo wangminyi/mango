@@ -26,6 +26,7 @@ $(function(){
       // 购物页面
       selected_category: categories[0], // 选中的商品类别
       show_shopping_cart: false, // 购物页面是否显示购物车详情
+      selected_dish: undefined,  // 显示做法
       show_header_hint: ($.cookie("show_header_hint") === undefined), // 是否显示顶部提示
       categories: categories, // 商品对象
 
@@ -109,9 +110,10 @@ $(function(){
       },
       // 选购商品的总价
       total_price: function(){
-        var price = 0;
+        var price = 0,
+            that  = this;
         $.each(this.shopping_cart_list, function(index, item) {
-          price += item.count * item.price;
+          price += item.count * that.item_price(item);
         });
         return price;
       },
@@ -180,11 +182,23 @@ $(function(){
     },
     methods: {
       change_order_type: function(type) {
-        this.selected_date = undefined;
-        this.selected_time = undefined;
-        this.temp_selected_date = undefined;
-        this.temp_selected_time = undefined;
-        this.order_type = type;
+        if (this.shopping_cart_list.length === 0 || confirm("切换后购物车将被清空，确定吗？")) {
+          this.selected_date = undefined;
+          this.selected_time = undefined;
+          this.temp_selected_date = undefined;
+          this.temp_selected_time = undefined;
+          $.each(this.shopping_cart_list, function(index, item){
+            item.count = 0;
+          });
+          this.order_type = type;
+        }
+      },
+      change_category: function(category) {
+        this.selected_category = category;
+        $(".ingredients-container").scrollTop(0);
+      },
+      show_dish_method(dish) {
+        this.selected_dish = dish;
       },
       add_dish: function(dish) {
         var that = this;
@@ -209,9 +223,22 @@ $(function(){
           this.show_shopping_cart = false;
         }
       },
+      item_price: function(item) {
+        if (this.order_type === "schedule") {
+          return item.schedule_price || item.price;
+        } else {
+          return item.price;
+        }
+      },
+      can_increase: function(item, number) {
+        var result_count = item.count + (number || 1);
+        return result_count <= (item.order_limit || 100) && (this.order_type === "schedule" || result_count <= item.stock);
+      },
       increase_item: function(item, number) {
         number = number || 1;
-        item.count += number;
+        if (this.can_increase(item, number)) {
+          item.count += number;
+        }
       },
       decrease_item: function(item, number) {
         number = number || 1;

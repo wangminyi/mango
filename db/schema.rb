@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170430085113) do
+ActiveRecord::Schema.define(version: 20170502084854) do
 
   create_table "addresses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -57,13 +57,15 @@ ActiveRecord::Schema.define(version: 20170430085113) do
     t.string   "image"
     t.integer  "price"
     t.integer  "weight"
-    t.text     "description", limit: 65535
+    t.text     "description",    limit: 65535
     t.integer  "stock"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.string   "discount"
     t.string   "texture"
     t.integer  "category_id"
+    t.integer  "order_limit"
+    t.integer  "schedule_price"
     t.index ["alias"], name: "index_ingredients_on_alias", using: :btree
     t.index ["category_id"], name: "index_ingredients_on_category_id", using: :btree
     t.index ["discount"], name: "index_ingredients_on_discount", using: :btree

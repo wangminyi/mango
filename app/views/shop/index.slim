@@ -21,7 +21,7 @@ template#shop-template
         .goods-container v-bind:class="{with_message: show_header_hint}"
           .items-container
             .categories-container
-              .category-label v-for="category in categories" v-bind:class="{ selected: selected_category === category }" v-on:click="selected_category = category"
+              .category-label v-for="category in categories" v-bind:class="{ selected: selected_category === category }" v-on:click="change_category(category)"
                 .category-count v-if="category_count(category) > 0"
                   | {{ category_count(category) }}
                 | {{ category.name }}
@@ -29,12 +29,14 @@ template#shop-template
               .unsellhint-container v-if="selected_category.unsellable"
                 | {{selected_category.unsellhint}}
               .ingredients-panel v-for="item in selected_items"
-                .image-container
+                .image-container v-on:click="item.type === 'dish' ? show_dish_method(item) : null"
                   img v-bind:src="item.image"
                 .ingredient-info-container
                   .name-container
                     .name
                       | {{ item.name }}
+                      span.stock-limit v-if="item.stock <= 10"
+                        | (仅剩{{ item.stock }}份)
                     .tag v-if="item.discount"
                       | 优惠
                   .texture v-if="item.texture"
@@ -51,7 +53,7 @@ template#shop-template
                   template v-else=true
                     .price-container
                       .price
-                        | {{ item.price | price_text }}
+                        | {{ item_price(item) | price_text }}
                       .weight v-if="item.weight"
                         | {{ item.weight | weight_text }}
                     .operation-container v-if="item.type == 'ingredient'"
@@ -85,6 +87,14 @@ template#shop-template
             .footer-btn v-on:click="forward_to('order')"
               | 去结算
 
+        .dish-method-container.modal-panel v-if="selected_dish !== undefined" v-on:click.self="selected_dish = undefined"
+          .modal-panel-container
+            i.fa.fa-times
+            .modal-panel-title
+              | {{selected_dish.name}}的做法
+            .modal-panel-content
+              | {{selected_dish.cooking_method}}
+
         .shopping-cart-detail-container.modal-panel v-show="show_shopping_cart" v-on:click.self="show_shopping_cart = false"
           transition name="slide-up"
             .shopping-cart-detail-panel v-show="show_shopping_cart"
@@ -103,7 +113,7 @@ template#shop-template
                         | {{ item.name }}
                     .price-container
                       .price
-                        | {{ item.price | price_text }}
+                        | {{ item_price(item) | price_text }}
                       .weight
                         | {{ item.weight | weight_text }}
                     .operation-container v-if="item.count > 0"
