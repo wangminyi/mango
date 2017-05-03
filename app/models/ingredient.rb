@@ -1,5 +1,5 @@
 class Ingredient < ApplicationRecord
-  belongs_to :category
+  belongs_to :category, optional: true
   has_many :dishes_ingredients, dependent: :destroy
   has_many :dishes, through: :dishes_ingredients
 

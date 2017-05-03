@@ -8,6 +8,15 @@ class DataFactory
       end
     end
 
+    def import_data
+      # Ingredient.delete_all
+      Dish.delete_all
+      # DishesIngredient.delete_all
+      # import_ingredient
+      import_dishes
+      # import_cooking_method
+    end
+
     def import_ingredient
       CSV.foreach("./data_files/ingredients.csv") do |line|
         Ingredient.create(
@@ -17,20 +26,35 @@ class DataFactory
     end
 
     def import_dishes
+      undefined_ingredients = []
       CSV.foreach("./data_files/dishes.csv") do |line|
+        data = line.reject(&:blank?)
+        next if data.length < 2
+
         dish = Dish.create(
-          name: line[0],
+          name: data[0],
         )
-        line.reject(&:blank?)[1..-1].each do |ingredient|
+
+        data[1..-1].each do |ingredient|
           i = Ingredient.find_by(name: ingredient)
-          dish.ingredients << i if i.present?
+          if i.present?
+            dish.ingredients << i
+          else
+            undefined_ingredients << ingredient
+          end
         end
       end
+
+      puts "未找到的食材：#{undefined_ingredients.uniq.join(",")}"
     end
 
     def import_cooking_method
       CSV.foreach("./data_files/methods.csv") do |line|
-        dish = Dish.find_by(name: line[0])&.update(cooking_method: line[1])
+        cm = line[1].split(/[0-9]./)
+        data = cm.map.with_index do |index, step|
+          "#{index + 1}. #{step}"
+        end.join("\n")
+        dish = Dish.find_by(name: line[0])&.update(cooking_method: data)
       end
     end
 
