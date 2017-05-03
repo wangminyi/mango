@@ -49,13 +49,24 @@ class DataFactory
     end
 
     def import_cooking_method
+      undefined_dishes = []
       CSV.foreach("./data_files/methods.csv") do |line|
-        cm = line[1].split(/[0-9]./)
-        data = cm.map.with_index do |index, step|
-          "#{index + 1}. #{step}"
+        data = line.reject(&:blank?)
+        next if data.length < 2
+
+        cm = data[1].split(/[0-9]./).reject(&:blank?)
+        method_text = cm.map.with_index do |step, index|
+          "#{index + 1}. #{step.strip}"
         end.join("\n")
-        dish = Dish.find_by(name: line[0])&.update(cooking_method: data)
+        dish = Dish.find_by(name: data[0])
+        if dish.present?
+          dish.update(cooking_method: method_text)
+        else
+          undefined_dishes << line[0]
+        end
       end
+
+      puts undefined_dishes.join(",")
     end
 
     def import_categories
