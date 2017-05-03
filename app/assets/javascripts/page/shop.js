@@ -33,14 +33,14 @@ $(function(){
       // 订单页面
         // 表单字段
       selected_address: undefined, // 选择的地址 json
-      selected_date: undefined, // 选择的送货日期 2017-04-06
-      selected_time: undefined, // 选择的送货时间 16:00
+      selected_date: undefined, // 选择的送货日期 [今天，2017-4-6]
+      selected_time: undefined, // 选择的送货时间 [16:00 ~ 18:00, "16:00"]
       coupon_enable: true,  // 是否使用优惠券
       pay_mode: "cod", // cod(cash on delivery) || wechat
       remark: undefined, // 备注
         // 局部变量
-      temp_selected_date: undefined, // 选择控件的日期值
-      temp_selected_time: undefined, // 选择控件的时间值
+      temp_selected_date: undefined, // 选择控件的日期值 [今天，2017-4-6]
+      temp_selected_time: undefined, // 选择控件的时间值 [16:00 ~ 18:00, "16:00"]
       show_time_selector: false, // 是否显示时间控件
 
       address_info: addresses,
@@ -183,14 +183,14 @@ $(function(){
     methods: {
       change_order_type: function(type) {
         if (this.shopping_cart_list.length === 0 || confirm("切换后购物车将被清空，确定吗？")) {
+          this.order_type = type;
           this.selected_date = undefined;
           this.selected_time = undefined;
-          this.temp_selected_date = undefined;
+          this.temp_selected_date = this.selectable_date()[0];
           this.temp_selected_time = undefined;
           $.each(this.shopping_cart_list, function(index, item){
             item.count = 0;
           });
-          this.order_type = type;
         }
       },
       change_category: function(category) {
@@ -444,6 +444,7 @@ $(function(){
       }
     },
     mounted: function () {
+      // 设置默认地址
       var default_addr = undefined;
       $.each(this.address_info, function(index, addr) {
         if (addr.is_default) {
@@ -451,6 +452,9 @@ $(function(){
         }
       });
       this.selected_address = default_addr;
+
+      // 设置默认送货日期
+      this.temp_selected_date = this.selectable_date()[0];
     }
   });
 
@@ -459,17 +463,17 @@ $(function(){
         from_y = event.clientY - 10,
         to_x   = 20,
         to_y   = 700,
-        $ele   = $("#throwable-ball");
+        $ele   = $("<div class='throwable-ball'></div>").appendTo($("body"));
     $ele.css({
       left: from_x,
       top: from_y,
-    }).show().animate({
+    }).animate({
       left: to_x,
       top: to_y,
     }, {
       duration: 500,
       complete: function(){
-        $ele.hide();
+        $ele.remove();
       },
     });
   }

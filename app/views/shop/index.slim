@@ -6,8 +6,6 @@
 
 #shop-vue-anchor
 
-#throwable-ball
-
 template#shop-template
   .yylife-wrapper
     transition v-bind:name="slide_direction"
@@ -210,6 +208,7 @@ template#shop-template
           | 应付：{{ order_price | price_text }}
           .footer-btn v-on:click="forward_to('order')"
             | {{ pay_mode === "cod" ? "提交订单" : "微信支付" }}
+
         .select-time-container.modal-panel v-show="show_time_selector" v-on:click.self="show_time_selector = false"
           transition name="slide-up"
             .time-selector v-show="show_time_selector"

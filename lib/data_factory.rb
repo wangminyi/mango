@@ -11,7 +11,7 @@ class DataFactory
     def import_data
       # Ingredient.delete_all
       Dish.delete_all
-      # DishesIngredient.delete_all
+      DishesIngredient.delete_all
       # import_ingredient
       import_dishes
       # import_cooking_method
@@ -60,11 +60,11 @@ class DataFactory
 
     def import_categories
       {
-        1 => 1..61,
-        2 => 69..79,
-        3 => 80..99,
-        4 => 100..117,
-        5 => 62..68,
+        1 => 1..192,
+        2 => 193..203,
+        3 => 204..224,
+        4 => 225..244,
+        5 => 245..255,
       }.each do |category_id, ingredient_ids|
         Ingredient.where(id: ingredient_ids).update_all(category_id: category_id)
       end
