@@ -6,6 +6,8 @@
 
 #shop-vue-anchor
 
+#throwable-ball
+
 template#shop-template
   .yylife-wrapper
     transition v-bind:name="slide_direction"
@@ -64,7 +66,7 @@ template#shop-template
                       .increase v-on:click="increase_item(item)"
                         | +
                     .operation-container v-if="item.type == 'dish'"
-                      .increase v-on:click="add_dish(item)"
+                      .increase v-on:click="add_dish(item, $event)"
                         | +
 
         .shopping-info-container.page-footer

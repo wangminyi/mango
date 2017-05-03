@@ -234,6 +234,15 @@ $header-height: 50px;
   opacity: 0;
 }
 
+#throwable-ball {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: $theme-green;
+  position: fixed;
+  display: none;
+}
+
 .shop-page-container {
   .order-type-container {
     .order-type {

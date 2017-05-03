@@ -200,8 +200,9 @@ $(function(){
       show_dish_method: function(dish) {
         this.selected_dish = dish;
       },
-      add_dish: function(dish) {
+      add_dish: function(dish, e) {
         var that = this;
+        add_to_shopping_cart(e);
         $.each(dish.items, function(index, item) {
           that.increase_item(that.items_hash[item.id], item.count);
         })
@@ -451,5 +452,25 @@ $(function(){
       });
       this.selected_address = default_addr;
     }
-  })
+  });
+
+  function add_to_shopping_cart(event) {
+    var from_x = event.clientX - 10,
+        from_y = event.clientY - 10,
+        to_x   = 20,
+        to_y   = 700,
+        $ele   = $("#throwable-ball");
+    $ele.css({
+      left: from_x,
+      top: from_y,
+    }).show().animate({
+      left: to_x,
+      top: to_y,
+    }, {
+      duration: 500,
+      complete: function(){
+        $ele.hide();
+      },
+    });
+  }
 })
