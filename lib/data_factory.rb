@@ -94,13 +94,27 @@ class DataFactory
 
     def import_ingredients_img
       dir_path = File.join(Rails.root + "app/assets/images")
-      Ingredient.preload(:category).all.each do |ingredient|
-        relative_path = "ingredients/#{ingredient.category.name}/#{ingredient.name}.jpg"
-        file = File.join(dir_path, relative_path)
-        if File.exists? file
+      suffixes = ["jpg", "jpeg"]
+      undefined_ingredients = []
+      Ingredient.where(image: nil).each do |ingredient|
+        relative_path = nil
+        suffixes.each do |suffix|
+          temp_path = "ingredients/#{ingredient.name}.#{suffix}"
+          file = File.join(dir_path, temp_path)
+          if File.exists? file
+            relative_path = temp_path
+            break
+          end
+        end
+
+        if relative_path.present?
           ingredient.update_attribute(:image, relative_path)
+        else
+          undefined_ingredients << ingredient.name
         end
       end
+
+      puts undefined_ingredients.join(",")
     end
   end
 end
