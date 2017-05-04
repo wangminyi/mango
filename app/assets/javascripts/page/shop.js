@@ -461,8 +461,9 @@ $(function(){
   function add_to_shopping_cart(event) {
     var from_x = event.clientX - 10,
         from_y = event.clientY - 10,
-        to_x   = 20,
-        to_y   = 700,
+        $target = $(".fa-shopping-cart"),
+        to_x   = $target.offset().left,
+        to_y   = $target.offset().top,
         $ele   = $("<div class='throwable-ball'></div>").appendTo($("body"));
     $ele.css({
       left: from_x,

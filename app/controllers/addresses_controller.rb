@@ -33,6 +33,8 @@ class AddressesController < ApplicationController
     end
 
     def address_param
+      params[:address][:is_default] = (params[:address][:is_default] == "true")
+
       params.require(:address).permit(
         :name,
         :gender,
