@@ -9,12 +9,13 @@ class DataFactory
     end
 
     def import_data
-      # Ingredient.delete_all
+      Ingredient.delete_all
       Dish.delete_all
       DishesIngredient.delete_all
-      # import_ingredient
+      import_ingredient
+      import_ingredients_img
       import_dishes
-      # import_cooking_method
+      import_cooking_method
     end
 
     def import_ingredient
@@ -71,11 +72,11 @@ class DataFactory
 
     def import_categories
       {
-        1 => 1..192,
-        2 => 193..203,
-        3 => 204..224,
-        4 => 225..244,
-        5 => 245..255,
+        1 => 258..332,
+        2 => 333..342,
+        3 => 344..364,
+        4 => 365..385,
+        5 => 386..397,
       }.each do |category_id, ingredient_ids|
         Ingredient.where(id: ingredient_ids).update_all(category_id: category_id)
       end
@@ -115,6 +116,60 @@ class DataFactory
       end
 
       puts undefined_ingredients.join(",")
+    end
+
+    def crawl_jd
+      url = "https://daojia.jd.com/client.json"
+      cat_ids = {
+        # "蔬菜": %w(
+        #           4360808
+        #           4360806
+        #           4360804
+        #           4360805
+        #           4360807
+        #         ),
+        # "肉类": %w(
+        #           4350411
+        #           4350412
+        #         ),
+        # "蛋类": ["4054051"],
+        # "干货": ["4017881"],
+        # "米面": ["4350417", "4350416", "4350415"],
+        "豆制品": ["4054057"],
+        "水产": ["4017262"]
+      }
+
+      require "open-uri"
+
+      cat_ids.each do |cat_name, id_arrays|
+        id_arrays.each do |cat_id|
+          options = {
+            functionId: "productsearch/search",
+            body: '{"ref":"index/LID:6","key":"","catId":"' + cat_id + '","storeId":"10030295","sortType":1,"page":1,"pageSize":200,"cartUuid":"","promotLable":"","timeTag":1494221919172}',
+            appVersion: '4.1.0',
+            appName: 'paidaojia',
+            platCode: 'H5',
+            lng: '121.47369',
+            lat: '31.23035',
+            city_id: '2'
+          }
+          j = JSON.parse(RestClient.get("#{url}?#{options.to_query}").to_s)["result"]["searchResultVOList"]
+          j.each do |item|
+            begin
+              name = item["skuName"].gsub("/", "_")
+              img = item["imgUrl"]
+              suffix = img.split(".")[-1]
+              open(img) do |f|
+                File.open("/Users/zenglingwu/Downloads/jd/#{cat_name}/#{name}.#{suffix}", "wb") do |file|
+                  file.puts f.read
+                end
+              end
+            rescue
+              puts "抓取失败: #{name} #{img}"
+            end
+          end
+        end
+      end
     end
   end
 end

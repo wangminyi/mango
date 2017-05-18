@@ -41,5 +41,6 @@ class ShopController < ApplicationController
         count: 2,
       }
     ]
+    gon.settings = Settings.as_json
   end
 end

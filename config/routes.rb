@@ -13,4 +13,8 @@ Rails.application.routes.draw do
     post :create
     post :update
   end
+
+  namespace :orders do
+    post :create
+  end
 end

@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 20170503061918) do
 
   create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "order_no"
+    t.integer  "user_id"
     t.string   "status"
     t.text     "item_details",             limit: 65535
     t.integer  "item_price"
@@ -86,15 +87,17 @@ ActiveRecord::Schema.define(version: 20170503061918) do
     t.string   "pay_mode"
     t.datetime "distribute_at"
     t.integer  "distributer_id"
-    t.string   "reciever_name"
-    t.string   "reciever_address"
-    t.string   "reciever_phone"
+    t.string   "receiver_name"
+    t.string   "receiver_address"
+    t.string   "receiver_phone"
+    t.text     "remark",                   limit: 65535
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
     t.index ["distribute_at"], name: "index_orders_on_distribute_at", using: :btree
     t.index ["distributer_id"], name: "index_orders_on_distributer_id", using: :btree
     t.index ["order_no"], name: "index_orders_on_order_no", unique: true, using: :btree
     t.index ["pay_mode"], name: "index_orders_on_pay_mode", using: :btree
+    t.index ["user_id"], name: "index_orders_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

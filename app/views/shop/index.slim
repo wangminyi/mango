@@ -206,7 +206,7 @@ template#shop-template
 
         .page-footer.order-price-container
           | 应付：{{ order_price | price_text }}
-          .footer-btn v-on:click="forward_to('order')"
+          .footer-btn v-on:click="submit_order"
             | {{ pay_mode === "cod" ? "提交订单" : "微信支付" }}
 
         .select-time-container.modal-panel v-show="show_time_selector" v-on:click.self="show_time_selector = false"

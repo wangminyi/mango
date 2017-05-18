@@ -14,11 +14,11 @@ $(function(){
     data: {
       // 全局变量
       order_type: "today", // 今日送货 today 预订送货 schedule
-      distribution_price: 400, // 配送费
-      free_distribution: 1000, // 免配送费金额
+      distribution_price: gon.settings.distribution_price, // 配送费
+      free_distribution: gon.settings.free_distribution, // 免配送费金额
       current_page: "shopping", // 当前所在页面 shopping order address edit_address
       can_immediately: false, // 能否可以立即送
-      preferential_price: 300, // 优惠金额
+      preferential_price: gon.settings.preferential_price, // 优惠金额
 
       // 过渡相关
       slide_direction: "slide-right",
@@ -441,6 +441,34 @@ $(function(){
         }).always(function(){
           that.submitting_address = false;
         })
+      },
+      submit_order: function() {
+        var addr = this.select_address,
+            item_details = {}; // {item_id: item_count}
+        $.each(this.shopping_cart_list, function(index, item) {
+          item_details[item.id] = item.count;
+        });
+        $.post("/orders/create", {
+          order: {
+            item_details: item_details,
+            item_price: this.total_price, // 商品总价
+            free_distribution: this.can_immediately, // 是否免外送
+            coupon_enable: this.coupon_enable, // 是否优惠
+            total_price: this.order_price, // 订单总价 double check
+            pay_mode: this.paymode,
+            distribute_at: this.selected_date_time_value,
+            receiver_name: addr.name,
+            receiver_phone: addr.phone,
+            receiver_address: addr.garden + addr.house_number,
+            remark: this.remark,
+          }
+        }).done(function() {
+
+        }).fail(function() {
+
+        }).always(function() {
+
+        });
       }
     },
     mounted: function () {
