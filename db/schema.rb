@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170503061918) do
+ActiveRecord::Schema.define(version: 20170527102603) do
 
   create_table "addresses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -57,20 +57,32 @@ ActiveRecord::Schema.define(version: 20170503061918) do
     t.string   "image"
     t.integer  "price"
     t.integer  "weight"
-    t.text     "description",    limit: 65535
-    t.integer  "stock"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.text     "description", limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.string   "discount"
     t.string   "texture"
     t.integer  "category_id"
     t.integer  "order_limit"
-    t.integer  "schedule_price"
+    t.string   "sale_mode"
+    t.integer  "limit_count"
     t.index ["alias"], name: "index_ingredients_on_alias", using: :btree
     t.index ["category_id"], name: "index_ingredients_on_category_id", using: :btree
     t.index ["discount"], name: "index_ingredients_on_discount", using: :btree
     t.index ["name"], name: "index_ingredients_on_name", using: :btree
-    t.index ["stock"], name: "index_ingredients_on_stock", using: :btree
+  end
+
+  create_table "order_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "order_id"
+    t.string   "name"
+    t.string   "img"
+    t.integer  "count"
+    t.integer  "price"
+    t.string   "type"
+    t.integer  "relation_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["order_id"], name: "index_order_items_on_order_id", using: :btree
   end
 
   create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

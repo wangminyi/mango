@@ -444,13 +444,15 @@ $(function(){
       },
       submit_order: function() {
         var addr = this.select_address,
-            item_details = {}; // {item_id: item_count}
-        $.each(this.shopping_cart_list, function(index, item) {
-          item_details[item.id] = item.count;
-        });
+            item_details = $.map(this.shopping_cart_list, function(item) {
+              return {
+                id: item.id,
+                count: item.count,
+              };
+            });
         $.post("/orders/create", {
           order: {
-            item_details: item_details,
+            item_details: JSON.stringify(item_details),
             item_price: this.total_price, // 商品总价
             free_distribution: this.can_immediately, // 是否免外送
             coupon_enable: this.coupon_enable, // 是否优惠
