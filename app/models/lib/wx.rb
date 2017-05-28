@@ -18,7 +18,7 @@ class Wx
     def update_menu
       # 防止将 & 转义成 unicode，微信服务器不接受
       # http://stackoverflow.com/questions/17936318/why-does-to-json-escape-unicode-automatically-in-rails-4
-      ActiveSupport.escape_html_entities_in_json = false
+      # ActiveSupport.escape_html_entities_in_json = false
 
       params = {
         button: [
@@ -36,7 +36,7 @@ class Wx
       }.to_json
 
 
-      SSLRestClient.post "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=#{Weixin.token(force: true)}", params
+      SSLRestClient.post "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=#{self.access_token}", params
     end
   end
 end
