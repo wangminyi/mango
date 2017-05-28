@@ -63,10 +63,10 @@ class Order < ApplicationRecord
       #      "prepay_id"=>"wx2014111104255143b7605afb0314593866",
       #      "trade_type"=>"JSAPI"
       #    }
-      return WxPay::Service.generate_js_pay_req {
+      return WxPay::Service.generate_js_pay_req({
         prepayid: response["prepay_id"],
         noncestr: response["nonce_str"],
-      }
+      })
     rescue
       if try_times < 3
         try_times += 1
