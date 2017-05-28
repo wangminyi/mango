@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   root to: "shop#index"
 
+  get "auth/wechat/callback", to: "wx#oauth_callback"
+
   namespace :shop do
 
   end
