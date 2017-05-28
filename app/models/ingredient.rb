@@ -16,8 +16,6 @@ class Ingredient < ApplicationRecord
       count:    (self.category.name != "水产类" && self.id % 10) === 0 ? 1 : 0,
       texture:  self.texture,
       order_limit: self.order_limit,
-      schedule_price: self.schedule_price,
-      stock:    self.stock || 100,
     }
   end
 end

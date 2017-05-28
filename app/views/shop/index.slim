@@ -10,11 +10,6 @@ template#shop-template
   .yylife-wrapper
     transition v-bind:name="slide_direction"
       .shop-page-container v-if="current_page === 'shopping'" key="shopping_page"
-        .order-type-container
-          .order-type v-bind:class="{ selected: order_type === 'today'}" v-on:click="change_order_type('today')"
-            | 今日送货
-          .order-type v-bind:class="{ selected: order_type === 'schedule'}" v-on:click="change_order_type('schedule')"
-            | 预定送货
         .event-message-container v-if="show_header_hint" v-on:click="hide_header_hint"
             | 首次下单满10元赠送围裙，满30元赠送洗菜篮；
             span &times;
@@ -35,8 +30,6 @@ template#shop-template
                   .name-container
                     .name
                       | {{ item.name }}
-                      span.stock-limit v-if="item.stock <= 10"
-                        | (仅剩{{ item.stock }}份)
                     .tag v-if="item.discount"
                       | 优惠
                   .texture v-if="item.texture"

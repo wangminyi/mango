@@ -13,7 +13,6 @@ $(function(){
     template: "#shop-template",
     data: {
       // 全局变量
-      order_type: "today", // 今日送货 today 预订送货 schedule
       distribution_price: gon.settings.distribution_price, // 配送费
       free_distribution: gon.settings.free_distribution, // 免配送费金额
       current_page: "shopping", // 当前所在页面 shopping order address edit_address
@@ -181,18 +180,6 @@ $(function(){
       }
     },
     methods: {
-      change_order_type: function(type) {
-        if (this.shopping_cart_list.length === 0 || confirm("切换后购物车将被清空，确定吗？")) {
-          this.order_type = type;
-          this.selected_date = undefined;
-          this.selected_time = undefined;
-          this.temp_selected_date = this.selectable_date()[0];
-          this.temp_selected_time = undefined;
-          $.each(this.shopping_cart_list, function(index, item){
-            item.count = 0;
-          });
-        }
-      },
       change_category: function(category) {
         this.selected_category = category;
         $(".ingredients-container").scrollTop(0);
@@ -225,15 +212,11 @@ $(function(){
         }
       },
       item_price: function(item) {
-        if (this.order_type === "schedule") {
-          return item.schedule_price || item.price;
-        } else {
-          return item.price;
-        }
+        return item.price;
       },
       can_increase: function(item, number) {
         var result_count = item.count + (number || 1);
-        return result_count <= (item.order_limit || 100) && (this.order_type === "schedule" || result_count <= item.stock);
+        return result_count <= (item.order_limit || 100);
       },
       increase_item: function(item, number) {
         number = number || 1;
@@ -267,25 +250,13 @@ $(function(){
       selectable_date: function() {
         var result = [],
             date  = moment();
-        if (this.order_type === "today") {
-          result.push(
-            [
-              "今天",
-              date.format("YYYY-MM-DD")
-            ]
-          );
-        } else {
-          var text_hash = ["明天", "后天"];
-          for (var i = 0 ; i < 2 ; i += 1) {
-            date.add(1, "d")
-            result.push(
-              [
-                text_hash[i] + "(" + date.format("M.D") + ")",
-                date.format("YYYY-MM-DD")
-              ]
-            )
-          }
-        }
+
+        result.push(
+          [
+            "今天",
+            date.format("YYYY-MM-DD")
+          ]
+        );
 
         return result;
       },
@@ -302,18 +273,14 @@ $(function(){
             from_hour,
             to_hour = 18;
         // 如选择今日送货，且有立即送额度，且在配送时间内，则显示立即送选项
-        if (this.order_type === "today") {
-          from_hour = Math.max((hour + 2 - hour % 2), 8);
-          if (this.can_immediately && from_hour > 8) {
-            result.push(
-              [
-                "立即送 (1小时以内)",
-                "immediately"
-              ]
-            )
-          }
-        } else {
-          from_hour = 8;
+        from_hour = Math.max((hour + 2 - hour % 2), 8);
+        if (this.can_immediately && from_hour > 8) {
+          result.push(
+            [
+              "立即送 (1小时以内)",
+              "immediately"
+            ]
+          )
         }
 
         for(var i = from_hour ; i <= to_hour ; i += 2 ) {
