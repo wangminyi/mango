@@ -243,23 +243,6 @@ $header-height: 50px;
 }
 
 .shop-page-container {
-  .order-type-container {
-    .order-type {
-      display: inline-block;
-      width: 50%;
-      line-height: 36px;
-      text-align: center;
-      font-size: 14px;
-      color: $theme-black;
-
-      background-color: #E4E4E4;
-      &.selected {
-        background-color: $theme-orange;
-        color: $theme-white;
-      }
-    }
-  }
-
   .event-message-container {
     line-height: 30px;
     background-color: #FFFDE2;
@@ -275,13 +258,13 @@ $header-height: 50px;
 
   .goods-container {
     position: absolute;
-    top: 36px;
+    top: 0px;
     bottom: 50px;
     left: 0;
     right: 0;
 
     &.with_message {
-      top: 66px;
+      top: 30px;
     }
 
     .items-container {
