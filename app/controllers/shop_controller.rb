@@ -1,5 +1,6 @@
 class ShopController < ApplicationController
   def index
+    puts params
     categories = []
 
     # 每日推荐
