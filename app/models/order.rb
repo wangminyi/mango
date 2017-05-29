@@ -24,13 +24,13 @@ class Order < ApplicationRecord
   ## validates
   # validate :check_stock
   validate :check_price, on: [:create]
-
+  validates_presence_of :receiver_name, :receiver_address, :receiver_phone
 
   def check_price
     items = self.item_details
 
-    total = Ingredient.where(id: items.keys).map do |i|
-      (i.price || 350) * items[i.id.to_s].to_i
+    total = Ingredient.where(id: items.map{|h| h["id"]}).map do |i|
+      (i.price || 350) * items.find{|h| h["id"] == i.id}["count"]
     end.sum
 
     if total != self.item_price.to_i
@@ -83,6 +83,6 @@ class Order < ApplicationRecord
 
   private
     def generate_order_no
-      self.order_no = [Time.now.strftime("%Y%m%d%H%M%S"), "0" * 10, Random.rand(10_000_000..99_999_999).to_s].join("-")
+      self.order_no = [Time.now.strftime("%Y%m%d%H%M%S"), "0" * 10, Random.rand(10_000_000..99_999_999).to_s].join
     end
 end

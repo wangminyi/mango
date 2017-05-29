@@ -6,12 +6,13 @@ class OrdersController < ApplicationController
     order.item_details = JSON.parse(params[:order][:item_details])
 
     if order.save
-      js_pay_req = order.apply_pay
-      if js_pay_req.present?
-        render json: js_pay_req
-      else
-        render json: {error: "微信支付失败，请稍后再试"}, status: 501
-      end
+      # js_pay_req = order.apply_pay
+      # if js_pay_req.present?
+      #  render json: js_pay_req
+      # else
+      #   render json: {error: "微信支付失败，请稍后再试"}, status: 501
+      # end
+      head :ok
     else
       head :unprocessable_entity
     end

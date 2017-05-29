@@ -36,7 +36,7 @@ $(function(){
       selected_date: undefined, // 选择的送货日期 [今天，2017-4-6]
       selected_time: undefined, // 选择的送货时间 [16:00 ~ 18:00, "16:00"]
       coupon_enable: true,  // 是否使用优惠券
-      pay_mode: "cod", // cod(cash on delivery) || wechat
+      // pay_mode: "cod", // cod(cash on delivery) || wechat
       remark: undefined, // 备注
         // 局部变量
       temp_selected_date: undefined, // 选择控件的日期值 [今天，2017-4-6]
@@ -419,7 +419,7 @@ $(function(){
         })
       },
       submit_order: function() {
-        var addr = this.select_address,
+        var addr = this.selected_address,
             item_details = $.map(this.shopping_cart_list, function(item) {
               return {
                 id: item.id,
@@ -433,7 +433,7 @@ $(function(){
             free_distribution: this.can_immediately, // 是否免外送
             coupon_enable: this.coupon_enable, // 是否优惠
             total_price: this.order_price, // 订单总价 double check
-            pay_mode: this.paymode,
+            // pay_mode: this.paymode,
             distribute_at: this.selected_date_time_value,
             receiver_name: addr.name,
             receiver_phone: addr.phone,
