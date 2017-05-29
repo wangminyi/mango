@@ -2,27 +2,36 @@ class DataFactory
   require "csv"
 
   class << self
-    def init_categories
-      %w(蔬菜类 豆制品 肉禽类 水产类 配料).each do |name|
-        Category.find_or_create_by(name: name)
-      end
-    end
-
-    def import_data
+    def clean_data
+      Category.delete_all
       Ingredient.delete_all
       Dish.delete_all
       DishesIngredient.delete_all
+    end
+
+    def import_data
       import_ingredient
-      import_ingredients_img
       import_dishes
       import_cooking_method
     end
 
+    def init_categories
+      %w(本地时令 水产 蔬菜类 豆制品 肉禽类 蛋类 调味料).each do |name|
+        Category.find_or_create_by(name: name)
+      end
+    end
+
     def import_ingredient
-      CSV.foreach("./data_files/ingredients.csv") do |line|
-        Ingredient.create(
-          name: line[0],
-        )
+      Category.all.each do |category|
+        CSV.foreach("./data_files/#{category.name}.csv", headers: true) do |line|
+          next if line[0].blank?
+          ingredient = Ingredient.create(
+            category: category,
+            name: line[0],
+            alias: line[1],
+          )
+          import_ingredients_img(ingredient)
+        end
       end
     end
 
@@ -70,18 +79,6 @@ class DataFactory
       puts undefined_dishes.join(",")
     end
 
-    def import_categories
-      {
-        1 => 258..332,
-        2 => 333..342,
-        3 => 344..364,
-        4 => 365..385,
-        5 => 386..397,
-      }.each do |category_id, ingredient_ids|
-        Ingredient.where(id: ingredient_ids).update_all(category_id: category_id)
-      end
-    end
-
     def import_dishes_img
       dir_path = File.join(Rails.root + "app/assets/images")
       Dish.all.each do |dish|
@@ -93,29 +90,30 @@ class DataFactory
       end
     end
 
-    def import_ingredients_img
+    def import_ingredients_img ingredient
       dir_path = File.join(Rails.root + "app/assets/images")
       suffixes = ["jpg", "jpeg"]
-      undefined_ingredients = []
-      Ingredient.where(image: nil).each do |ingredient|
-        relative_path = nil
-        suffixes.each do |suffix|
-          temp_path = "ingredients/#{ingredient.name}.#{suffix}"
-          file = File.join(dir_path, temp_path)
-          if File.exists? file
-            relative_path = temp_path
-            break
-          end
-        end
 
-        if relative_path.present?
-          ingredient.update_attribute(:image, relative_path)
-        else
-          undefined_ingredients << ingredient.name
+      relative_path = nil
+      if ingredient.category.name.in? %w(本地时令 调味料)
+        category_name = "蔬菜类"
+      else
+        category_name = ingredient.category.name
+      end
+      suffixes.each do |suffix|
+        temp_path = "ingredients/#{category_name}/#{ingredient.name}.#{suffix}"
+        file = File.join(dir_path, temp_path)
+        if File.exists? file
+          relative_path = temp_path
+          break
         end
       end
 
-      puts undefined_ingredients.join(",")
+      if relative_path.present?
+        ingredient.update_attribute(:image, relative_path)
+      else
+        puts ingredient.name
+      end
     end
 
     def crawl_jd
