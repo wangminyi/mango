@@ -19,4 +19,8 @@ Rails.application.routes.draw do
   namespace :orders do
     post :create
   end
+
+  namespace :admin do
+    resources :orders, only: [:index, :show]
+  end
 end
