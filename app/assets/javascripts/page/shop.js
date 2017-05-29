@@ -155,15 +155,21 @@ $(function(){
       free_distribution_reason: function() {
         if (this.total_price >= this.free_distribution) {
           return "满10元免配送费";
-        } else if (this.can_immediately) {
-          return "会员权益";
+        }
+        // else if (this.can_immediately) {
+        //   return "会员权益";
+        // }
+      },
+      distribute_price: function() {
+        if (this.free_distribution_reason) {
+          return 0;
+        } else {
+          return this.distribution_price;
         }
       },
       order_price: function() {
-        var result = this.total_price;
-        if (!this.free_distribution_reason) {
-          result += this.distribution_price;
-        }
+        var result = this.total_price + this.distribute_price;
+
         if (this.coupon_enable) {
           result -= this.preferential_price;
         }
@@ -430,11 +436,13 @@ $(function(){
           order: {
             item_details: JSON.stringify(item_details),
             item_price: this.total_price, // 商品总价
-            free_distribution: this.can_immediately, // 是否免外送
             coupon_enable: this.coupon_enable, // 是否优惠
             total_price: this.order_price, // 订单总价 double check
             // pay_mode: this.paymode,
             distribute_at: this.selected_date_time_value,
+            distribution_price: this.distribute_price,
+            free_distribution_reason: this.free_distribution_reason,
+            preferential_price: this.preferential_price,
             receiver_name: addr.name,
             receiver_phone: addr.phone,
             receiver_address: addr.garden + addr.house_number,

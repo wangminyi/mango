@@ -51,8 +51,11 @@ class OrdersController < ApplicationController
     def order_param
       params.require(:order).permit(
         :item_price,
-        :pay_mode,
+        :total_price,
         :distribute_at,
+        :distribution_price,
+        :free_distribution_reason,
+        :preferential_price,
         :receiver_name,
         :receiver_phone,
         :receiver_address,

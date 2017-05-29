@@ -176,10 +176,8 @@ template#shop-template
               span.price-label
                 | 运费
               .price-tag.right-side
-                span v-if="free_distribution_reason"
-                  | （{{ free_distribution_reason }}）{{ 0 | price_text}}
-                span v-else=true
-                  | {{ distribution_price | price_text }}
+                span
+                  | {{ distribute_price | price_text }}
             .panel-block v-show="coupon_enable"
               span.price-label
                 | 优惠

@@ -27,14 +27,19 @@ class Order < ApplicationRecord
   validates_presence_of :receiver_name, :receiver_address, :receiver_phone
 
   def check_price
-    items = self.item_details
-
-    total = Ingredient.where(id: items.map{|h| h["id"]}).map do |i|
-      (i.price || 350) * items.find{|h| h["id"] == i.id}["count"]
+    total = self.ingredients_hash.map do |i, count|
+      (i.price || 350) * count
     end.sum
 
-    if total != self.item_price.to_i
-      self.errors.add :item_price, "订单金额不符"
+    if total < Settings::FREE_DISTRIBUTION
+      total += Settings::DISTRIBUTION_PRICE
+    end
+
+    # 优惠
+    total -= Settings::PREFERENTIAL_PRICE
+
+    if total != self.total_price.to_i
+      self.errors.add :total_price, "订单金额不符"
     end
   end
 
@@ -75,6 +80,13 @@ class Order < ApplicationRecord
         return nil
       end
     end
+  end
+
+  def ingredients_hash
+    ingredients = Ingredient.where(id: self.item_details.map{|h| h["id"]})
+    self.item_details.map do |i|
+      [ingredients.find{|ingredient| ingredient.id == i["id"]}, i["count"]]
+    end.to_h
   end
 
   def paid!

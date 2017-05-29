@@ -19,7 +19,6 @@ class WxController < ApplicationController
 
   def oauth_callback
     omniauth = request.env["omniauth.auth"]
-    puts omniauth.to_json
     openid = omniauth[:extra][:raw_info][:openid]
     user = User.find_or_create_by(open_id: openid)
     sign_in user
