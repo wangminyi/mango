@@ -21,8 +21,6 @@ template#shop-template
                   | {{ category_count(category) }}
                 | {{ category.name }}
             .ingredients-container
-              .unsellhint-container v-if="selected_category.unsellable"
-                | {{selected_category.unsellhint}}
               .ingredients-panel v-for="item in selected_items"
                 .image-container v-on:click="item.type === 'dish' ? show_dish_method(item) : null"
                   img v-bind:src="item.image"
@@ -37,28 +35,21 @@ template#shop-template
                   .relate-dishes-container
                     span
                       | {{ item.label }}
-                  template v-if="selected_category.unsellable"
-                    .price-container
-                      .price.unsellable
-                        | 以实价为准
-                      .weight v-if="item.weight"
-                        | {{ item | unsellable_text }}
-                  template v-else=true
-                    .price-container
-                      .price
-                        | {{ item_price(item) | price_text }}
-                      .weight v-if="item.weight"
-                        | {{ item.weight | weight_text }}
-                    .operation-container v-if="item.type == 'ingredient'"
-                      .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
-                        | -
-                      .count v-show="item.count > 0"
-                        | {{ item.count }}
-                      .increase v-on:click="increase_item(item)"
-                        | +
-                    .operation-container v-if="item.type == 'dish'"
-                      .increase v-on:click="add_dish(item, $event)"
-                        | +
+                  .price-container
+                    .price
+                      | {{ item_price(item) | price_text }}
+                    .weight v-if="item.weight"
+                      | {{ item | weight_text }}
+                  .operation-container v-if="item.type == 'ingredient'"
+                    .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
+                      | -
+                    .count v-show="item.count > 0"
+                      | {{ item.count }}
+                    .increase v-on:click="increase_item(item)"
+                      | +
+                  .operation-container v-if="item.type == 'dish'"
+                    .increase v-on:click="add_dish(item, $event)"
+                      | +
 
         .shopping-info-container.page-footer
           .shopping-cart-empty v-if="total_count === 0"
@@ -108,7 +99,7 @@ template#shop-template
                       .price
                         | {{ item_price(item) | price_text }}
                       .weight
-                        | {{ item.weight | weight_text }}
+                        | {{ item | weight_text }}
                     .operation-container v-if="item.count > 0"
                       .decrease v-on:click="decrease_item(item)"
                         | -

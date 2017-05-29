@@ -17,6 +17,8 @@ module Mango
     config.time_zone = 'Beijing'
     config.active_record.default_timezone = :utc
 
+    config.i18n.default_locale = "zh-CN"
+
     config.generators do |g|
       g.test_framework false
     end

@@ -6,9 +6,9 @@ class Settings
   class << self
     def as_json
       {
-        distribution_price: DISTRIBUTION_PRICE,
-        free_distribution: FREE_DISTRIBUTION,
-        preferential_price: PREFERENTIAL_PRICE,
+        distribution_price: DISTRIBUTION_PRICE, # 配送费
+        free_distribution: FREE_DISTRIBUTION, # 免配送费金额
+        preferential_price: PREFERENTIAL_PRICE, # 优惠金额
       }
     end
   end

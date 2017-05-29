@@ -1,0 +1,7 @@
+zh-CN:
+  enumerize:
+    ingredient:
+      sale_mode:
+        gram: 克
+        liang: 两
+        count: 份

@@ -169,11 +169,8 @@ $(function(){
       price_text: function(price) {
         return "￥" + (price / 100).toFixed(2);
       },
-      weight_text: function(weight) {
-        return "/ 约" + weight + "g";
-      },
-      unsellable_text: function(item) {
-        return "(约￥" + (item.price / 100) + "/" + item.weight + "g)";
+      weight_text: function(item) {
+        return "/ " + item.weight + item.unit;
       },
       address_text: function(addr) {
         return addr.name + "  " + addr.phone + "\n" + addr.garden + addr.house_number;
@@ -220,6 +217,10 @@ $(function(){
       },
       increase_item: function(item, number) {
         number = number || 1;
+        // xx份起卖
+        if ($.isNumeric(item.limit_count) && item.limit_count > item.count + number) {
+          number = item.limit_count;
+        }
         if (this.can_increase(item, number)) {
           item.count += number;
         }
@@ -228,6 +229,9 @@ $(function(){
         number = number || 1;
         if (item.count >= number) {
           item.count -= number;
+        }
+        if (item.count < item.limit_count) {
+          item.count = 0;
         }
         if (this.shopping_cart_list.length === 0) {
           this.show_shopping_cart = false;
