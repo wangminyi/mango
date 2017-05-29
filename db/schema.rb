@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170527102603) do
+ActiveRecord::Schema.define(version: 20170529051110) do
 
   create_table "addresses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -105,10 +105,12 @@ ActiveRecord::Schema.define(version: 20170527102603) do
     t.text     "remark",                   limit: 65535
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
+    t.string   "pay_status"
     t.index ["distribute_at"], name: "index_orders_on_distribute_at", using: :btree
     t.index ["distributer_id"], name: "index_orders_on_distributer_id", using: :btree
     t.index ["order_no"], name: "index_orders_on_order_no", unique: true, using: :btree
     t.index ["pay_mode"], name: "index_orders_on_pay_mode", using: :btree
+    t.index ["pay_status"], name: "index_orders_on_pay_status", using: :btree
     t.index ["user_id"], name: "index_orders_on_user_id", using: :btree
   end
 
