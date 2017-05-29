@@ -20,6 +20,8 @@ template#shop-template
                 .category-count v-if="category_count(category) > 0"
                   | {{ category_count(category) }}
                 | {{ category.name }}
+              .category-label v-bind:class="{selected: selected_category === gifts}" v-on:click="change_category(gifts)"
+                | 赠品
             .ingredients-container
               .ingredients-panel v-for="item in selected_items"
                 .image-container v-on:click="item.type === 'dish' ? show_dish_method(item) : null"
@@ -47,9 +49,10 @@ template#shop-template
                       | {{ item.count }}
                     .increase v-on:click="increase_item(item)"
                       | +
-                  .operation-container v-if="item.type == 'dish'"
+                  .operation-container v-else-if="item.type == 'dish'"
                     .increase v-on:click="add_dish(item, $event)"
                       | +
+
 
         .shopping-info-container.page-footer
           .shopping-cart-empty v-if="total_count === 0"

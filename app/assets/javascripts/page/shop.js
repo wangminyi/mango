@@ -28,6 +28,7 @@ $(function(){
       selected_dish: undefined,  // 显示做法
       show_header_hint: ($.cookie("show_header_hint") === undefined), // 是否显示顶部提示
       categories: categories, // 商品对象
+      gifts: gon.gifts,
 
       // 订单页面
         // 表单字段
@@ -75,7 +76,11 @@ $(function(){
     computed: {
       // 选中类型的商品
       selected_items: function() {
-        return this.selected_category.items;
+        if (this.selected_category === this.gifts) {
+          return this.gifts;
+        } else {
+          return this.selected_category.items;
+        }
       },
       // 所有食材对象的hash
       items_hash: function(){
@@ -120,7 +125,7 @@ $(function(){
       gift_list: function(){
         var result = [],
             that = this;
-        $.each(gon.gifts, function(index, gift) {
+        $.each(this.gifts, function(index, gift) {
           if (that.total_price >= gift.limit) {
             result.push(gift);
           }

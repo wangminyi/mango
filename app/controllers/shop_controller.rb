@@ -26,12 +26,16 @@ class ShopController < ApplicationController
         limit: "1000",
         name: "菜篮子",
         count: 1,
+        label: "好篮子",
+        price: 5000,
       },
       {
         image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
         limit: "2000",
         name: "拖把",
+        label: "好拖把",
         count: 2,
+        price: 6000,
       }
     ]
     gon.settings = Settings.as_json
