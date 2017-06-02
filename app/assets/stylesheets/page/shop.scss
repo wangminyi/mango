@@ -38,6 +38,7 @@ $header-height: 50px;
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, .5);
+  padding: 0 25px;
 
   &:after {
     content: "";
@@ -48,13 +49,13 @@ $header-height: 50px;
 
   .modal-panel-container {
     display: inline-block;
+    width: 100%;
     vertical-align: middle;
-    max-height: 450px;
+    max-height: 500px;
     overflow: auto;
-    margin: 0 25px;
     background-color: white;
     position: relative;
-    padding: 0 25px;
+    padding: 25px;
 
     i.fa.fa-times {
       position: absolute;
@@ -63,15 +64,34 @@ $header-height: 50px;
     }
 
     .modal-panel-title {
-      color: $theme-green;
-      font-size: 18px;
-      padding: 35px 0;
+      text-align: center;
+      span {
+        display: inline-block;
+        padding: 0 25px;
+        color: white;
+        background-color: $theme-green;
+        font-size: 18px;
+        line-height: 30px;
+        border-radius: 5px;
+      }
     }
 
     .modal-panel-content {
       color: $theme-black;
       font-size: 16px;
       min-height: 200px;
+      margin-top: 30px;
+      .desc-content {
+        color: $theme-black;
+        text-align: center;
+      }
+      .desc-img img{
+        margin: 10px 0;
+        width: 100%;
+      }
+      .desc-hint {
+        color: $theme-gray;
+      }
     }
   }
 }

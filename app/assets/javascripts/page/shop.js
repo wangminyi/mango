@@ -25,7 +25,7 @@ $(function(){
       // 购物页面
       selected_category: categories[0], // 选中的商品类别
       show_shopping_cart: false, // 购物页面是否显示购物车详情
-      selected_dish: undefined,  // 显示做法
+      selected_description: undefined,  // 显示做法
       show_header_hint: ($.cookie("show_header_hint") === undefined), // 是否显示顶部提示
       categories: categories, // 商品对象
       gifts: gon.gifts,
@@ -87,9 +87,7 @@ $(function(){
         var hash = {};
         $.each(this.categories, function(index, category) {
           $.each(category.items, function(index, item) {
-            if (item.type === "ingredient") {
-              hash[item.id] = item;
-            }
+            hash[item.id] = item;
           })
         });
         return hash;
@@ -192,8 +190,9 @@ $(function(){
         this.selected_category = category;
         $(".ingredients-container").scrollTop(0);
       },
-      show_dish_method: function(dish) {
-        this.selected_dish = dish;
+      // 展示详情
+      show_description: function(item) {
+        this.selected_description = item.description;
       },
       add_dish: function(dish, e) {
         var that = this;

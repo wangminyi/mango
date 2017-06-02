@@ -24,7 +24,7 @@ template#shop-template
                 | 赠品
             .ingredients-container
               .ingredients-panel v-for="item in selected_items"
-                .image-container v-on:click="item.type === 'dish' ? show_dish_method(item) : null"
+                .image-container v-on:click="item.description ? show_description(item) : null"
                   img v-bind:src="item.image"
                 .ingredient-info-container
                   .name-container
@@ -42,15 +42,12 @@ template#shop-template
                       | {{ item_price(item) | price_text }}
                     .weight v-if="item.weight"
                       | {{ item | weight_text }}
-                  .operation-container v-if="item.type == 'ingredient'"
+                  .operation-container
                     .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
                       | -
                     .count v-show="item.count > 0"
                       | {{ item.count }}
                     .increase v-on:click="increase_item(item)"
-                      | +
-                  .operation-container v-else-if="item.type == 'dish'"
-                    .increase v-on:click="add_dish(item, $event)"
                       | +
 
 
@@ -74,13 +71,19 @@ template#shop-template
             .footer-btn v-on:click="forward_to('order')"
               | 去结算
 
-        .dish-method-container.modal-panel v-if="selected_dish !== undefined" v-on:click.self="selected_dish = undefined"
+        .dish-method-container.modal-panel v-if="selected_description !== undefined" v-on:click.self="selected_description = undefined"
           .modal-panel-container
-            i.fa.fa-times
+            i.fa.fa-times v-on:click="selected_description = undefined"
             .modal-panel-title
-              | {{selected_dish.name}}的做法
+              span
+                | {{selected_description.title}}的做法
             .modal-panel-content
-              | {{selected_dish.cooking_method}}
+              .desc-content
+                | {{selected_description.content}}
+              .desc-img
+                img v-bind:src="selected_description.img"
+              .desc-hint
+                | {{selected_description.hint}}
 
         .shopping-cart-detail-container.modal-panel v-show="show_shopping_cart" v-on:click.self="show_shopping_cart = false"
           transition name="slide-up"
@@ -151,12 +154,6 @@ template#shop-template
               | 优惠券
               .checkbox-btn.right-side v-bind:class="coupon_enable ? 'enable' : 'disable'" v-on:click="coupon_enable = !coupon_enable"
                 .btn-circle
-            /.panel-block
-              | 支付方式
-              .pay-mode-container.right-side
-                - {"cod" => "货到付款", "wechat" => "微信支付"}.each do |type, label|
-                  .pay-mode-block v-bind:class="{ selected: pay_mode === '#{type}' }" v-on:click="pay_mode = '#{type}'"
-                    = label
 
           .page-panel.remark-container
             .panel-block
