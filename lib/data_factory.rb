@@ -16,7 +16,7 @@ class DataFactory
     end
 
     def init_categories
-      %w(本地时令 水产 蔬菜类 豆制品 肉禽类 蛋类 调味料).each do |name|
+      %w(本地时令 水产类 蔬菜类 肉禽类 豆制品 蛋类 元也特色).each do |name|
         Category.find_or_create_by(name: name)
       end
     end

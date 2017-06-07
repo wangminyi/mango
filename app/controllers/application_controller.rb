@@ -6,7 +6,9 @@ class ApplicationController < ActionController::Base
 
   def require_login
     if !current_user
-      sign_in(User.first)
+      store_location_for :user, request.url
+      redirect_to "auth/wechat/callback"
+      # sign_in(User.first)
     end
   end
 
