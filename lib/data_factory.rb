@@ -23,12 +23,12 @@ class DataFactory
 
     def import_ingredient
       Category.all.each do |category|
-        CSV.foreach("./data_files/#{category.name}.csv", headers: true) do |line|
+        CSV.foreach("./data_files/#{category.name}.csv") do |line|
           next if line[0].blank?
           ingredient = Ingredient.create(
             category: category,
             name: line[0],
-            alias: line[1],
+            alias: line[1].presence,
           )
           import_ingredients_img(ingredient)
         end
