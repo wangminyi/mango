@@ -11,8 +11,8 @@ class DataFactory
 
     def import_data
       import_ingredient
-      import_dishes
-      import_cooking_method
+      # import_dishes
+      # import_cooking_method
     end
 
     def init_categories
@@ -31,6 +31,10 @@ class DataFactory
             alias: line[1].presence,
           )
           import_ingredients_img(ingredient)
+          line[2..4].reject(&:blank?).each do |dish_name|
+            dish = Dish.find_or_create_by(name: dish_name)
+            dish.ingredients << ingredient
+          end
         end
       end
     end
@@ -95,13 +99,8 @@ class DataFactory
       suffixes = ["jpg", "jpeg"]
 
       relative_path = nil
-      if ingredient.category.name.in? %w(本地时令 调味料)
-        category_name = "蔬菜类"
-      else
-        category_name = ingredient.category.name
-      end
       suffixes.each do |suffix|
-        temp_path = "ingredients/#{category_name}/#{ingredient.name}.#{suffix}"
+        temp_path = "ingredients/#{ingredient.category.name}/#{ingredient.name}.#{suffix}"
         file = File.join(dir_path, temp_path)
         if File.exists? file
           relative_path = temp_path

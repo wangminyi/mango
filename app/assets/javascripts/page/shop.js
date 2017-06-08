@@ -16,7 +16,7 @@ $(function(){
       distribution_price: gon.settings.distribution_price, // 配送费
       free_distribution: gon.settings.free_distribution, // 免配送费金额
       current_page: "shopping", // 当前所在页面 shopping order address edit_address
-      can_immediately: false, // 能否可以立即送
+      // can_immediately: false, // 能否可以立即送
       preferential_price: gon.settings.preferential_price, // 优惠金额
 
       // 过渡相关
@@ -263,14 +263,22 @@ $(function(){
       // 可选择日期 @Array [label, value]
       selectable_date: function() {
         var result = [],
-            date  = moment();
+            hour = moment().hour();
+        if (hour < 13) {
+          result.push(
+            [
+              "今天",
+              date.format("YYYY-MM-DD")
+            ]
+          );
+        }
 
         result.push(
           [
-            "今天",
-            date.format("YYYY-MM-DD")
+            "明天",
+            moment().add(1, "d").format("YYYY-MM-DD");
           ]
-        );
+        )
 
         return result;
       },
@@ -282,21 +290,44 @@ $(function(){
         }
 
         var result = [],
-            time   = moment(),
-            hour = time.hour(),
-            from_hour,
-            to_hour = 18;
-        // 如选择今日送货，且有立即送额度，且在配送时间内，则显示立即送选项
-        from_hour = Math.max((hour + 2 - hour % 2), 8);
-        if (this.can_immediately && from_hour > 8) {
-          result.push(
+            time = moment(),
+            now = moment(),
+            slot_1 = [],
+            slot_2 = [],
+            slot_3 = [];
+
+        for(var i = 16 ; i <= 18 ; i += 1) {
+          slot_1.push(
             [
-              "立即送 (1小时以内)",
-              "immediately"
+              i + ":00 ~ " + (i + 2) + ":00 (上午)",
+              time.hour(i).minute(0).format("H:mm"),
             ]
-          )
+          );
         }
 
+        for(var i = 9 ; i <= 11 ; i += 1) {
+          slot_2.push(
+            [
+              i + ":00 ~ " + (i + 2) + ":00 (上午)",
+              time.hour(i).minute(0).format("H:mm"),
+            ]
+          );
+        }
+
+        for(var i = 16 ; i <= 18 ; i += 1) {
+          result.push(
+            [
+              i + ":00 ~ " + (i + 2) + ":00 (上午)",
+              time.hour(i).minute(0).format("H:mm"),
+            ]
+          );
+        }
+        if (now.format("YYYY-MM-DD") === this.temp_selected_date) {
+          // 今天
+
+        }
+        // 如选择今日送货，且有立即送额度，且在配送时间内，则显示立即送选项
+        from_hour = Math.max((hour + 2 - hour % 2), 8);
         for(var i = from_hour ; i <= to_hour ; i += 2 ) {
           var time_period;
           if (i <= 10) {
