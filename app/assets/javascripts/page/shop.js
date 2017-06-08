@@ -276,7 +276,7 @@ $(function(){
         result.push(
           [
             "明天",
-            moment().add(1, "d").format("YYYY-MM-DD");
+            moment().add(1, "d").format("YYYY-MM-DD")
           ]
         );
 
@@ -300,7 +300,7 @@ $(function(){
           morning_slot.push(
             [
               i + ":00 ~ " + (i + 1) + ":00 (上午)",
-              time.hour(i).minute(0).format("H:mm"),
+              time.hour(i).minute(0).format("H:mm")
             ]
           );
         }
@@ -310,7 +310,7 @@ $(function(){
           afternoon_slot.push(
             [
               i + ":00 ~ " + (i + 1) + ":00 (上午)",
-              time.hour(i).minute(0).format("H:mm"),
+              time.hour(i).minute(0).format("H:mm")
             ]
           );
         }
