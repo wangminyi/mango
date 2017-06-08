@@ -31,7 +31,7 @@ $(function(){
       gifts: gon.gifts,
 
       // 订单页面
-        // 表单字段
+        // 表单字段slot
       selected_address: undefined, // 选择的地址 json
       selected_date: undefined, // 选择的送货日期 [今天，2017-4-6]
       selected_time: undefined, // 选择的送货时间 [16:00 ~ 18:00, "16:00"]
@@ -278,7 +278,7 @@ $(function(){
             "明天",
             moment().add(1, "d").format("YYYY-MM-DD");
           ]
-        )
+        );
 
         return result;
       },
@@ -292,60 +292,35 @@ $(function(){
         var result = [],
             time = moment(),
             now = moment(),
-            slot_1 = [],
-            slot_2 = [],
-            slot_3 = [];
+            morning_slot = [],
+            afternoon_slot = [];
 
-        for(var i = 16 ; i <= 18 ; i += 1) {
-          slot_1.push(
+        // 上午
+        for(var i = 9 ; i < 11 ; i += 1) {
+          morning_slot.push(
             [
-              i + ":00 ~ " + (i + 2) + ":00 (上午)",
+              i + ":00 ~ " + (i + 1) + ":00 (上午)",
               time.hour(i).minute(0).format("H:mm"),
             ]
           );
         }
 
-        for(var i = 9 ; i <= 11 ; i += 1) {
-          slot_2.push(
+        // 下午
+        for(var i = 16 ; i < 19 ; i += 1) {
+          afternoon_slot.push(
             [
-              i + ":00 ~ " + (i + 2) + ":00 (上午)",
+              i + ":00 ~ " + (i + 1) + ":00 (上午)",
               time.hour(i).minute(0).format("H:mm"),
             ]
           );
         }
 
-        for(var i = 16 ; i <= 18 ; i += 1) {
-          result.push(
-            [
-              i + ":00 ~ " + (i + 2) + ":00 (上午)",
-              time.hour(i).minute(0).format("H:mm"),
-            ]
-          );
+        if (now.format("YYYY-MM-DD") !== this.temp_selected_date && now.hour() < 20) {
+          // 次日送达 且 当前时间8点之前
+          result = morning_slot.concat(afternoon_slot);
+        } else {
+          result = afternoon_slot;
         }
-        if (now.format("YYYY-MM-DD") === this.temp_selected_date) {
-          // 今天
-
-        }
-        // 如选择今日送货，且有立即送额度，且在配送时间内，则显示立即送选项
-        from_hour = Math.max((hour + 2 - hour % 2), 8);
-        for(var i = from_hour ; i <= to_hour ; i += 2 ) {
-          var time_period;
-          if (i <= 10) {
-            time_period = "上午";
-          } else if (i <= 16 ) {
-            time_period = "下午";
-          } else {
-            time_period = "傍晚";
-          }
-
-          result.push(
-            [
-              i + ":00 ~ " + (i + 2) + ":00 (" + time_period + ")",
-              time.hour(i).minute(0).format("H:mm"),
-            ]
-          );
-        }
-
         return result;
       },
       // 是否选择了某日期
