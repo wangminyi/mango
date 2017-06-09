@@ -268,7 +268,7 @@ $(function(){
           result.push(
             [
               "今天",
-              date.format("YYYY-MM-DD")
+              moment().format("YYYY-MM-DD")
             ]
           );
         }
@@ -309,13 +309,13 @@ $(function(){
         for(var i = 16 ; i < 19 ; i += 1) {
           afternoon_slot.push(
             [
-              i + ":00 ~ " + (i + 1) + ":00 (上午)",
+              i + ":00 ~ " + (i + 1) + ":00 (下午)",
               time.hour(i).minute(0).format("H:mm")
             ]
           );
         }
 
-        if (now.format("YYYY-MM-DD") !== this.temp_selected_date && now.hour() < 20) {
+        if ("今天" !== this.temp_selected_date[0] && now.hour() < 20) {
           // 次日送达 且 当前时间8点之前
           result = morning_slot.concat(afternoon_slot);
         } else {
