@@ -51,7 +51,7 @@ class Order < ApplicationRecord
       spbill_create_ip: ip,
       notify_url: 'http://www.yylife.shop/wx/notify',
       trade_type: 'JSAPI',
-      openid: order.user.open_id,
+      openid: self.user.open_id,
     }
 
     try_times = 0

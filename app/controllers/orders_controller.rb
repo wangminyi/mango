@@ -12,7 +12,6 @@ class OrdersController < ApplicationController
       else
         render json: {error: "微信支付失败，请稍后再试"}, status: 501
       end
-      head :ok
     else
       head :unprocessable_entity
     end

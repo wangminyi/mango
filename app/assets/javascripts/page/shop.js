@@ -461,11 +461,10 @@ $(function(){
           }
         }).done(function(data) {
           if (wx_ready) {
-            var params = data.js_pay_params;
-            params.success = function() {
+            data.success = function() {
               alert("支付成功");
             }
-            wx.chooseWXPay(params);
+            wx.chooseWXPay(data);
           }
         }).fail(function() {
 
