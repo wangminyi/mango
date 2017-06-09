@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   root to: "home#index"
 
   get "auth/wechat/callback", to: "wx#oauth_callback"
+  get "auth/failure", to: "wx#oauth_failure"
 
   namespace :shop do
     get :index

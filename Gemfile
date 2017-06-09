@@ -54,7 +54,7 @@ gem 'rest-client'
 gem 'redis-rails'
 gem 'redis-objects'
 gem 'wx_pay'
-gem 'omniauth-wechat-oauth2', :git => 'git@github.com:wangminyi/omniauth-wechat-oauth2.git'
+gem 'omniauth-wechat-oauth2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

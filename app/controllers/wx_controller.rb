@@ -24,4 +24,8 @@ class WxController < ApplicationController
     sign_in user
     redirect_to root_path
   end
+
+  def oauth_failure
+    head 404
+  end
 end
