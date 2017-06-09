@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
         sign_in(User.first)
       else
         store_location_for :user, request.url
-        redirect_to "auth/wechat/callback"
+        redirect_to "/auth/wechat/callback"
       end
       # sign_in(User.first)
     end
