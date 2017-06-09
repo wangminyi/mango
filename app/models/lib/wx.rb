@@ -35,7 +35,7 @@ class Wx
       noncestr = "ij4o23jovdfv0d0fjsd"
       timestamp = Time.now.to_i
       {
-        appId: ENV[:wx_id],
+        appId: ENV["wx_id"],
         noncestr: noncestr,
         timestamp: timestamp,
         signature: self.js_signature(noncestr, timestamp, url),
