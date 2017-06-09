@@ -40,5 +40,6 @@ class ShopController < ApplicationController
       }
     ]
     gon.settings = Settings.as_json
+    gon.js_config_params = Wx.js_config_params(shop_index_url)
   end
 end

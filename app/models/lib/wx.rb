@@ -15,28 +15,47 @@ class Wx
       token_redis.value
     end
 
-    def update_menu
-      # 防止将 & 转义成 unicode，微信服务器不接受
-      # http://stackoverflow.com/questions/17936318/why-does-to-json-escape-unicode-automatically-in-rails-4
-      # ActiveSupport.escape_html_entities_in_json = false
+    # 用于JS-SDK使用权限签名算法
+    def jsapi_ticket
+      return nil if !Rails.env.production?
 
-      params = {
-        button: [
-          {
-            name: '精品选购',
-            type: 'view',
-            url:  'http://yylife.online'
-          },
-          {
-            type: 'click',
-            name: '店主微信',
-            key:  'NGIRL_MOM',
-          }
-        ]
-      }.to_json
+      ticket_redis = Redis::Value.new("wx_jsapi_ticket")
+      if ticket_redis.value.nil?
+        res = JSON.parse(RestClient.get "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=#{self.access_token}&type=jsapi")
+        ticket_redis.value = res["ticket"]
+        ticket_redis.expire res["expires_in"].seconds
+      end
 
+      ticket_redis.value
+    end
 
-      SSLRestClient.post "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=#{self.access_token}", params
+    # 注册微信js的参数
+    # wx.config(js_config_params)
+    def js_config_params url
+      noncestr = "ij4o23jovdfv0d0fjsd"
+      timestamp = Time.now.to_i
+      {
+        appId: ENV[:wx_id],
+        noncestr: noncestr,
+        timestamp: timestamp,
+        signature: self.js_signature(noncestr, timestamp, url),
+        jsApiList: ["chooseWXPay"]
+      }
+    end
+
+    def js_signature noncestr, timestamp, url
+      # 按 key 字典序排列
+      sign_str = {
+        jsapi_ticket: self.jsapi_ticket,
+        noncestr: noncestr,
+        timestamp: timestamp,
+        url: url
+      }.map do |key, value|
+        "#{key}=#{value}"
+      end.join("&")
+
+      require 'digest/sha1'
+      Digest::SHA1.hexdigest sign_str
     end
   end
 end

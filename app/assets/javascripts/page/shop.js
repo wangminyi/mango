@@ -3,8 +3,14 @@
 //= require moment/locale/zh-cn
 
 $(function(){
+  // 微信 js 注册
+  var wx_ready = false;
+  wx.config(gon.js_config_params);
+  wx.ready(function() {
+    wx_ready = true;
+  });
+
   moment.locale("zh-CN");
-  Vue.config.devtools = true;
   var categories = gon.categories,
       addresses = gon.addresses;
 
@@ -453,8 +459,14 @@ $(function(){
             receiver_address: addr.garden + addr.house_number,
             remark: this.remark,
           }
-        }).done(function() {
-
+        }).done(function(data) {
+          if (wx_ready) {
+            var params = data.js_pay_params;
+            params.success = function() {
+              alert("支付成功");
+            }
+            wx.chooseWXPay(params);
+          }
         }).fail(function() {
 
         }).always(function() {
