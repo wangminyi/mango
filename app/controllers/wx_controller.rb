@@ -20,7 +20,11 @@ class WxController < ApplicationController
   def oauth_callback
     omniauth = request.env["omniauth.auth"]
     openid = omniauth[:extra][:raw_info][:openid]
-    user = User.find_or_create_by(open_id: openid)
+    user = User.find_or_initialize_by(open_id: openid)
+    if user.new_record?
+      user.password = SecureRandom.hex(10)
+      user.save!
+    end
     sign_in user
     redirect_to stored_location_for(:user) || root_path
   end
