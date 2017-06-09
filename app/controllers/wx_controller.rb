@@ -22,7 +22,7 @@ class WxController < ApplicationController
     openid = omniauth[:extra][:raw_info][:openid]
     user = User.find_or_create_by(open_id: openid)
     sign_in user
-    redirect_to root_path
+    redirect_to stored_location_for(:user) || root_path
   end
 
   def oauth_failure
