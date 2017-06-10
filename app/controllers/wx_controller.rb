@@ -5,7 +5,7 @@ class WxController < ApplicationController
     result = Hash.from_xml(request.body.read)["xml"]
 
     if WxPay::Sign.verify?(result)
-      order = Order.find(result["out_trade_no"])
+      order = Order.find_by(order_no: result["out_trade_no"])
 
       if order.total_price == result["total_fee"]
         order.paid!

@@ -62,6 +62,7 @@ class Order < ApplicationRecord
         noncestr: response["nonce_str"],
       })
       origin_data[:timestamp] = origin_data.delete(:timeStamp)
+      origin_data
     rescue
       if try_times < 3
         try_times += 1
