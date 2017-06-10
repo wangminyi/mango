@@ -81,7 +81,7 @@ class Order < ApplicationRecord
   end
 
   def paid!
-    order.update(pay_status: :paid)
+    self.update(pay_status: :paid)
   end
 
   private
