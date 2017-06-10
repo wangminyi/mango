@@ -19,6 +19,8 @@ module Mango
 
     config.i18n.default_locale = "zh-CN"
 
+    config.autoload_paths << Rails.root.join('app', 'models', 'lib')
+
     config.generators do |g|
       g.test_framework false
     end
