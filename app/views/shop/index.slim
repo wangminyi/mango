@@ -9,8 +9,18 @@
 
 template#shop-template
   .yylife-wrapper
+    .confirm-modal-overlay v-show="confirm_params.show"
+      .confirm-modal
+        .content-container
+          | {{ confirm_params.text }}
+        .action-container
+          .confirm-btn v-if="confirm_params.cancel_callback" v-on:click="confirm_cancel"
+            | 取消
+          .confirm-btn v-on:click="confirm_ok"
+            | 确定
+
     transition v-bind:name="slide_direction"
-      .shop-page-container v-if="current_page === 'shopping'" key="shopping_page"
+      .shop-page-container.page-container v-if="current_page === 'shopping'" key="shopping_page"
         .event-message-container v-if="show_header_hint" v-on:click="hide_header_hint"
             | 首次下单满10元赠送围裙，满30元赠送洗菜篮；
             span &times;
@@ -21,28 +31,27 @@ template#shop-template
                 .category-count v-if="category_count(category) > 0"
                   | {{ category_count(category) }}
                 | {{ category.name }}
-              .category-label v-bind:class="{selected: selected_category === gifts}" v-on:click="change_category(gifts)"
-                | 赠品
             .ingredients-container
               .ingredients-panel v-for="item in selected_items"
                 .image-container v-on:click="item.description ? show_description(item) : null"
                   img v-bind:src="item.image"
                 .ingredient-info-container
                   .name-container
-                    .name
-                      | {{ item.name }}
-                    .tag v-if="item.discount"
-                      | 优惠
+                    | {{ item.name }}
+                  .tag-container
+                    .tag v-for="tag in item.tags"
+                      | {{ tag }}
                   .texture v-if="item.texture"
                     | {{item.texture}}
                   .relate-dishes-container
-                    span
-                      | {{ item.label }}
+                    | {{ item.label }}
+                  .sales-volume-container v-if="item.sales_volume > 0"
+                    | {{ item.sales_volume | sales_volume_text }}
                   .price-container
                     .price
                       | {{ item_price(item) | price_text }}
-                    .weight v-if="item.weight"
-                      | {{ item | weight_text }}
+                    .weight
+                      | {{ item.unit_text }}
                   .operation-container
                     .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
                       | -
@@ -50,7 +59,6 @@ template#shop-template
                       | {{ item.count }}
                     .increase v-on:click="increase_item(item)"
                       | +
-
 
         .shopping-info-container.page-footer
           .shopping-cart-empty v-if="total_count === 0"
@@ -66,7 +74,7 @@ template#shop-template
                 span
                   | {{ total_price | price_text }}
                 span.need-distribution v-if="total_price < free_distribution"
-                  |（另需支付运费4元）
+                  |（另需支付运费{{ distribute_price / 100 }}元）
               .distribute-hint
                 | 满{{free_distribution / 100}}元免配送费
             .footer-btn v-on:click="forward_to('order')"
@@ -106,7 +114,7 @@ template#shop-template
                       .price
                         | {{ item_price(item) | price_text }}
                       .weight
-                        | {{ item | weight_text }}
+                        | {{ item.unit_text }}
                     .operation-container v-if="item.count > 0"
                       .decrease v-on:click="decrease_item(item)"
                         | -
@@ -115,7 +123,7 @@ template#shop-template
                       .increase v-on:click="increase_item(item)"
                         | +
 
-      .order-page-container v-else-if="current_page === 'order'" key="order_page"
+      .order-page-container.page-container v-else-if="current_page === 'order'" key="order_page"
         .page-header
           i.fa.fa-chevron-left v-on:click="back_to('shopping')"
           | 提交订单
@@ -209,7 +217,7 @@ template#shop-template
                     | {{ time[0] }}
 
 
-      .address-page-container v-else-if="current_page === 'address'" key="address_page"
+      .address-page-container.page-container v-else-if="current_page === 'address'" key="address_page"
         .page-header
           i.fa.fa-chevron-left v-on:click="back_to('order')"
           | 我的送货地址
@@ -241,7 +249,7 @@ template#shop-template
             | 添加送货地址
 
 
-      .edit-address-page v-else-if="current_page === 'edit_address'" key="edit_address"
+      .edit-address-page.page-container v-else-if="current_page === 'edit_address'" key="edit_address"
         .page-header
           i.fa.fa-chevron-left v-on:click="back_to('address')"
           | 添加送货地址

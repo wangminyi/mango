@@ -21,7 +21,7 @@ html, body, .yylife-wrapper, .yylife-wrapper > * {
   overflow: hidden;
 }
 
-.yylife-wrapper > * {
+.yylife-wrapper > .page-container {
   position: absolute;
   left: 0;
   top: 0;
@@ -31,6 +31,52 @@ html, body, .yylife-wrapper, .yylife-wrapper > * {
 $footer-height: 50px;
 $header-height: 50px;
 
+.confirm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  text-align: center;
+  background-color: rgba(0, 0, 0, .5);
+
+  &:after {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  .confirm-modal {
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+    max-height: 500px;
+    overflow: auto;
+    background-color: white;
+    position: relative;
+    border-radius: 21px;
+    width: 250px;
+    .content-container {
+      padding: 30px;
+      text-align: center;
+      border-bottom: 1px solid $border-color;
+    }
+
+    .action-container {
+      @include flex-container;
+      .confirm-btn {
+        @include flex(1);
+        text-align: center;
+        line-height: 40px;
+        &:not(:last-child) {
+          border-right: 1px solid $border-color;
+        }
+      }
+    }
+  }
+}
 .modal-panel {
   position: fixed;
   top: 0;
@@ -353,22 +399,15 @@ $header-height: 50px;
           padding-left: 10px;
           position: relative;
           .name-container {
-            .name, .tag {
+            font-size: 16px;
+          }
+
+          .tag-container {
+            .tag {
               display: inline-block;
               vertical-align: middle;
-            }
-
-            .name {
-              font-size: 16px;
-              .stock-limit {
-                font-size: 12px;
-                margin-left: 5px;
-                color: $theme-gray;
-              }
-            }
-            .tag {
               padding: 0 2px;
-              margin-left: 10px;
+              margin-right: 10px;
               border-radius: 10px;
               line-height: 13px;
               font-size: 12px;
@@ -388,6 +427,12 @@ $header-height: 50px;
             color: $theme-gray;
             line-height: 18px;
             min-height: 36px;
+          }
+
+          .sales-volume-container {
+            color: $theme-light-gray;
+            font-size: 12px;
+            margin-top: 5px;
           }
 
           .price-container {

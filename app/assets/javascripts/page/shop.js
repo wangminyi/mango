@@ -22,6 +22,14 @@ $(function(){
       distribution_price: gon.settings.distribution_price, // 配送费
       free_distribution: gon.settings.free_distribution, // 免配送费金额
       current_page: "shopping", // 当前所在页面 shopping order address edit_address
+      // 弹出框
+      confirm_params: {
+        show: false,
+        text: undefined,
+        ok_callback: undefined,
+        cancel_callback: undefined,
+      },
+
       // can_immediately: false, // 能否可以立即送
       preferential_price: gon.settings.preferential_price, // 优惠金额
 
@@ -184,11 +192,11 @@ $(function(){
       price_text: function(price) {
         return "￥" + (price / 100).toFixed(2);
       },
-      weight_text: function(item) {
-        return "/ " + item.weight + item.unit;
-      },
       address_text: function(addr) {
         return addr.name + "  " + addr.phone + "\n" + addr.garden + addr.house_number;
+      },
+      sales_volume_text: function(sales_volume) {
+        return "月售" + sales_volume;
       }
     },
     methods: {
@@ -217,12 +225,16 @@ $(function(){
         return sum;
       },
       clear_shopping_cart: function() {
-        if (confirm("清空购物车中所有商品？")) {
-          $.each(this.shopping_cart_list, function(index, item){
-            item.count = 0;
-          });
-          this.show_shopping_cart = false;
-        }
+        this.show_confirm_dialog({
+          text: "清空购物车中所有商品？",
+          ok: function() {
+            $.each(this.shopping_cart_list, function(index, item){
+              item.count = 0;
+            });
+            this.show_shopping_cart = false;
+          },
+          cancel: true
+        });
       },
       item_price: function(item) {
         return item.price;
@@ -471,6 +483,27 @@ $(function(){
         }).always(function() {
 
         });
+      },
+      // 弹框
+      show_confirm_dialog: function (options) {
+        this.confirm_params = {
+          text: options.text,
+          ok_callback: options.ok,
+          cancel_callback: options.cancel,
+          show: true
+        }
+      },
+      confirm_cancel: function () {
+        this.confirm_params.show = false;
+        if (typeof this.confirm_params.cancel_callback === "function") {
+          this.confirm_params.cancel_callback();
+        }
+      },
+      confirm_ok: function () {
+        this.confirm_params.show = false;
+        if (typeof this.confirm_params.ok_callback === "function") {
+          this.confirm_params.ok_callback.apply(this);
+        }
       }
     },
     mounted: function () {

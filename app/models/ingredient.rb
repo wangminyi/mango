@@ -15,7 +15,7 @@ class Ingredient < ApplicationRecord
       label:  self.dishes.present? ? "推荐食谱：#{self.dishes.first(3).map(&:name).join('、')}" : "",
       tags:   self.tags&.split(",") || [],
       price:    self.price || 350,
-      unit_text: self.unit_text || "约500g",
+      unit_text: "/" + (self.unit_text || "约500g"),
       count:    self.id % 10 === 0 ? 1 : 0,
       texture:  self.texture,
       order_limit: self.order_limit, # 上限
@@ -23,8 +23,5 @@ class Ingredient < ApplicationRecord
       description: self.description,
       sales_volume: self.sales_volume || 0
     }
-  end
-
-  def unit
   end
 end
