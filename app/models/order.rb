@@ -57,10 +57,11 @@ class Order < ApplicationRecord
     try_times = 0
     begin
       response = WxPay::Service.invoke_unifiedorder(wx_params)
-      WxPay::Service.generate_js_pay_req({
+      origin_data = WxPay::Service.generate_js_pay_req({
         prepayid: response["prepay_id"],
         noncestr: response["nonce_str"],
       })
+      origin_data[:timestamp] = origin_data.delete(:timeStamp)
     rescue
       if try_times < 3
         try_times += 1
