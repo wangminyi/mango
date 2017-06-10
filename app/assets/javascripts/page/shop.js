@@ -62,15 +62,6 @@ $(function(){
       // 编辑地址页面
       show_garden_selector: false,
       submitting_address: false,
-      address_attributes: [
-        "id",
-        "name",
-        "gender",
-        "phone",
-        "garden",
-        "house_number",
-        "is_default",
-      ],
       editing_address: {
         id: undefined,
         name: undefined,
@@ -382,7 +373,7 @@ $(function(){
       },
       edit_address: function(address) {
         var that = this;
-        $.each(this.address_attributes, function(index, attr){
+        $.each(this.editing_address, function(attr){
           that.editing_address[attr] = address[attr];
         });
 
@@ -392,17 +383,18 @@ $(function(){
         this.show_confirm_dialog({
           text: "您确定要删除该地址？",
           ok: function() {
+            var that = this;
             $.post("/addresses/destroy", {
               address_id: address.id
             }).done(function(){
-              if ((index = this.address_info.indexOf(address)) >= 0) {
-                this.address_info.splice(index, 1);
-                if (this.selected_address === address) {
-                  this.selected_address = undefined;
+              if ((index = that.address_info.indexOf(address)) >= 0) {
+                that.address_info.splice(index, 1);
+                if (that.selected_address === address) {
+                  that.selected_address = undefined;
                 }
               }
             }).fail(function(){
-              this.show_confirm_dialog({
+              that.show_confirm_dialog({
                 text: "操作失败"
               });
             })
@@ -424,7 +416,7 @@ $(function(){
 
       clear_editing_address: function() {
         var that = this;
-        $.each(this.address_attributes, function(index, attr){
+        $.each(this.editing_address, function(attr){
           if(typeof that.editing_address[attr] === "boolean") {
             that.editing_address[attr] = false;
           }else{
@@ -439,16 +431,22 @@ $(function(){
           this.submitting_address = true;
         }
         var that = this,
-            url = (this.editing_address.id === undefined ? "addresses/create" : "addresses/update");
+            url = (this.editing_address.id === undefined ? "/addresses/create" : "/addresses/update");
         $.post(url, {
           address_id: this.editing_address.id,
           address: this.editing_address,
         }).done(function(data){
           that.address_info = data.addresses;
           that.back_to("address");
-        }).fail(function(){
-          this.show_confirm_dialog({
-            text: "地址信息不完整"
+        }).fail(function(data){
+          var msg;
+          if (data.status === 422) {
+            msg = data.responseJSON.error;
+          } else {
+            msg = "操作失败";
+          }
+          that.show_confirm_dialog({
+            text: msg
           });
         }).always(function(){
           that.submitting_address = false;

@@ -10,7 +10,9 @@ class Address < ApplicationRecord
 
   after_save :set_default, if: "self.is_default"
 
-  validates_presence_of :name, :gender, :phone, :garden, :house_number, :is_default
+  validates_presence_of :name, :gender, :phone, :garden, :house_number, message: "地址信息不完整"
+  validates_inclusion_of :is_default, in: [true, false], message: "地址信息不完整"
+  validates_format_of :phone, with: /\A[0-9]{11}\z/, message: "手机格式不正确"
 
   def to_json
     {

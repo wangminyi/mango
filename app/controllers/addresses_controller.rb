@@ -8,7 +8,9 @@ class AddressesController < ApplicationController
         addresses: current_user.addresses_json
       }
     else
-      head :unprocessable_entity
+      render json: {
+        error: address.first_error
+      }, status: :unprocessable_entity
     end
   end
 
@@ -18,12 +20,14 @@ class AddressesController < ApplicationController
         addresses: current_user.addresses_json
       }
     else
-      head :unprocessable_entity
+      render json: {
+        error: @address.first_error
+      }, status: :unprocessable_entity
     end
   end
 
   def destroy
-    # @address.destroy
+    @address.destroy
     head :ok
   end
 
@@ -33,7 +37,7 @@ class AddressesController < ApplicationController
     end
 
     def address_param
-      params[:address][:is_default] = (params[:address][:is_default] == "true")
+      params[:address][:is_default] = (params[:address][:is_default] == "true" ? 1 : 0)
 
       params.require(:address).permit(
         :name,
