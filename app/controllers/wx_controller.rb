@@ -7,7 +7,7 @@ class WxController < ApplicationController
     if WxPay::Sign.verify?(result)
       order = Order.find_by(order_no: result["out_trade_no"])
 
-      if order.total_price == result["total_fee"]
+      if order.total_price == result["total_fee"].to_i
         order.paid!
       else
         # notify
