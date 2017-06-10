@@ -1,4 +1,6 @@
 class WxController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:notify]
+
   def notify
     result = Hash.from_xml(request.body.read)["xml"]
 

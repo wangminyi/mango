@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   get "auth/wechat/callback", to: "wx#oauth_callback"
   get "auth/failure", to: "wx#oauth_failure"
 
+  namespace :wx do
+    post :notify
+  end
+
   namespace :shop do
     get :index
   end
