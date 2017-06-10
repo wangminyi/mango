@@ -389,21 +389,26 @@ $(function(){
         this.forward_to("edit_address");
       },
       delete_address: function(address) {
-        var that = this;
-        if(confirm("您确定要删除该地址？")){
-          $.post("/addresses/destroy", {
-            address_id: address.id
-          }).done(function(){
-            if ((index = that.address_info.indexOf(address)) >= 0) {
-              that.address_info.splice(index, 1);
-              if (that.selected_address === address) {
-                that.selected_address = undefined;
+        this.show_confirm_dialog({
+          text: "您确定要删除该地址？",
+          ok: function() {
+            $.post("/addresses/destroy", {
+              address_id: address.id
+            }).done(function(){
+              if ((index = this.address_info.indexOf(address)) >= 0) {
+                this.address_info.splice(index, 1);
+                if (this.selected_address === address) {
+                  this.selected_address = undefined;
+                }
               }
-            }
-          }).fail(function(){
-            alert("操作失败");
-          })
-        }
+            }).fail(function(){
+              this.show_confirm_dialog({
+                text: "操作失败"
+              });
+            })
+          },
+          cancel: true
+        });
       },
       add_address: function() {
         var that = this;
@@ -442,7 +447,9 @@ $(function(){
           that.address_info = data.addresses;
           that.back_to("address");
         }).fail(function(){
-          alert("地址信息不完整");
+          this.show_confirm_dialog({
+            text: "地址信息不完整"
+          });
         }).always(function(){
           that.submitting_address = false;
         })
@@ -473,8 +480,11 @@ $(function(){
           }
         }).done(function(data) {
           if (wx_ready) {
+            var that = this;
             data.success = function() {
-              alert("支付成功");
+              that.show_confirm_dialog({
+                text: "支付成功"
+              });
             }
             wx.chooseWXPay(data);
           }
