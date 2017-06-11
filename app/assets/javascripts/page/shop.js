@@ -490,13 +490,18 @@ $(function(){
                 }
               }).done(function(data) {
                 if (wx_ready) {
-                  var that = this;
-                  data.success = function() {
+                  var that = this,
+                      params = data.pay_params,
+                      order_url = data.order_url;
+                  params.success = function() {
                     that.show_confirm_dialog({
-                      text: "支付成功"
+                      text: "支付成功",
+                      ok: function() {
+                        window.location = order_url;
+                      }
                     });
                   }
-                  wx.chooseWXPay(data);
+                  wx.chooseWXPay(params);
                 }
               }).fail(function() {
 

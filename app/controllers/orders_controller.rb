@@ -18,7 +18,10 @@ class OrdersController < ApplicationController
     if order.save
       js_pay_req = order.apply_prepay
       if js_pay_req.present?
-        render json: js_pay_req
+        render json: {
+          pay_params: js_pay_req,
+          order_url: order_url(order),
+        }
       else
         render json: {error: "微信支付失败，请稍后再试"}, status: 501
       end
