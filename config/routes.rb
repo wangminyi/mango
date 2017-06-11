@@ -21,9 +21,7 @@ Rails.application.routes.draw do
     post :update
   end
 
-  namespace :orders do
-    post :create
-  end
+  resources :orders, only: [:index, :show, :create]
 
   namespace :admin do
     resources :orders, only: [:index, :show]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170606125702) do
+ActiveRecord::Schema.define(version: 20170611111747) do
 
   create_table "addresses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -57,15 +57,15 @@ ActiveRecord::Schema.define(version: 20170606125702) do
     t.string   "image"
     t.integer  "price"
     t.text     "description",  limit: 65535
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
     t.string   "tags"
     t.string   "texture"
     t.integer  "category_id"
     t.integer  "order_limit"
     t.string   "unit_text"
     t.integer  "limit_count"
-    t.integer  "sales_volume"
+    t.integer  "sales_volume",               default: 0
     t.index ["alias"], name: "index_ingredients_on_alias", using: :btree
     t.index ["category_id"], name: "index_ingredients_on_category_id", using: :btree
     t.index ["name"], name: "index_ingredients_on_name", using: :btree
@@ -106,6 +106,8 @@ ActiveRecord::Schema.define(version: 20170606125702) do
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
     t.string   "pay_status"
+    t.text     "gifts",                    limit: 65535
+    t.text     "item_list",                limit: 65535
     t.index ["distribute_at"], name: "index_orders_on_distribute_at", using: :btree
     t.index ["distributer_id"], name: "index_orders_on_distributer_id", using: :btree
     t.index ["order_no"], name: "index_orders_on_order_no", unique: true, using: :btree

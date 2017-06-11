@@ -1,0 +1,102 @@
+- content_for :page_css
+  = stylesheet_link_tag 'page/order_show'
+
+.order-container
+  .order-box
+    .order-block.title
+      | 订单信息
+
+    .order-block
+      span.pull-left
+        | 订单编号
+      span.pull-right
+        = @order.order_no[-8..-1]
+
+    .order-block
+      span.pull-left
+        | 订单时间
+      span.pull-right
+        = @order.created_at.strftime("%F %T")
+
+    .order-block
+      span.pull-left
+        | 收货人
+      span.pull-right
+        = @order.receiver_name
+
+    .order-block
+      span.pull-left
+        | 手机
+      span.pull-right
+        = @order.receiver_phone
+
+    .order-block
+      span.pull-left
+        | 收货地址
+      span.pull-right
+        = @order.receiver_address
+
+    .order-block
+      span.pull-left
+        | 支付方式
+      span.pull-right
+        | 微信支付
+
+    .order-block
+      span.pull-left
+        | 支付状态
+      span.pull-right
+        = @order.pay_status_text
+
+  .order-box
+    .order-block.title
+      = "商品清单（共#{@order.item_details.count}件）"
+
+    .order-block.scrollable
+      - @order.gifts&.each do |gift|
+        .item-box
+          = image_tag gift["image"]
+          .hint
+            | 赠品
+      - @order.item_details.each do |item|
+        .item-box
+          = image_tag item["image"]
+          .hint
+            = "x#{item["count"]}"
+    .order-block
+      span.pull-left
+        | 配送时间
+      span.pull-right
+        = @order.distribute_at_text
+
+  .order-box.price
+    .order-block.title
+      | 价格清单
+
+    .order-block
+      sapn.pull-left
+        | 商品金额
+      span.pull-right
+        = format_price @order.item_price
+
+    .order-block
+      sapn.pull-left
+        | 运费
+      span.pull-right
+        - if @order.free_distribution_reason.present?
+          = "（#{@order.free_distribution_reason}）"
+        = format_price @order.distribution_price
+
+    - if @order.preferential_price > 0
+      .order-block
+        sapn.pull-left
+          | 优惠
+        span.pull-right
+          | -
+          = format_price @order.preferential_price
+
+    .order-block
+      sapn.pull-left
+        | 应付金额
+      span.pull-right
+        = format_price @order.total_price

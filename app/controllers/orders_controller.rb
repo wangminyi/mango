@@ -1,10 +1,20 @@
 class OrdersController < ApplicationController
-  before_action :set_address, only: [:update, :destroy]
+  before_action :require_login, only: [:index, :show]
+
+  def index
+    @orders = current_user.orders
+  end
+
+  def show
+    @order = current_user.orders.find params[:id]
+  end
 
   def create
     order = current_user.orders.build order_param
-    order.item_details = JSON.parse(params[:order][:item_details])
-
+    order.assign_attributes(
+      item_list: JSON.parse(params[:order][:item_list]),
+      gifts: JSON.parse(params[:order][:gifts])
+    )
     if order.save
       js_pay_req = order.apply_prepay
       if js_pay_req.present?
@@ -25,21 +35,6 @@ class OrdersController < ApplicationController
     else
       render json: {error: "微信支付失败，请稍后再试"}, status: 501
     end
-  end
-
-  def update
-    if @address.update(address_param)
-      render json: {
-        addresses: current_user.addresses_json
-      }
-    else
-      head :unprocessable_entity
-    end
-  end
-
-  def destroy
-    # @address.destroy
-    head :ok
   end
 
   private

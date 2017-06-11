@@ -1,7 +1,9 @@
 class Order < ApplicationRecord
   extend Enumerize
 
+  serialize :item_list, JSON
   serialize :item_details, JSON
+  serialize :gifts, JSON
 
   enumerize :status, in: [
     :submitted,
@@ -20,6 +22,7 @@ class Order < ApplicationRecord
 
   ## callbacks
   before_create :generate_order_no
+  before_create :generate_item_details
 
   ## validates
   # validate :check_stock
@@ -76,18 +79,34 @@ class Order < ApplicationRecord
   end
 
   def ingredients_hash
-    ingredients = Ingredient.where(id: self.item_details.map{|h| h["id"]})
-    self.item_details.map do |i|
-      [ingredients.find{|ingredient| ingredient.id == i["id"]}, i["count"]]
-    end.to_h
+    @__ingredients_hash ||= begin
+      ingredients = Ingredient.where(id: self.item_list.map{|h| h["id"]}).preload(:dishes)
+      self.item_list.map do |i|
+        [ingredients.find{|ingredient| ingredient.id == i["id"]}, i["count"]]
+      end.to_h
+    end
   end
 
   def paid!
     self.update(pay_status: :paid)
   end
 
+  def total_price_yuan
+    '%.2f' % (self.total_price / 100.0)
+  end
+
+  def distribute_at_text
+    "#{self.distribute_at.strftime("%F %H:00")} ~ #{self.distribute_at.since(1.hour).strftime("%H:00")}"
+  end
+
   private
     def generate_order_no
       self.order_no = [Time.now.strftime("%Y%m%d%H%M%S"), "0" * 10, Random.rand(10_000_000..99_999_999).to_s].join
+    end
+
+    def generate_item_details
+      self.item_details = self.ingredients_hash.map do |ingredient, count|
+        ingredient.as_json.merge(count: count)
+      end
     end
 end

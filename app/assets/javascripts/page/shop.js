@@ -466,7 +466,7 @@ $(function(){
             text: "确定提交订单吗？",
             ok: function() {
               var addr = this.selected_address,
-              item_details = JSON.stringify($.map(this.shopping_cart_list, function(item) {
+              item_list = JSON.stringify($.map(this.shopping_cart_list, function(item) {
                 return {
                   id: item.id,
                   count: item.count,
@@ -474,7 +474,8 @@ $(function(){
               }));
               $.post("/orders/create", {
                 order: {
-                  item_details: item_details,
+                  item_list: item_list,
+                  gifts: JSON.stringify(this.gift_list),
                   item_price: this.total_price, // 商品总价
                   coupon_enable: this.coupon_enable, // 是否优惠
                   total_price: this.order_price, // 订单总价 double check

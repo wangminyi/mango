@@ -1,7 +1,6 @@
 zh-CN:
   enumerize:
-    ingredient:
-      sale_mode:
-        gram: 克
-        liang: 两
-        count: 份
+    order:
+      pay_status:
+        paid: 已支付
+        unpaid: 未支付

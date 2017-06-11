@@ -1,0 +1,46 @@
+@import "macro";
+
+body {
+  background-color: $bg-light-gray;
+}
+
+.order-box {
+  margin-top: 20px;
+  background-color: white;
+  .order-block {
+    color: $theme-light-gray;
+    padding: 10px 20px;
+    font-size: 14px;
+    &.scrollable {
+      white-space: nowrap;
+      overflow-x: auto;
+    }
+    &:not(:last-child) {
+      border-bottom: 1px solid $border-color;
+    }
+
+    .item-box {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      position: relative;
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+
+      .hint {
+        position: absolute;
+        right: 2px;
+        bottom: 2px;
+        font-size: 12px;
+        color: $theme-black;
+      }
+    }
+  }
+}
