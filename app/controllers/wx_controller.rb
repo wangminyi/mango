@@ -25,6 +25,10 @@ class WxController < ApplicationController
     user = User.find_or_initialize_by(open_id: openid)
     if user.new_record?
       user.password = SecureRandom.hex(10)
+      user.assign_attributes(
+        nickname: omniauth[:extra][:raw_info][:nickname],
+        user_name: omniauth[:extra][:raw_info][:headimgurl],
+      )
       user.save!
     end
     sign_in user

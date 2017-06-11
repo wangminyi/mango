@@ -462,43 +462,49 @@ $(function(){
             text: "请选择送货时间"
           });
         } else {
-          var addr = this.selected_address,
+          this.show_confirm_dialog({
+            text: "确定提交订单吗？",
+            ok: function() {
+              var addr = this.selected_address,
               item_details = JSON.stringify($.map(this.shopping_cart_list, function(item) {
                 return {
                   id: item.id,
                   count: item.count,
                 };
               }));
-          $.post("/orders/create", {
-            order: {
-              item_details: item_details,
-              item_price: this.total_price, // 商品总价
-              coupon_enable: this.coupon_enable, // 是否优惠
-              total_price: this.order_price, // 订单总价 double check
-              distribute_at: this.selected_date_time_value,
-              distribution_price: this.distribute_price,
-              free_distribution_reason: this.free_distribution_reason,
-              preferential_price: this.preferential_price,
-              receiver_name: addr.name,
-              receiver_phone: addr.phone,
-              receiver_address: addr.garden + addr.house_number,
-              remark: this.remark,
-            }
-          }).done(function(data) {
-            if (wx_ready) {
-              var that = this;
-              data.success = function() {
-                that.show_confirm_dialog({
-                  text: "支付成功"
-                });
-              }
-              wx.chooseWXPay(data);
-            }
-          }).fail(function() {
+              $.post("/orders/create", {
+                order: {
+                  item_details: item_details,
+                  item_price: this.total_price, // 商品总价
+                  coupon_enable: this.coupon_enable, // 是否优惠
+                  total_price: this.order_price, // 订单总价 double check
+                  distribute_at: this.selected_date_time_value,
+                  distribution_price: this.distribute_price,
+                  free_distribution_reason: this.free_distribution_reason,
+                  preferential_price: this.preferential_price,
+                  receiver_name: addr.name,
+                  receiver_phone: addr.phone,
+                  receiver_address: addr.garden + addr.house_number,
+                  remark: this.remark,
+                }
+              }).done(function(data) {
+                if (wx_ready) {
+                  var that = this;
+                  data.success = function() {
+                    that.show_confirm_dialog({
+                      text: "支付成功"
+                    });
+                  }
+                  wx.chooseWXPay(data);
+                }
+              }).fail(function() {
 
-          }).always(function() {
+              }).always(function() {
 
-          });
+              });
+            },
+            cancel: true
+          })
         }
       },
       // 弹框
