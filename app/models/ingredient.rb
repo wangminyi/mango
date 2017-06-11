@@ -16,7 +16,7 @@ class Ingredient < ApplicationRecord
       tags:   self.tags&.split(",") || [],
       price:    self.price || 350,
       unit_text: "/" + (self.unit_text || "约500g"),
-      count:    self.id % 10 === 0 ? 1 : 0,
+      count:    0,
       texture:  self.texture,
       order_limit: self.order_limit, # 上限
       limit_count: self.limit_count, # 起卖

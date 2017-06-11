@@ -472,7 +472,7 @@ $(function(){
                   count: item.count,
                 };
               }));
-              $.post("/orders/create", {
+              $.post("/orders", {
                 order: {
                   item_list: item_list,
                   gifts: JSON.stringify(this.gift_list),
