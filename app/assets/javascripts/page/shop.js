@@ -462,6 +462,7 @@ $(function(){
             text: "请选择送货时间"
           });
         } else {
+          var that = this;
           this.show_confirm_dialog({
             text: "确定提交订单吗？",
             ok: function() {
@@ -490,8 +491,7 @@ $(function(){
                 }
               }).done(function(data) {
                 if (wx_ready) {
-                  var that = this,
-                      params = data.pay_params,
+                  var params = data.pay_params,
                       order_url = data.order_url;
                   params.success = function() {
                     that.show_confirm_dialog({
@@ -504,7 +504,9 @@ $(function(){
                   wx.chooseWXPay(params);
                 }
               }).fail(function() {
-
+                that.show_confirm_dialog({
+                  text: "订单提交失败",
+                })
               }).always(function() {
 
               });
