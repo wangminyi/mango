@@ -13,7 +13,7 @@ class ShopController < ApplicationController
     Category.all.each do |category|
       base_info = {
         name: category.name,
-        items: category.ingredients.where.not(price: nil).preload(:dishes).map(&:as_json),
+        items: category.ingredients.where.not(price: nil).preload(:dishes).order(priority: :desc).map(&:as_json),
       }
 
       categories.push(base_info)

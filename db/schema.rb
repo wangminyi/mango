@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611111747) do
+ActiveRecord::Schema.define(version: 20170612101738) do
 
   create_table "addresses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -66,9 +66,11 @@ ActiveRecord::Schema.define(version: 20170611111747) do
     t.string   "unit_text"
     t.integer  "limit_count"
     t.integer  "sales_volume",               default: 0
+    t.integer  "priority",                   default: 0
     t.index ["alias"], name: "index_ingredients_on_alias", using: :btree
     t.index ["category_id"], name: "index_ingredients_on_category_id", using: :btree
     t.index ["name"], name: "index_ingredients_on_name", using: :btree
+    t.index ["priority"], name: "index_ingredients_on_priority", using: :btree
     t.index ["tags"], name: "index_ingredients_on_tags", using: :btree
   end
 
