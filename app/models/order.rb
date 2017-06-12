@@ -39,7 +39,6 @@ class Order < ApplicationRecord
     end
 
     # 优惠
-    total -= Settings::PREFERENTIAL_PRICE
 
     if total != self.total_price.to_i
       self.errors.add :total_price, "订单金额不符"

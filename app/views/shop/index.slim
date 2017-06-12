@@ -32,7 +32,7 @@ template#shop-template
                   | {{ category_count(category) }}
                 | {{ category.name }}
             .ingredients-container
-              .ingredients-panel v-for="item in selected_items"
+              .ingredients-panel v-for="item in selected_items" key={{item.id}}
                 .image-container v-on:click="item.description ? show_description(item) : null"
                   img v-bind:src="item.image"
                 .ingredient-info-container
@@ -126,7 +126,7 @@ template#shop-template
       .order-page-container.page-container v-else-if="current_page === 'order'" key="order_page"
         .page-header
           i.fa.fa-chevron-left v-on:click="back_to('shopping')"
-          | 提交订单
+          | 微信支付
 
         .page-body-wrapper
           .page-panel.personal-info
@@ -158,7 +158,7 @@ template#shop-template
                 .hint
                   | x{{item.count}}
 
-          .page-panel.additional-info
+          /.page-panel.additional-info
             .panel-block
               | 优惠券
               .checkbox-btn.right-side v-bind:class="coupon_enable ? 'enable' : 'disable'" v-on:click="coupon_enable = !coupon_enable"

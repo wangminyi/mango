@@ -49,7 +49,7 @@ $(function(){
       selected_address: undefined, // 选择的地址 json
       selected_date: undefined, // 选择的送货日期 [今天，2017-4-6]
       selected_time: undefined, // 选择的送货时间 [16:00 ~ 18:00, "16:00"]
-      coupon_enable: true,  // 是否使用优惠券
+      coupon_enable: false,  // 是否使用优惠券
       // pay_mode: "cod", // cod(cash on delivery) || wechat
       remark: undefined, // 备注
         // 局部变量
@@ -478,12 +478,11 @@ $(function(){
                   item_list: item_list,
                   gifts: JSON.stringify(this.gift_list),
                   item_price: this.total_price, // 商品总价
-                  coupon_enable: this.coupon_enable, // 是否优惠
                   total_price: this.order_price, // 订单总价 double check
                   distribute_at: this.selected_date_time_value,
                   distribution_price: this.distribute_price,
                   free_distribution_reason: this.free_distribution_reason,
-                  preferential_price: this.preferential_price,
+                  preferential_price: this.coupon_enable ? this.preferential_price : 0,
                   receiver_name: addr.name,
                   receiver_phone: addr.phone,
                   receiver_address: addr.garden + addr.house_number,
