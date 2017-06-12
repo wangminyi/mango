@@ -32,7 +32,7 @@ template#shop-template
                   | {{ category_count(category) }}
                 | {{ category.name }}
             .ingredients-container
-              .ingredients-panel v-for="item in selected_items" key={{item.id}}
+              .ingredients-panel v-for="item in selected_items" key="{{item.id}}"
                 .image-container v-on:click="item.description ? show_description(item) : null"
                   img v-bind:src="item.image"
                 .ingredient-info-container
