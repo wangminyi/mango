@@ -14,7 +14,7 @@ class Ingredient < ApplicationRecord
       image:  ActionController::Base.helpers.asset_url(self.image || "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg"),
       label:  self.dishes.present? ? "推荐食谱：#{self.dishes.first(3).map(&:name).join('、')}" : "",
       tags:   self.tags&.split(",") || [],
-      price:    self.price || 350,
+      price:    self.price,
       unit_text: "/" + (self.unit_text || "约500g"),
       count:    0,
       texture:  self.texture,
