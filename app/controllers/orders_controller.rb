@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   before_action :require_login, only: [:index, :show]
 
   def index
-    @orders = current_user.orders
+    @orders = current_user.orders.order(created_at: :desc)
   end
 
   def show
