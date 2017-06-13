@@ -114,7 +114,7 @@ class Order < ApplicationRecord
 
     def update_sales_volume
       self.ingredients_hash.each do |ingredient, count|
-        ingredient.update_column(:sales_volume, ingredient.sales_volume +count)
+        ingredient.update_column(:sales_volume, (ingredient.sales_volume + count))
       end
     end
 end
