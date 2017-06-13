@@ -1,6 +1,8 @@
 class Order < ApplicationRecord
   extend Enumerize
 
+  STAFF_IDS = [2, 3]
+
   serialize :item_list, JSON
   serialize :item_details, JSON
   serialize :gifts, JSON
@@ -23,6 +25,7 @@ class Order < ApplicationRecord
   ## callbacks
   before_create :generate_order_no
   before_create :generate_item_details
+  after_create :update_sales_volume
 
   ## validates
   # validate :check_stock
@@ -31,7 +34,7 @@ class Order < ApplicationRecord
 
   def check_price
     total = self.ingredients_hash.map do |i, count|
-      (i.price || 350) * count
+      i.price * count
     end.sum
 
     if total < Settings::FREE_DISTRIBUTION
@@ -44,7 +47,7 @@ class Order < ApplicationRecord
       self.errors.add :total_price, "订单金额不符"
     end
 
-    self.total_price = 1 if user.id == 2 || user.id == 3
+    self.total_price = 1 if STAFF_IDS.include?(user.id)
   end
 
   def apply_prepay ip: "127.0.0.1"
@@ -106,6 +109,12 @@ class Order < ApplicationRecord
     def generate_item_details
       self.item_details = self.ingredients_hash.map do |ingredient, count|
         ingredient.as_json.merge(count: count)
+      end
+    end
+
+    def update_sales_volume
+      self.ingredients_hash.each do |ingredient, count|
+        ingredient.update_column(:sales_volume, ingredient.sales_volume +count)
       end
     end
 end
