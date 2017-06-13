@@ -492,7 +492,7 @@ $(function(){
                     that.show_confirm_dialog({
                       text: "支付成功",
                       ok: function() {
-                        window.location = order_url;
+                        window.open(order_url);
                       }
                     });
                   }
