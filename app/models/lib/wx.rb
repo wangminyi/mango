@@ -39,7 +39,7 @@ class Wx
         noncestr: noncestr,
         timestamp: timestamp,
         signature: self.js_signature(noncestr, timestamp, url),
-        jsApiList: ["chooseWXPay"]
+        jsApiList: ["chooseWXPay", "closeWindow"]
       }
     end
 

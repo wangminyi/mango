@@ -6,6 +6,9 @@ class OrdersController < ApplicationController
   end
 
   def show
+    if params[:from] == "shop"
+      gon.js_config_params = Wx.js_config_params(request.url)
+    end
     @order = current_user.orders.find params[:id]
   end
 

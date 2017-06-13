@@ -1,6 +1,9 @@
 - content_for :page_css
   = stylesheet_link_tag 'page/order_show'
 
+- content_for :page_js
+  = javascript_include_tag 'http://res.wx.qq.com/open/js/jweixin-1.2.0.js'
+
 .order-container
   .order-box
     .order-block.title
@@ -100,3 +103,20 @@
         | 应付金额
       span.pull-right
         = format_price @order.total_price
+
+javascript:
+  $(function(){
+    if (typeof gon !== "undefined" && typeof gon.js_config_params !== "undefined") {
+      wx.config(gon.js_config_params);
+      wx.ready(function() {
+        var state = {
+          title: "title",
+          url: "#"
+        };
+        history.pushState({}, "title", "#");
+        window.addEventListener('popstate', function() {
+          wx.closeWindow();
+        }, false);
+      });
+    }
+  })

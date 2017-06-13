@@ -492,10 +492,7 @@ $(function(){
                     that.show_confirm_dialog({
                       text: "支付成功",
                       ok: function() {
-                        that.clear_shopping_cart();
-                        that.gifts = [];
-                        that.current_page = "shopping";
-                        window.open(order_url);
+                        window.location = order_url + "?from=shop";
                       }
                     });
                   }
