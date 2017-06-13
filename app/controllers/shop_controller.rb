@@ -21,24 +21,28 @@ class ShopController < ApplicationController
 
     gon.categories = categories
     gon.addresses = current_user.addresses_json
-    gon.gifts = [
-      {
-        image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-        limit: "1000",
-        name: "菜篮子",
-        count: 1,
-        label: "好篮子",
-        price: 5000,
-      },
-      {
-        image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-        limit: "2000",
-        name: "拖把",
-        label: "好拖把",
-        count: 2,
-        price: 6000,
-      }
-    ]
+
+    if !current_user.orders.with_pay_status(:paid).exists?
+      gon.gifts = [
+        {
+          image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
+          limit: "1000",
+          name: "菜篮子",
+          count: 1,
+          label: "好篮子",
+          price: 5000,
+        },
+        {
+          image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
+          limit: "2000",
+          name: "拖把",
+          label: "好拖把",
+          count: 2,
+          price: 6000,
+        }
+      ]
+    end
+
     gon.settings = Settings.as_json
     gon.js_config_params = Wx.js_config_params(shop_index_url)
   end

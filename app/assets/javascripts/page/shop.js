@@ -42,7 +42,7 @@ $(function(){
       selected_description: undefined,  // 显示做法
       show_header_hint: ($.cookie("show_header_hint") === undefined), // 是否显示顶部提示
       categories: categories, // 商品对象
-      gifts: gon.gifts,
+      gifts: gon.gifts || [],
 
       // 订单页面
         // 表单字段slot
@@ -81,11 +81,7 @@ $(function(){
     computed: {
       // 选中类型的商品
       selected_items: function() {
-        if (this.selected_category === this.gifts) {
-          return this.gifts;
-        } else {
-          return this.selected_category.items;
-        }
+        return this.selected_category.items;
       },
       // 所有食材对象的hash
       items_hash: function(){

@@ -11,9 +11,10 @@ class OrdersController < ApplicationController
 
   def create
     order = current_user.orders.build order_param
+    gifts = current_user.orders.with_pay_status(:paid).exists? ? [] : JSON.parse(params[:order][:gifts])
     order.assign_attributes(
       item_list: JSON.parse(params[:order][:item_list]),
-      gifts: JSON.parse(params[:order][:gifts])
+      gifts: gifts,
     )
     if order.save
       js_pay_req = order.apply_prepay
