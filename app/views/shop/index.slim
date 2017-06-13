@@ -126,7 +126,7 @@ template#shop-template
       .order-page-container.page-container v-else-if="current_page === 'order'" key="order_page"
         .page-header
           i.fa.fa-chevron-left v-on:click="back_to('shopping')"
-          | 微信支付
+          | 提交订单
 
         .page-body-wrapper
           .page-panel.personal-info
@@ -198,7 +198,7 @@ template#shop-template
         .page-footer.order-price-container
           | 应付：{{ order_price | price_text }}
           .footer-btn v-on:click="submit_order"
-            | 提交订单
+            | 微信支付
 
         .select-time-container.modal-panel v-show="show_time_selector" v-on:click.self="show_time_selector = false"
           transition name="slide-up"
