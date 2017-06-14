@@ -14,10 +14,6 @@ table.table.table-hover.table-bordered.table-striped
       th
         | 订单金额
       th
-        | 实际金额
-      th
-        | 是否支付
-      th
         | 订单状态
       th
         | 操作
@@ -28,10 +24,8 @@ table.table.table-hover.table-bordered.table-striped
         td = order.receiver_name
         td = order.receiver_phone
         td = order.receiver_address
-        td = order.created_at
+        td = order.created_at.strftime("%F %T")
         td = order.item_price
-        td = order.total_price
-        td = order.pay_status
         td = order.status
         td
           = link_to "处理", admin_order_path(order), target: "_blank"

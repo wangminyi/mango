@@ -20,4 +20,8 @@ class ApplicationController < ActionController::Base
       cookies.signed[:user_id] ||= current_user.id
     end
   end
+
+  def after_sign_in_path_for(resource)
+    stored_location_for(resource) || root_path
+  end
 end
