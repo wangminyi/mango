@@ -15,3 +15,4 @@
 //= require jquery.cookie/jquery.cookie
 //= require simplemde/dist/simplemde.min
 //= require_directory .
+//= require bootstrap

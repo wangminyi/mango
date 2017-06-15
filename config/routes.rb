@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   resources :orders, only: [:index, :show, :create]
 
   namespace :admin do
+    root "orders#index"
     resources :orders, only: [:index, :show]
   end
 end

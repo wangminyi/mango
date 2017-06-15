@@ -9,9 +9,8 @@ class Order < ApplicationRecord
 
   enumerize :status, in: [
     :submitted,
-    :handling,
-    :deliverying,
     :finished,
+    :abandon,
   ], scope: true, default: :submitted
 
   enumerize :pay_status, in: [

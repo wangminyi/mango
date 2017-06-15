@@ -1,0 +1,22 @@
+doctype html
+
+html
+  head
+    title 元也后台
+    meta content="width=device-width, initial-scale=1.0" name="viewport"
+    = csrf_meta_tags
+
+    = stylesheet_link_tag    'application', media: 'all'
+
+    = yield :page_css
+
+    = javascript_include_tag 'application'
+
+    = include_gon
+
+  body
+    = render "admin/common/header"
+
+    = yield
+
+    = yield :page_js

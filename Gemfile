@@ -43,7 +43,7 @@ group :development do
 end
 
 # Custom
-gem 'bootstrap'
+gem 'bootstrap-sass'
 gem 'figaro'
 gem 'slim-rails'
 gem 'simple_form'

@@ -1,31 +1,55 @@
-table.table.table-hover.table-bordered.table-striped
-  tr
-    thead
-      th
-        | ID
-      th
-        | 姓名
-      th
-        | 手机
-      th
-        | 地址
-      th
-        | 创建时间
-      th
-        | 订单金额
-      th
-        | 订单状态
-      th
-        | 操作
-  tbody
-    - @orders.each do |order|
-      tr
-        td = order.id
-        td = order.receiver_name
-        td = order.receiver_phone
-        td = order.receiver_address
-        td = order.created_at.strftime("%F %T")
-        td = order.item_price
-        td = order.status
-        td
-          = link_to "处理", admin_order_path(order), target: "_blank"
+.admin-order-container
+  table.table.table-hover.table-bordered.table-striped
+    tr
+      thead
+        th
+          | ID
+        th
+          | 姓名
+        th
+          | 手机
+        th
+          | 地址
+        th
+          | 创建时间
+        th
+          | 订单金额
+        th
+          | 订单状态
+        th
+          | 操作
+    tbody
+      - @orders.each do |order|
+        tr.list
+          td = order.id
+          td = order.receiver_name
+          td = order.receiver_phone
+          td = order.receiver_address
+          td = order.created_at.strftime("%F %T")
+          td = format_price(order.item_price)
+          td = order.status
+          td
+            = link_to "处理", admin_order_path(order), target: "_blank"
+        tr.detail.hidden
+          td colspan=8
+            - order.item_details.each do |i|
+              .item = "#{i["name"]} x #{i["count"]} -- #{format_price(i["price"])} #{i["unit_text"]}"
+
+javascript:
+  $(function(){
+    $("tbody").on("click", "tr.list", function(){
+      $(this).next().toggleClass("hidden");
+    })
+  });
+
+scss:
+  .admin-order-container {
+    margin: 20px;
+  }
+
+  .item {
+    display: inline-block;
+    width: 50%;
+    font-size: 14px;
+    line-height: 25px;
+  }

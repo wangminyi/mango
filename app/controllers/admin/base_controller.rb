@@ -1,11 +1,12 @@
 class Admin::BaseController < ApplicationController
-  def sign_in_by_params
-    id = params[:id]
-    password = params[:password]
-    user = User.with_role(:admin).find(id)
+  layout "admin"
 
-    if user.valid_password? password
-      sign_in user
+  def require_admin
+    if current_user.blank?
+      store_location_for(:user, request.url)
+      redirect_to new_user_session_path
+    elsif !current_user.role.admin?
+      raise ActionController::RoutingError.new('Not Found')
     end
   end
 end

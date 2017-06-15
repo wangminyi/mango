@@ -7,3 +7,5 @@ log/development.log
 public/assets/*
 
 config/application.yml
+
+.idea/*
