@@ -11,7 +11,9 @@
         th
           | 地址
         th
-          | 创建时间
+          | 下单时间
+        th
+          | 配送时间
         th
           | 订单金额
         th
@@ -26,6 +28,7 @@
           td = order.receiver_phone
           td = order.receiver_address
           td = order.created_at.strftime("%F %T")
+          td = order.distribute_at.strftime("%F %T")
           td = format_price(order.item_price)
           td = order.status
           td
@@ -48,8 +51,6 @@ scss:
   }
 
   .item {
-    display: inline-block;
-    width: 50%;
     font-size: 14px;
     line-height: 25px;
   }
