@@ -124,7 +124,7 @@ template#shop-template
                         | +
 
       .order-page-container.page-container v-else-if="current_page === 'order'" key="order_page"
-        .page-header
+        .shop-page-header
           i.fa.fa-chevron-left v-on:click="back_to('shopping')"
           | 提交订单
 
@@ -218,7 +218,7 @@ template#shop-template
 
 
       .address-page-container.page-container v-else-if="current_page === 'address'" key="address_page"
-        .page-header
+        .shop-page-header
           i.fa.fa-chevron-left v-on:click="back_to('order')"
           | 我的送货地址
 
@@ -250,7 +250,7 @@ template#shop-template
 
 
       .edit-address-page.page-container v-else-if="current_page === 'edit_address'" key="edit_address"
-        .page-header
+        .shop-page-header
           i.fa.fa-chevron-left v-on:click="back_to('address')"
           | 添加送货地址
         .page-body-wrapper
