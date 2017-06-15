@@ -16,6 +16,11 @@ class Admin::OrdersController < Admin::BaseController
 
   def next_state
     @order.next_state!
+    current_user.history_logs.create(
+      action: :handle_order,
+      order: @order,
+      details: @order.status_text
+    )
     render json: {
       finished: @order.status.finished?,
       html: render_to_string(partial: "order_row", locals: { order: @order })
@@ -24,6 +29,10 @@ class Admin::OrdersController < Admin::BaseController
 
   def abandon
     @order.abandon!
+    current_user.history_logs.create(
+      action: :abandon_order,
+      order: @order,
+    )
     head :ok
   end
 

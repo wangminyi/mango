@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612101738) do
+ActiveRecord::Schema.define(version: 20170615111547) do
+
+  create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "namespace"
+    t.text     "body",          limit: 65535
+    t.string   "resource_type"
+    t.integer  "resource_id"
+    t.string   "author_type"
+    t.integer  "author_id"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
+    t.index ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
+    t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
+  end
 
   create_table "addresses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -49,6 +63,18 @@ ActiveRecord::Schema.define(version: 20170612101738) do
     t.datetime "updated_at",    null: false
     t.index ["dish_id"], name: "index_dish_ingredients_on_dish_id", using: :btree
     t.index ["ingredient_id"], name: "index_dish_ingredients_on_ingredient_id", using: :btree
+  end
+
+  create_table "history_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "action"
+    t.integer  "user_id"
+    t.integer  "order_id"
+    t.text     "details",    limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.index ["action"], name: "index_history_logs_on_action", using: :btree
+    t.index ["order_id"], name: "index_history_logs_on_order_id", using: :btree
+    t.index ["user_id"], name: "index_history_logs_on_user_id", using: :btree
   end
 
   create_table "ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -135,6 +161,7 @@ ActiveRecord::Schema.define(version: 20170612101738) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "role"
+    t.string   "email",                  default: "", null: false
     t.index ["nickname"], name: "index_users_on_nickname", using: :btree
     t.index ["open_id"], name: "index_users_on_open_id", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
