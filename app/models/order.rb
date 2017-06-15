@@ -8,9 +8,12 @@ class Order < ApplicationRecord
   serialize :gifts, JSON
 
   enumerize :status, in: [
-    :submitted,
-    :finished,
-    :abandon,
+    :submitted, # 待处理
+    :arranging, # 正在配单
+    :arranged,  # 等待发货
+    :distributing, #正在送货
+    :finished, # 完成订单
+    :abandon, # 废弃
   ], scope: true, default: :submitted
 
   enumerize :pay_status, in: [
@@ -90,6 +93,49 @@ class Order < ApplicationRecord
 
   def paid!
     self.update(pay_status: :paid)
+  end
+
+  def arranging!
+    self.status.submitted? && self.update(status: :arranging)
+  end
+
+  def arranged!
+    self.status.arranging? && self.update(status: :arranged)
+  end
+
+  def distributing!
+    self.status.arranged? && self.update(status: :distribuing)
+  end
+
+  def finished!
+    self.status.distribuing? && self.update(status: :finished)
+  end
+
+  def can_abandon?
+    %w(finished abandon).exclude? self.status
+  end
+
+  def abandon!
+    self.update(status: :abandon)
+  end
+
+  def can_push_state?
+    %w(finished abandon).exclude? self.status
+  end
+
+  def next_state!
+    options = self.class.status.values
+    if (index = options[0...-2].index(self.status)).present?
+      self.update(status: options[index + 1])
+    end
+  end
+
+  # 下一步的文案
+  def next_state_text
+    options = self.class.status.options
+    if (index = options[0...-2].index{|s| s[1] == self.status}).present?
+      options[index + 1][0]
+    end
   end
 
   def total_price_yuan

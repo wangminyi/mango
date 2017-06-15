@@ -1,0 +1,14 @@
+tr.list
+  td = order.id
+  td = order.receiver_name
+  td = order.receiver_phone
+  td = order.receiver_address
+  td = order.created_at.strftime("%F %T")
+  td = order.distribute_at.strftime("%F %T")
+  td = format_price(order.item_price)
+  td = order.status_text
+  td.operation
+    - if order.can_push_state?
+      = link_to order.next_state_text, next_state_admin_order_path(order), remote: true, method: :post, class: "next-state"
+    - if order.can_abandon?
+      = link_to "废弃", abandon_admin_order_path(order), remote: true, method: :post, class: "abandon"

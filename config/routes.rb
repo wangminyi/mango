@@ -28,6 +28,11 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root "orders#index"
-    resources :orders, only: [:index, :show]
+    resources :orders, only: [:index, :show] do
+      member do
+        post :next_state
+        post :abandon
+      end
+    end
   end
 end

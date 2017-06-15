@@ -11,9 +11,9 @@ nav.navbar.navbar-default
       li.nav-item
         = link_to "未处理订单", admin_orders_path(status: :submitted)
       li.nav-item
-        = link_to "已处理订单", admin_orders_path(status: :submit)
+        = link_to "已处理订单", admin_orders_path(status: :finished)
       li.nav-item
-        = link_to "已处理订单", admin_orders_path(status: :submit)
+        = link_to "已废弃订单", admin_orders_path(status: :abandon)
 
     ul.nav.navbar-nav.navbar-right
       li.dropdown

@@ -1,0 +1,4 @@
+tr.detail.hidden
+  td colspan=9
+    - order.item_details.each do |i|
+      .item = "#{i["name"]} x #{i["count"]} -- #{format_price(i["price"])} #{i["unit_text"]}"

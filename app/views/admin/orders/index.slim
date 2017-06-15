@@ -22,27 +22,39 @@
           | 操作
     tbody
       - @orders.each do |order|
-        tr.list
-          td = order.id
-          td = order.receiver_name
-          td = order.receiver_phone
-          td = order.receiver_address
-          td = order.created_at.strftime("%F %T")
-          td = order.distribute_at.strftime("%F %T")
-          td = format_price(order.item_price)
-          td = order.status
-          td
-            = link_to "处理", admin_order_path(order), target: "_blank"
-        tr.detail.hidden
-          td colspan=8
-            - order.item_details.each do |i|
-              .item = "#{i["name"]} x #{i["count"]} -- #{format_price(i["price"])} #{i["unit_text"]}"
+        = render partial: "order_row", locals: {order: order}
+        = render partial: "order_details", locals: {order: order}
 
 javascript:
   $(function(){
-    $("tbody").on("click", "tr.list", function(){
-      $(this).next().toggleClass("hidden");
+    var $evt_adapter = $(".admin-order-container");
+    $evt_adapter.on("click", "tr.list", function(evt){
+      if (!$(evt.target).parent().hasClass("operation")) {
+        $(this).next().toggleClass("hidden");
+      }
+    });
+
+    // 推进
+    $evt_adapter.on("ajax:before", ".next-state", function() {
+      return confirm("确定将该订单推进至下一状态？");
+    }).on("ajax:success", ".next-state", function(evt, data) {
+      var $row = $(this).parents("tr");
+      if (data.finished) {
+        $row.next().remove();
+        $row.remove();
+      } else {
+        $row.replaceWith(data.html);
+      }
     })
+
+    // 废弃
+    $evt_adapter.on("ajax:before", ".abandon", function(){
+      return confirm("确定废弃该订单？");
+    }).on("ajax:success", ".abandon", function(evt, data) {
+      var $row = $(this).parents("tr");
+      $row.next().remove();
+      $row.remove();
+    });
   });
 
 scss:
@@ -50,7 +62,15 @@ scss:
     margin: 20px;
   }
 
+  .next-state {
+    margin-right: 10px;
+  }
+
   .item {
     font-size: 14px;
     line-height: 25px;
+  }
+
+  tr.list {
+    cursor: pointer;
   }
