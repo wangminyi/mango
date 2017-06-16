@@ -21,10 +21,9 @@ template#shop-template
 
     transition v-bind:name="slide_direction"
       .shop-page-container.page-container v-if="current_page === 'shopping'" key="shopping_page"
-        .event-message-container v-if="show_header_hint" v-on:click="hide_header_hint"
+        .event-message-container v-if="first_order"
             | 首次订单满30元赠送中号沥水篮；满80元赠送加厚沥水洗菜篮；
-            span &times;
-        .goods-container v-bind:class="{with_message: show_header_hint}"
+        .goods-container v-bind:class="{with_message: first_order}"
           .items-container
             .categories-container
               .category-label v-for="category in categories" v-bind:class="{ selected: selected_category === category }" v-on:click="change_category(category)"

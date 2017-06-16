@@ -22,23 +22,20 @@ class ShopController < ApplicationController
     gon.categories = categories
     gon.addresses = current_user.addresses_json
 
-    if !current_user.orders.with_pay_status(:paid).exists?
+    if !(Rails.env.production? && current_user.orders.with_pay_status(:paid).exists?)
+      gon.first_order = true
       gon.gifts = [
         {
-          image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-          limit: "1000",
-          name: "菜篮子",
+          image: ActionController::Base.helpers.asset_url("gifts/gift_1.jpg"),
+          limit: "3000",
+          name: "中号沥水篮",
           count: 1,
-          label: "好篮子",
-          price: 5000,
         },
         {
-          image: "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg",
-          limit: "2000",
-          name: "拖把",
-          label: "好拖把",
-          count: 2,
-          price: 6000,
+          image: ActionController::Base.helpers.asset_url("gifts/gift_2.jpg"),
+          limit: "8000",
+          name: "加厚沥水篮",
+          count: 1,
         }
       ]
     end

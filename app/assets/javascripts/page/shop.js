@@ -40,7 +40,7 @@ $(function(){
       selected_category: categories[0], // 选中的商品类别
       show_shopping_cart: false, // 购物页面是否显示购物车详情
       selected_description: undefined,  // 显示做法
-      show_header_hint: ($.cookie("show_header_hint") === undefined), // 是否显示顶部提示
+      first_order: gon.first_order, // 是否是第一次下单
       categories: categories, // 商品对象
       gifts: gon.gifts || [],
 
@@ -251,10 +251,6 @@ $(function(){
         if (this.shopping_cart_list.length === 0) {
           this.show_shopping_cart = false;
         }
-      },
-      hide_header_hint: function(){
-        this.show_header_hint = false;
-        $.cookie("show_header_hint", true);
       },
       forward_to: function(page) {
         this.slide_direction = "slide-right";
