@@ -19,6 +19,7 @@ $(function(){
     template: "#shop-template",
     data: {
       // 全局变量
+      show_item_image: null, // 显示大图
       distribution_price: gon.settings.distribution_price, // 配送费
       free_distribution: gon.settings.free_distribution, // 免配送费金额
       current_page: "shopping", // 当前所在页面 shopping order address edit_address
@@ -39,7 +40,7 @@ $(function(){
       // 购物页面
       selected_category: categories[0], // 选中的商品类别
       show_shopping_cart: false, // 购物页面是否显示购物车详情
-      selected_description: undefined,  // 显示做法
+      // selected_description: undefined,  // 显示做法
       first_order: gon.first_order, // 是否是第一次下单
       categories: categories, // 商品对象
       gifts: gon.gifts || [],
@@ -192,9 +193,9 @@ $(function(){
         $(".ingredients-container").scrollTop(0);
       },
       // 展示详情
-      show_description: function(item) {
-        this.selected_description = item.description;
-      },
+      // show_description: function(item) {
+      //   this.selected_description = item.description;
+      // },
       add_dish: function(dish, e) {
         var that = this;
         add_to_shopping_cart(e);

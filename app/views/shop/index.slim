@@ -19,10 +19,14 @@ template#shop-template
           .confirm-btn v-on:click="confirm_ok"
             | 确定
 
+    .item-image-modal.modal-panel v-if="show_item_image !== null" v-on:click="show_item_image = null"
+      .modal-panel-container
+        img v-bind:src="show_item_image"
+
     transition v-bind:name="slide_direction"
       .shop-page-container.page-container v-if="current_page === 'shopping'" key="shopping_page"
         .event-message-container v-if="first_order"
-            | 首次订单满30元赠送中号沥水篮；满80元赠送加厚沥水洗菜篮；
+          | 首次订单满30元赠送中号沥水篮；满80元赠送加厚沥水洗菜篮；
         .goods-container v-bind:class="{with_message: first_order}"
           .items-container
             .categories-container
@@ -31,9 +35,9 @@ template#shop-template
                   | {{ category_count(category) }}
                 | {{ category.name }}
             .ingredients-container
-              .ingredients-panel v-for="item in selected_items" key="{{item.id}}"
+              .ingredients-panel v-for="item in selected_items" key="item.id"
                 .image-container v-on:click="item.description ? show_description(item) : null"
-                  img v-bind:src="item.image"
+                  img v-bind:src="item.image" v-on:click="show_item_image = item.image"
                 .ingredient-info-container
                   .name-container
                     | {{ item.name }}
@@ -79,7 +83,7 @@ template#shop-template
             .footer-btn v-on:click="forward_to('order')"
               | 去结算
 
-        .dish-method-container.modal-panel v-if="selected_description !== undefined" v-on:click.self="selected_description = undefined"
+        / .dish-method-container.modal-panel v-if="selected_description !== undefined" v-on:click.self="selected_description = undefined"
           .modal-panel-container
             i.fa.fa-times v-on:click="selected_description = undefined"
             .modal-panel-title
@@ -149,11 +153,11 @@ template#shop-template
               | 商品清单 （共{{total_count}}件）
             .panel-block.scrollable
               .item-box v-for="gift in gift_list"
-                img v-bind:src="gift.image"
+                img v-bind:src="gift.image" v-on:click="show_item_image = gift.image"
                 .hint
                   | 赠品
               .item-box v-for="item in shopping_cart_list"
-                img v-bind:src="item.image"
+                img v-bind:src="item.image" v-on:click="show_item_image = item.image"
                 .hint
                   | x{{item.count}}
 
