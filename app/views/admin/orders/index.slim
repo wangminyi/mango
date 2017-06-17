@@ -1,12 +1,14 @@
 .admin-order-container
   .filter-container
-    = form_tag request.url do |f|
+    = form_tag request.url do ||
       .filter-wrapper
         label 日期
-        = date_field "filter", "date", value: Date.today
+        = text_field "filter", "date", value: Date.today, class: "date"
       .filter-wrapper
         label 时间范围
-        = time_field "filter", "time_from", value: "7:00".to_time
+        = text_field "filter", "time_from", value: nil, class: "time"
+        span ~
+        = text_field "filter", "time_from", value: nil, class: "time"
 
   table.table.table-hover.table-bordered.table-striped
     tr
