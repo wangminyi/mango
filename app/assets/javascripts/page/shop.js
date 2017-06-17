@@ -104,6 +104,14 @@ $(function(){
         });
         return buy_items;
       },
+      cookie_item_list: function() {
+        return JSON.stringify($.map(this.shopping_cart_list, function(item) {
+          return {
+            id: item.id,
+            count: item.count
+          }
+        }));
+      },
       // 选购商品的总数
       total_count: function(){
         var count = 0;
@@ -220,6 +228,7 @@ $(function(){
               item.count = 0;
             });
             this.show_shopping_cart = false;
+            $.cookie("cache_items", this.cookie_item_list);
           },
           cancel: true
         });
@@ -239,6 +248,7 @@ $(function(){
         }
         if (this.can_increase(item, number)) {
           item.count += number;
+          $.cookie("cache_items", this.cookie_item_list);
         }
       },
       decrease_item: function(item, number) {
@@ -252,6 +262,7 @@ $(function(){
         if (this.shopping_cart_list.length === 0) {
           this.show_shopping_cart = false;
         }
+        $.cookie("cache_items", this.cookie_item_list);
       },
       forward_to: function(page) {
         this.slide_direction = "slide-right";
@@ -489,6 +500,7 @@ $(function(){
                     that.show_confirm_dialog({
                       text: "支付成功",
                       ok: function() {
+                        $.cookie("cache_items", this.cookie_item_list);
                         window.location = order_url + "?from=shop";
                       }
                     });
@@ -541,6 +553,19 @@ $(function(){
 
       // 设置默认送货日期
       this.temp_selected_date = this.selectable_date()[0];
+
+      // 恢复购物车
+      if (typeof $.cookie("cache_items") !== "undefined") {
+        var cache_items = JSON.parse($.cookie("cache_items"));
+        $.each(this.items_hash, function(index, item) {
+          $.each(cache_items, function(index, cache_item) {
+            if (cache_item.id === item.id) {
+              item.count = cache_item.count;
+              return false;
+            }
+          })
+        });
+      }
     }
   });
 
