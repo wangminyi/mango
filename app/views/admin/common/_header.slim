@@ -8,12 +8,20 @@ nav.navbar.navbar-default
 
   .collapse.navbar-collapse#navbar
     ul.nav.navbar-nav
-      li.nav-item
-        = link_to "未处理订单", admin_orders_path(status: :submitted)
-      li.nav-item
-        = link_to "已处理订单", admin_orders_path(status: :finished)
-      li.nav-item
-        = link_to "已废弃订单", admin_orders_path(status: :abandon)
+      li.nav-item class=("active" if @active_nav == "submitted_order")
+        = link_to "待处理", admin_orders_path(status: :submitted)
+      li.nav-item class=("active" if @active_nav == "arranging_order")
+        = link_to "正在配单", admin_orders_path(status: :arranging)
+      li.nav-item class=("active" if @active_nav == "arranged_order")
+        = link_to "等待发货", admin_orders_path(status: :arranged)
+      li.nav-item class=("active" if @active_nav == "distributing_order")
+        = link_to "送货中", admin_orders_path(status: :distributing)
+      li.nav-item class=("active" if @active_nav == "finished_order")
+        = link_to "已完成", admin_orders_path(status: :finished)
+      li.nav-item class=("active" if @active_nav == "abandon_order")
+        = link_to "已废弃", admin_orders_path(status: :abandon)
+      li.nav-item class=("active" if @active_nav == "_order")
+        = link_to "全部订单", admin_orders_path
 
     ul.nav.navbar-nav.navbar-right
       li.dropdown

@@ -4,11 +4,11 @@ class Admin::OrdersController < Admin::BaseController
   def index
     status = params[:status]
     @orders = Order.all.with_pay_status(:paid).order(created_at: :desc)
-    if %w(finished abandon).include? status
+    if status.present?
       @orders = @orders.with_status(status)
-    else
-      @orders = @orders.without_status(:finished, :abandon)
+      gon.status = status
     end
+    @active_nav = "#{status}_order"
   end
 
   def show
@@ -22,7 +22,6 @@ class Admin::OrdersController < Admin::BaseController
       details: @order.status_text
     )
     render json: {
-      finished: @order.status.finished?,
       html: render_to_string(partial: "order_row", locals: { order: @order })
     }
   end
