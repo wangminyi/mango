@@ -1,4 +1,13 @@
 .admin-order-container
+  .filter-container
+    = form_tag request.url do |f|
+      .filter-wrapper
+        label 日期
+        = date_field "filter", "date", value: Date.today
+      .filter-wrapper
+        label 时间范围
+        = time_field "filter", "time_from", value: "7:00".to_time
+
   table.table.table-hover.table-bordered.table-striped
     tr
       thead
