@@ -1,15 +1,24 @@
+- content_for :page_css
+  = stylesheet_link_tag    'admin/order_index'
+
 .admin-order-container
-  .filter-container
-    = form_tag request.url do ||
-      .filter-wrapper
-        label 时间范围
-        = text_field "filter", "datetime_from", value: nil, class: "time"
-        span ~
-        /= text_field "filter", "datetime_to", value: nil, class: "time"
+  / .filter-container
+  /   = form_tag request.url do ||
+  /     .filter-wrapper
+  /       label 时间范围
+  /       = text_field "filter", "datetime_from", value: nil, class: "time"
+  /       span ~
+  /       /= text_field "filter", "datetime_to", value: nil, class: "time"
+
+  .group-action
+    .btn.btn-primary.bulk-open 显示 / 隐藏全部详情
+    .btn.btn-primary.bulk-push 批量推进状态
 
   table.table.table-hover.table-bordered.table-striped
     tr
       thead
+        th.all
+          = check_box_tag "all"
         th
           | ID
         th
@@ -64,27 +73,37 @@ javascript:
       $row.remove();
     });
 
+    $("th.all input").on("change", function() {
+      $("td.select input").prop( "checked", $(this).is(":checked") );
+    });
+
+    $(".bulk-open").on("click", function() {
+      if ($("tr.detail.hidden").length > 0) {
+        $("tr.detail.hidden").removeClass("hidden");
+      } else {
+        $("tr.detail").addClass("hidden");
+      }
+    });
+
+    $(".bulk-push").on("click", function() {
+      var ids = $.map($("td.operation.select input:checked"), function(ele){return $(ele).data("id")});
+
+      if (ids.length === 0) {
+        alert("请至少选中一个订单");
+      } else {
+        if (confirm("确定批量推进订单状态？")) {
+          $.post("/admin/orders/bulk_push", {
+            ids: ids
+          }).done(function() {
+            location.reload();
+          });
+        }
+      }
+    });
+
     // $(".filter-container .time").flatpickr({
     //   // enableTime: true,
     //   // defaultDate: new Date(),
     //   // time_24hr: true,
     // })
   });
-
-scss:
-  .admin-order-container {
-    margin: 20px;
-  }
-
-  .next-state {
-    margin-right: 10px;
-  }
-
-  .item {
-    font-size: 14px;
-    line-height: 25px;
-  }
-
-  tr.list {
-    cursor: pointer;
-  }

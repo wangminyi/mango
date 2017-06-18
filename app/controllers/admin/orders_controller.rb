@@ -3,7 +3,7 @@ class Admin::OrdersController < Admin::BaseController
   before_action :set_order, only: [:show, :next_state, :abandon]
   def index
     status = params[:status]
-    @orders = Order.all.with_pay_status(:paid).order(created_at: :desc)
+    @orders = Order.all.with_pay_status(:paid).order(distribute_at: :asc)
     if status.present?
       @orders = @orders.with_status(status)
       gon.status = status
@@ -32,6 +32,12 @@ class Admin::OrdersController < Admin::BaseController
       action: :abandon_order,
       order: @order,
     )
+    head :ok
+  end
+
+  def bulk_push
+    orders = Order.where(id: params[:ids])
+    orders.update_all(status: orders.first.next_state_value)
     head :ok
   end
 

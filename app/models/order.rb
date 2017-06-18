@@ -124,9 +124,16 @@ class Order < ApplicationRecord
   end
 
   def next_state!
+    if ( _next_state = self.next_state_value).present?
+      self.update(status: _next_state)
+    end
+  end
+
+  # 下一步的状态
+  def next_state_value
     options = self.class.status.values
     if (index = options[0...-2].index(self.status)).present?
-      self.update(status: options[index + 1])
+      options[index + 1]
     end
   end
 

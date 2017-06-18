@@ -33,6 +33,10 @@ Rails.application.routes.draw do
         post :next_state
         post :abandon
       end
+
+      collection do
+        post :bulk_push
+      end
     end
   end
 end
