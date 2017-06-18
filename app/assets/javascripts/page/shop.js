@@ -277,7 +277,7 @@ $(function(){
       selectable_date: function() {
         var result = [],
             hour = moment().hour();
-        if (hour < 13) {
+        if (hour < 14) {
           result.push(
             [
               "今天",
@@ -328,8 +328,8 @@ $(function(){
           );
         }
 
-        if ("今天" !== this.temp_selected_date[0] && now.hour() < 20) {
-          // 次日送达 且 当前时间8点之前
+        if ("今天" !== this.temp_selected_date[0] || now.hour() < 8) {
+          // 次日送达 或 今日送达且当前时间小于8点
           result = morning_slot.concat(afternoon_slot);
         } else {
           result = afternoon_slot;
