@@ -2,13 +2,10 @@
   .filter-container
     = form_tag request.url do ||
       .filter-wrapper
-        label 日期
-        = text_field "filter", "date", value: Date.today, class: "date"
-      .filter-wrapper
         label 时间范围
-        = text_field "filter", "time_from", value: nil, class: "time"
+        = text_field "filter", "datetime_from", value: nil, class: "time"
         span ~
-        = text_field "filter", "time_from", value: nil, class: "time"
+        /= text_field "filter", "datetime_to", value: nil, class: "time"
 
   table.table.table-hover.table-bordered.table-striped
     tr
@@ -66,6 +63,12 @@ javascript:
       $row.next().remove();
       $row.remove();
     });
+
+    // $(".filter-container .time").flatpickr({
+    //   // enableTime: true,
+    //   // defaultDate: new Date(),
+    //   // time_24hr: true,
+    // })
   });
 
 scss:
