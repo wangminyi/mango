@@ -3,4 +3,6 @@ tr.detail.hidden
     - order.item_details.each do |i|
       .item = "#{i["name"]} x #{i["count"]}"
 
-    p = "附加信息：#{order.remark}"
+    - if order.remark
+      br
+      p = "附加信息：#{order.remark}"
