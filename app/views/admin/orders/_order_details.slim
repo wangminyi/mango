@@ -2,3 +2,5 @@ tr.detail.hidden
   td colspan=10
     - order.item_details.each do |i|
       .item = "#{i["name"]} x #{i["count"]}"
+
+    p = "附加信息：#{order.remark}"
