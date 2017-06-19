@@ -11,7 +11,7 @@ class Settings
   class << self
     def as_json
       {
-        gardens: GARDENSk,
+        gardens: GARDENS, # 小区名称
         distribution_price: DISTRIBUTION_PRICE, # 配送费
         free_distribution: FREE_DISTRIBUTION, # 免配送费金额
         preferential_price: PREFERENTIAL_PRICE, # 优惠金额
