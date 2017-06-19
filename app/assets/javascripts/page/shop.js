@@ -500,7 +500,7 @@ $(function(){
                     that.show_confirm_dialog({
                       text: "支付成功",
                       ok: function() {
-                        $.cookie("cache_items", that.cookie_item_list);
+                        $.removeCookie("cache_items");
                         window.location = order_url + "?from=shop";
                       }
                     });
