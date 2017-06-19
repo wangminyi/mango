@@ -2,13 +2,23 @@
   = stylesheet_link_tag    'admin/order_index'
 
 .admin-order-container
-  / .filter-container
-  /   = form_tag request.url do ||
-  /     .filter-wrapper
-  /       label 时间范围
-  /       = text_field "filter", "datetime_from", value: nil, class: "time"
-  /       span ~
-  /       /= text_field "filter", "datetime_to", value: nil, class: "time"
+  .filter-container.panel.panel-default
+    .panel-heading 筛选
+    .panel-body
+      = form_tag request.url, method: :get do ||
+        = hidden_field_tag :status, @status
+        .filter-wrapper
+          label 小区
+          = select "query", "receiver_garden", Settings::GARDENS, include_blank: true, selected: @q[:receiver_garden]
+        .filter-wrapper
+          label 配送日期
+          = date_field "query", "distribute_at_date", value: @q[:distribute_at_date]
+        .filter-wrapper
+          label 配送时间
+          = select "query", "distribute_at_time", [["上午（9:00 - 11:00）", "morning"], ["下午（16:00 - 19:00）", "afternoon"]], include_blank: true, selected: @q[:distribute_at_time]
+        .action-container
+          = submit_tag "筛选", class: "btn btn-primary"
+          .btn.btn-default.clear 清空
 
   .group-action
     .btn.btn-primary.bulk-open 显示 / 隐藏全部详情
@@ -101,9 +111,7 @@ javascript:
       }
     });
 
-    // $(".filter-container .time").flatpickr({
-    //   // enableTime: true,
-    //   // defaultDate: new Date(),
-    //   // time_24hr: true,
-    // })
+    $(".filter-container .clear").on("click", function() {
+      $(".filter-container .filter-wrapper").find("input, select").val("");
+    });
   });

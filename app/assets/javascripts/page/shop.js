@@ -72,12 +72,7 @@ $(function(){
         house_number: undefined,
         is_default: false,
       }, // 正在编辑的地址 json
-      support_gardens: [ // 支持的小区名称
-        "周浦印象春城",
-        "周浦逸亭佳苑",
-        "周浦兰亭-九龙仓",
-        "周浦惠康公寓",
-      ],
+      support_gardens: gon.settings.gardens,
     },
     computed: {
       // 选中类型的商品
@@ -489,6 +484,7 @@ $(function(){
                   preferential_price: this.coupon_enable ? this.preferential_price : 0,
                   receiver_name: addr.name,
                   receiver_phone: addr.phone,
+                  receiver_garden: addr.garden,
                   receiver_address: addr.garden + addr.house_number,
                   remark: this.remark,
                 }

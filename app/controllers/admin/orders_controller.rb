@@ -2,13 +2,30 @@ class Admin::OrdersController < Admin::BaseController
   before_action :require_admin
   before_action :set_order, only: [:show, :next_state, :abandon]
   def index
-    status = params[:status]
+    @status = params[:status]
+    @q  = params[:query] || {}
+    # receiver_garden distribute_at_date distribute_at_time
+
     @orders = Order.all.with_pay_status(:paid).order(distribute_at: :asc)
-    if status.present?
-      @orders = @orders.with_status(status)
-      gon.status = status
+    if @status.present?
+      @orders = @orders.with_status(@status)
+      gon.status = @status
     end
-    @active_nav = "#{status}_order"
+
+    if (receiver_garden = @q[:receiver_garden]).present?
+      @orders = @orders.where(receiver_garden: receiver_garden)
+    end
+
+    if (distribute_at_date = @q[:distribute_at_date]).present? && (distribute_at_time = @q[:distribute_at_time]).present?
+      distribute_at_scope = if distribute_at_time == "morning"
+        "#{distribute_at_date} 9:00:00".to_time.."#{distribute_at_date} 11:00:00".to_time
+      else
+        "#{distribute_at_date} 16:00:00".to_time.."#{distribute_at_date} 19:00:00".to_time
+      end
+      @orders = @orders.where(distribute_at: distribute_at_scope)
+    end
+
+    @active_nav = "#{@status}_order"
   end
 
   def show

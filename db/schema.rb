@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615111547) do
+ActiveRecord::Schema.define(version: 20170619075638) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -128,6 +128,7 @@ ActiveRecord::Schema.define(version: 20170615111547) do
     t.datetime "distribute_at"
     t.integer  "distributer_id"
     t.string   "receiver_name"
+    t.string   "receiver_garden"
     t.string   "receiver_address"
     t.string   "receiver_phone"
     t.text     "remark",                   limit: 65535
@@ -141,6 +142,7 @@ ActiveRecord::Schema.define(version: 20170615111547) do
     t.index ["order_no"], name: "index_orders_on_order_no", unique: true, using: :btree
     t.index ["pay_mode"], name: "index_orders_on_pay_mode", using: :btree
     t.index ["pay_status"], name: "index_orders_on_pay_status", using: :btree
+    t.index ["receiver_garden"], name: "index_orders_on_receiver_garden", using: :btree
     t.index ["user_id"], name: "index_orders_on_user_id", using: :btree
   end
 

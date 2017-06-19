@@ -58,6 +58,7 @@ class OrdersController < ApplicationController
         :free_distribution_reason,
         :preferential_price,
         :receiver_name,
+        :receiver_garden,
         :receiver_phone,
         :receiver_address,
         :remark,
