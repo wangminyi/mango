@@ -29,7 +29,12 @@ class WxController < ApplicationController
         nickname: omniauth[:extra][:raw_info][:nickname],
         user_name: omniauth[:extra][:raw_info][:headimgurl],
       )
-      user.save!
+      begin
+        user.save!
+      rescue => ActiveRecord::StatementInvalid
+        user.nickname = nil
+        user.save!
+      end
     end
     sign_in user
     user.history_logs.create(
