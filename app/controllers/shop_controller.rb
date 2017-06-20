@@ -10,7 +10,7 @@ class ShopController < ApplicationController
     # )
 
     # 普通食材
-    Category.all.each do |category|
+    Category.order(updated_at: :desc).each do |category|
       base_info = {
         name: category.name,
         items: category.ingredients.where.not(price: nil).preload(:dishes).order(priority: :desc).map(&:as_json),
