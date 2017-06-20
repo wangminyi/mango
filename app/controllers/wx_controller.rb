@@ -31,7 +31,7 @@ class WxController < ApplicationController
       )
       begin
         user.save!
-      rescue => ActiveRecord::StatementInvalid
+      rescue
         user.nickname = nil
         user.save!
       end
