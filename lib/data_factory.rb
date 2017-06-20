@@ -119,7 +119,7 @@ class DataFactory
         temp_path = if ingredient.category.present?
           "ingredients/#{ingredient.category.name}/#{ingredient.name}.#{suffix}"
         else
-          "ingredients/#{ingredient.name}.#{suffix}"
+          "ingredients/v2/#{ingredient.name}.#{suffix}"
         end
 
         file = File.join(dir_path, temp_path)
