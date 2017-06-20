@@ -3,6 +3,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :validatable
 
+  stores_emoji_characters :nickname
+
   extend Enumerize
 
   enumerize :role, in: [

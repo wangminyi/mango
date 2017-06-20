@@ -86,6 +86,9 @@ GEM
       warden (~> 1.2.3)
     domain_name (0.5.20170223)
       unf (>= 0.0.5, < 1.0.0)
+    emojimmy (0.3)
+      activerecord (>= 3.0.0)
+      rumoji (>= 0.3.1)
     enumerize (2.0.1)
       activesupport (>= 3.2)
     erubis (2.7.0)
@@ -255,6 +258,7 @@ GEM
     ruby_engine (1.0.1)
     ruby_info (1.0.1)
     ruby_version (1.0.1)
+    rumoji (0.5.0)
     sass (3.4.23)
     sass-rails (5.0.6)
       railties (>= 4.0.0, < 6)
@@ -327,6 +331,7 @@ DEPENDENCIES
   capistrano-rails
   capistrano3-puma
   devise
+  emojimmy
   enumerize
   figaro
   font-awesome-rails
