@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
 
   rescue_from "Exception", with: :notify_exception
 
+  before_action :set_format
+
   def require_login
     if !current_user
       if Rails.env.development?
@@ -22,5 +24,11 @@ class ApplicationController < ActionController::Base
   def notify_exception e
     SlackNotifier.notify "#{e.to_s}\n#{e.backtrace.join("\n").truncate(1000)}"
     raise e
+  end
+
+  def set_format
+    if %w(html json).exclude? request.format.symbol.to_s
+      request.format = "html"
+    end
   end
 end
