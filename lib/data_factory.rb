@@ -39,6 +39,21 @@ class DataFactory
       end
     end
 
+    def import_new_ingredient
+      CSV.foreach("./data_files/第二批.csv") do |line|
+        next if line[0].blank?
+        ingredient = Ingredient.create(
+          name: line[0],
+          alias: line[1].presence,
+        )
+        import_ingredients_img(ingredient)
+        line[2..4].reject(&:blank?).each do |dish_name|
+          dish = Dish.find_or_create_by(name: dish_name)
+          dish.ingredients << ingredient
+        end
+      end
+    end
+
     def import_dishes
       undefined_ingredients = []
       CSV.foreach("./data_files/dishes.csv") do |line|
@@ -96,11 +111,17 @@ class DataFactory
 
     def import_ingredients_img ingredient
       dir_path = File.join(Rails.root + "app/assets/images")
-      suffixes = ["jpg", "jpeg"]
+      suffixes = ["jpg"]
 
       relative_path = nil
+
       suffixes.each do |suffix|
-        temp_path = "ingredients/#{ingredient.category.name}/#{ingredient.name}.#{suffix}"
+        temp_path = if ingredient.category.present?
+          "ingredients/#{ingredient.category.name}/#{ingredient.name}.#{suffix}"
+        else
+          "ingredients/#{ingredient.name}.#{suffix}"
+        end
+
         file = File.join(dir_path, temp_path)
         if File.exists? file
           relative_path = temp_path
