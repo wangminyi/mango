@@ -32,6 +32,9 @@ class WxController < ApplicationController
       user.save!
     end
     sign_in user
+    user.history_logs.create(
+      action: :sign_in,
+    )
     redirect_to stored_location_for(:user) || root_path
   end
 

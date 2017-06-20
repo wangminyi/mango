@@ -2,6 +2,7 @@ class HistoryLog < ApplicationRecord
   extend Enumerize
 
   enumerize :action, in: [
+    :sign_in,
     :handle_order,
     :abandon_order,
   ], scope: true
