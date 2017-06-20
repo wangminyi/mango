@@ -1,6 +1,8 @@
 class Order < ApplicationRecord
   extend Enumerize
 
+  stores_emoji_characters :remark
+
   STAFF_IDS = [2, 3]
 
   serialize :item_list, JSON
