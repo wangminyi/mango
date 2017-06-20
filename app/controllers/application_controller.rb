@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   end
 
   def notify_exception e
-    SlackNotifier.notify e.to_s
+    SlackNotifier.notify "#{e.to_s}\n#{e.backtrace.join("\n").truncate(1000)}"
     raise e
   end
 end
