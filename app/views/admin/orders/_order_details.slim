@@ -1,7 +1,7 @@
 tr.detail.hidden
   td colspan=10
     - order.item_details.each do |i|
-      .item = "#{i["name"]} x #{i["count"]}"
+      .item = "#{i["name"]} x #{i["count"]} -- #{format_price(i["price"])} #{i["unit_text"]}"
 
     - if order.remark
       br
