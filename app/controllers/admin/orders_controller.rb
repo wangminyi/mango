@@ -54,7 +54,9 @@ class Admin::OrdersController < Admin::BaseController
 
   def bulk_push
     orders = Order.where(id: params[:ids])
-    orders.update_all(status: orders.first.next_state_value)
+    if (next_state = orders.first.next_state_value).present?
+      orders.update_all(status: next_state)
+    end
     head :ok
   end
 
