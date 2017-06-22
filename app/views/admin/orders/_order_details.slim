@@ -3,6 +3,11 @@ tr.detail.hidden
     - order.item_details.each do |i|
       .item = "#{i["name"]} x #{i["count"]} -- #{format_price(i["price"])} #{i["unit_text"]}"
 
+    - if order.gifts.present?
+      br
+      - order.gifts.each do |g|
+        .item = "#{g["name"]} x #{g["count"]} -- 满#{format_price(g["limit"])}"
+
     - if order.remark
       br
       p = "附加信息：#{order.remark}"
