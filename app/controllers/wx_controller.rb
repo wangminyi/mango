@@ -21,26 +21,30 @@ class WxController < ApplicationController
 
   def oauth_callback
     omniauth = request.env["omniauth.auth"]
-    openid = omniauth[:extra][:raw_info][:openid]
-    user = User.find_or_initialize_by(open_id: openid)
-    if user.new_record?
-      user.password = SecureRandom.hex(10)
-      user.assign_attributes(
-        nickname: omniauth[:extra][:raw_info][:nickname],
-        user_name: omniauth[:extra][:raw_info][:headimgurl],
-      )
-      begin
-        user.save!
-      rescue
-        user.nickname = nil
-        user.save!
+    if (openid = omniauth[:extra][:raw_info][:openid]).present?
+      user = User.find_or_initialize_by(open_id: openid)
+      if user.new_record?
+        user.password = SecureRandom.hex(10)
+        user.assign_attributes(
+          nickname: omniauth[:extra][:raw_info][:nickname],
+          user_name: omniauth[:extra][:raw_info][:headimgurl],
+        )
+        begin
+          user.save!
+        rescue
+          user.nickname = nil
+          user.save!
+        end
       end
+      sign_in user
+      user.history_logs.create(
+        action: :sign_in,
+      )
+      redirect_to stored_location_for(:user) || root_path
+    else
+      SlackNotifier.notify(omniauth.to_json)
+      redirect_to 404
     end
-    sign_in user
-    user.history_logs.create(
-      action: :sign_in,
-    )
-    redirect_to stored_location_for(:user) || root_path
   end
 
   def oauth_failure
