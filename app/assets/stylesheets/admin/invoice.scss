@@ -1,0 +1,57 @@
+.invoice-container {
+  width: 300px;
+  font-size: 14px;
+  padding: 15px;
+
+  hr {
+    border-color: #333333;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .title, .subtitle {
+    text-align: center;
+  }
+
+  .summary-container {
+    p {
+      word-break: break-all;
+      margin: 3px 0;
+    }
+  }
+
+  .items-container {
+    .header {
+      margin-bottom: 20px;
+    }
+    .item {
+      margin-top: 3px;
+    }
+    .name, .count, .price {
+      display: inline-block;
+      vertical-align: top;
+      padding-right: 10px;
+    }
+
+    .name {
+      width: 55%;
+    }
+
+    .count {
+      width: 20%;
+      text-align: center;
+    }
+
+    .price {
+      width: 25%;
+      text-align: center;
+    }
+  }
+
+  .total-price {
+    padding-right: 20px;
+    text-align: right;
+  }
+}

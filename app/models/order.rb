@@ -93,6 +93,10 @@ class Order < ApplicationRecord
     end
   end
 
+  def ingredients_count
+    self.ingredients_hash.values.sum
+  end
+
   def paid!
     self.update(pay_status: :paid)
   end

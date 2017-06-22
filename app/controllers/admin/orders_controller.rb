@@ -1,6 +1,6 @@
 class Admin::OrdersController < Admin::BaseController
   before_action :require_admin
-  before_action :set_order, only: [:show, :next_state, :abandon]
+  before_action :set_order, only: [:show, :next_state, :abandon, :invoice]
   def index
     @status = params[:status]
     @q  = params[:query] || {}
@@ -58,6 +58,10 @@ class Admin::OrdersController < Admin::BaseController
       orders.update_all(status: next_state)
     end
     head :ok
+  end
+
+  def invoice
+    @no_footer = true
   end
 
   private

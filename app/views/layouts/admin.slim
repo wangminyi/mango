@@ -15,7 +15,8 @@ html
     = include_gon
 
   body
-    = render "admin/common/header"
+    - if @no_footer.nil?
+      = render "admin/common/header"
 
     = yield
 

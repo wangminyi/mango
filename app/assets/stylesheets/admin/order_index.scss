@@ -28,8 +28,10 @@
 
   table {
     margin-top: 20px;
-    .next-state {
-      margin-right: 10px;
+    .operation {
+      & > a:not(:last-child) {
+        margin-right: 10px;
+      }
     }
 
     .item {
