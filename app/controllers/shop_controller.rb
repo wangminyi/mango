@@ -27,13 +27,13 @@ class ShopController < ApplicationController
       gon.gifts = [
         {
           image: ActionController::Base.helpers.asset_url("gifts/gift_1.jpg"),
-          limit: "3000",
+          limit: 3000,
           name: "中号沥水篮",
           count: 1,
         },
         {
           image: ActionController::Base.helpers.asset_url("gifts/gift_2.jpg"),
-          limit: "8000",
+          limit: 8000,
           name: "加厚沥水篮",
           count: 1,
         }

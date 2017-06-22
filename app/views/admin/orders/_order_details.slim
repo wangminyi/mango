@@ -5,6 +5,7 @@ tr.detail.hidden
 
     - if order.gifts.present?
       br
+      p 赠品：
       - order.gifts.each do |g|
         .item = "#{g["name"]} x #{g["count"]} -- 满#{format_price(g["limit"])}"
 
