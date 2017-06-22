@@ -40,7 +40,7 @@ class DataFactory
     end
 
     def import_new_ingredient
-      CSV.foreach("./data_files/第二批.csv") do |line|
+      CSV.foreach("./data_files/v3.csv") do |line|
         next if line[0].blank?
         ingredient = Ingredient.create(
           name: line[0],
@@ -119,7 +119,7 @@ class DataFactory
         temp_path = if ingredient.category.present?
           "ingredients/#{ingredient.category.name}/#{ingredient.name}.#{suffix}"
         else
-          "ingredients/v2/#{ingredient.name}.#{suffix}"
+          "ingredients/v3/#{ingredient.name}.#{suffix}"
         end
 
         file = File.join(dir_path, temp_path)
