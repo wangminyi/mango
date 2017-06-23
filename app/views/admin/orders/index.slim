@@ -3,7 +3,7 @@
   = stylesheet_link_tag    'admin/order_index_print', media: "print"
 
 .admin-order-container
-  .filter-container.panel.panel-default
+  .filter-container.panel.panel-default.print-hidden
     .panel-heading 筛选
     .panel-body
       = form_tag request.url, method: :get do ||
@@ -21,13 +21,13 @@
           = submit_tag "筛选", class: "btn btn-primary"
           .btn.btn-default.clear 清空
 
-  .group-action
+  .group-action.print-hidden
     .btn.btn-primary.bulk-open 显示 / 隐藏全部详情
     .btn.btn-primary.bulk-push 批量推进状态
     .btn.btn-primary.bulk-invoice 批量打印小票
 
   table.table.table-hover.table-bordered.table-striped
-    thead
+    thead.print-hidden
       th.all
         = check_box_tag "all"
       th
