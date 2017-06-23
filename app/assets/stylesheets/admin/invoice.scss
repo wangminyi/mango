@@ -1,16 +1,16 @@
 .invoice-container {
   width: 100%;
   // max-width: 336px;
-  font-size: 14px;
+  font-size: 20px;
   padding: 15px;
-  margin-bottom: 40px;
+  margin-bottom: 60px;
 
   hr {
     border-color: #333333;
   }
 
   .title {
-    font-size: 16px;
+    font-size: 24px;
   }
 
   .title, .subtitle {
@@ -20,21 +20,21 @@
   .summary-container {
     p {
       word-break: break-all;
-      margin: 3px 0;
+      margin: 5px 0;
     }
   }
 
   .items-container {
     .header {
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
     .item {
-      margin-top: 3px;
+      margin-top: 5px;
     }
     .name, .count, .price {
       display: inline-block;
       vertical-align: top;
-      padding-right: 10px;
+      padding-right: 15px;
     }
 
     .name {
@@ -53,7 +53,7 @@
   }
 
   .total-price {
-    padding-right: 20px;
+    padding-right: 30px;
     text-align: right;
   }
 }
