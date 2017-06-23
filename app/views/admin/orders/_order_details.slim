@@ -1,5 +1,11 @@
 tr.detail.hidden
   td colspan=10
+    .print-show.hidden
+      p = "姓名：#{order.receiver_name}"
+      p = "电话：#{order.receiver_phone}"
+      p = "地址：#{order.receiver_address}"
+      p = "配送时间：#{order.distribute_at.strftime("%F %T")}"
+
     - order.item_details.each do |i|
       .item = "#{i["name"]} x #{i["count"]} -- #{format_price(i["price"])} #{i["unit_text"]}"
 

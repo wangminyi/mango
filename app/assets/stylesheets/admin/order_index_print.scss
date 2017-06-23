@@ -17,3 +17,9 @@ thead {
 tr.list {
   display: none;
 }
+
+tr.detail {
+  .print-show.hidden {
+    display: block !important;
+  }
+}
