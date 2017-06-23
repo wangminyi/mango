@@ -1,5 +1,6 @@
 - content_for :page_css
-  = stylesheet_link_tag    'admin/order_index'
+  = stylesheet_link_tag    'admin/order_index', media: "all"
+  = stylesheet_link_tag    'admin/order_index_print', media: "print"
 
 .admin-order-container
   .filter-container.panel.panel-default
@@ -26,28 +27,27 @@
     .btn.btn-primary.bulk-invoice 批量打印小票
 
   table.table.table-hover.table-bordered.table-striped
-    tr
-      thead
-        th.all
-          = check_box_tag "all"
-        th
-          | ID
-        th
-          | 姓名
-        th
-          | 手机
-        th
-          | 地址
-        th
-          | 下单时间
-        th
-          | 配送时间
-        th
-          | 订单金额
-        th
-          | 订单状态
-        th
-          | 操作
+    thead
+      th.all
+        = check_box_tag "all"
+      th
+        | ID
+      th
+        | 姓名
+      th
+        | 手机
+      th
+        | 地址
+      th
+        | 下单时间
+      th
+        | 配送时间
+      th
+        | 订单金额
+      th
+        | 订单状态
+      th
+        | 操作
     tbody
       - @orders.each do |order|
         = render partial: "order_row", locals: {order: order}
