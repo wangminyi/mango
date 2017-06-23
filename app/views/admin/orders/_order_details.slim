@@ -22,9 +22,9 @@ tr.detail.hidden
     br
 
     .print-show.hidden
-      p.print-admin-remark = "自己备注：#{order.admin_remark}"
+      p.print-admin-remark = "元也生鲜备注：#{order.admin_remark}"
 
     = simple_form_for order, url: admin_order_path(order), method: :patch, remote: true, html: {class: "print-hidden"} do |f|
-      p 自己备注：
+      p 元也生鲜备注：
       = f.input :admin_remark, label: false
       = f.submit "保存", class: "btn btn-primary"
