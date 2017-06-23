@@ -126,6 +126,10 @@ javascript:
       $(".filter-container .filter-wrapper").find("input, select").val("");
     });
 
+    $("table").on("ajax:success", "form", function(){
+      alert("保存成功");
+    });
+
     function get_selected_ids () {
       return $.map($("td.operation.select input:checked"), function(ele){return $(ele).data("id")});
     }
