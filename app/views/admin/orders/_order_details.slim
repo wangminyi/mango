@@ -12,15 +12,13 @@ tr.detail.hidden
       .item = "赠品：#{g["name"]} x #{g["count"]} -- 满#{format_price(g["limit"])}"
 
     - if order.remark
-      br
-      p = "附加信息：#{order.remark}"
-
-    br
+      .item = "附加信息：#{order.remark}"
 
     .print-show.hidden
-      p.print-admin-remark = "元也生鲜备注：#{order.admin_remark}"
+      .print-admin-remark = "元也生鲜备注：#{order.admin_remark}"
 
     = simple_form_for order, url: admin_order_path(order), method: :patch, remote: true, html: {class: "print-hidden"} do |f|
+      br
       p 元也生鲜备注：
       = f.input :admin_remark, label: false
       = f.submit "保存", class: "btn btn-primary"
