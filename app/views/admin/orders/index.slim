@@ -23,6 +23,7 @@
   .group-action
     .btn.btn-primary.bulk-open 显示 / 隐藏全部详情
     .btn.btn-primary.bulk-push 批量推进状态
+    .btn.btn-primary.bulk-invoice 批量打印小票
 
   table.table.table-hover.table-bordered.table-striped
     tr
@@ -96,7 +97,7 @@ javascript:
     });
 
     $(".bulk-push").on("click", function() {
-      var ids = $.map($("td.operation.select input:checked"), function(ele){return $(ele).data("id")});
+      var ids = get_selected_ids();
 
       if (ids.length === 0) {
         alert("请至少选中一个订单");
@@ -111,7 +112,21 @@ javascript:
       }
     });
 
+    $(".bulk-invoice").on("click", function() {
+      var ids = get_selected_ids();
+
+      if (ids.length === 0) {
+        alert("请至少选中一个订单");
+      } else {
+        window.open("/admin/orders/bulk_invoice?ids=" + ids.join(","))
+      }
+    });
+
     $(".filter-container .clear").on("click", function() {
       $(".filter-container .filter-wrapper").find("input, select").val("");
     });
+
+    function get_selected_ids () {
+      return $.map($("td.operation.select input:checked"), function(ele){return $(ele).data("id")});
+    }
   });

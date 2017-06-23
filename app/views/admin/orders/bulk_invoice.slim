@@ -1,0 +1,6 @@
+/ @orders
+- content_for :page_css
+  = stylesheet_link_tag 'admin/invoice', media: "all"
+
+- @orders.each do |order|
+  = render partial: "single_invoice", locals: {order: order}

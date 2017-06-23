@@ -39,6 +39,7 @@ Rails.application.routes.draw do
 
       collection do
         post :bulk_push
+        get :bulk_invoice
       end
     end
   end

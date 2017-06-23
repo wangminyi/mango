@@ -3,7 +3,7 @@ class SlackNotifier
     retry_time = 0
     @notifier ||= Slack::Notifier.new "https://hooks.slack.com/services/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", username: "来bug喽！", channel: "yylife"
     begin
-      @notifier.ping "#{Rails.env}: #{content}"
+      @notifier.ping "#{Rails.env}: #{content}" unless Rails.env.development?
     rescue
       if retry_time < 3
         retry_time += 1

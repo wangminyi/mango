@@ -64,6 +64,11 @@ class Admin::OrdersController < Admin::BaseController
     @no_footer = true
   end
 
+  def bulk_invoice
+    @no_footer = true
+    @orders = Order.where(id: params[:ids].split(","))
+  end
+
   private
     def set_order
       @order = Order.find(params[:id])
