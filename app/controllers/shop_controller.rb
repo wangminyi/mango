@@ -37,7 +37,7 @@ class ShopController < ApplicationController
           name: "加厚沥水篮",
           count: 1,
         }
-      ]
+      ].sort_by{|gift| -gift[:limit]}
     end
 
     gon.settings = Settings.as_json

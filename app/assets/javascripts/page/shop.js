@@ -131,6 +131,7 @@ $(function(){
         $.each(this.gifts, function(index, gift) {
           if (that.total_price >= gift.limit) {
             result.push(gift);
+            return false;
           }
         });
         return result;
