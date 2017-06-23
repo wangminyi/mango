@@ -12,3 +12,9 @@ tr.detail.hidden
     - if order.remark
       br
       p = "附加信息：#{order.remark}"
+
+    br
+    = simple_form_for order, url: admin_order_path(order), method: :patch, remote: true do |f|
+      p 自己备注：
+      = f.input :admin_remark, label: false
+      = f.submit "保存", class: "btn btn-primary"

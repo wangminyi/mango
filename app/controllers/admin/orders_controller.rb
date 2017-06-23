@@ -1,6 +1,6 @@
 class Admin::OrdersController < Admin::BaseController
   before_action :require_admin
-  before_action :set_order, only: [:show, :next_state, :abandon, :invoice]
+  before_action :set_order, only: [:show, :update, :next_state, :abandon, :invoice]
   def index
     @status = params[:status]
     @q  = params[:query] || {}
@@ -29,6 +29,11 @@ class Admin::OrdersController < Admin::BaseController
   end
 
   def show
+  end
+
+  def update
+    @order.update(order_params)
+    head :ok
   end
 
   def next_state
@@ -72,5 +77,9 @@ class Admin::OrdersController < Admin::BaseController
   private
     def set_order
       @order = Order.find(params[:id])
+    end
+
+    def order_params
+      params.require(:order).permit!
     end
 end

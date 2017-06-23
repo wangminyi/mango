@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170619075638) do
+ActiveRecord::Schema.define(version: 20170623011750) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -137,6 +137,7 @@ ActiveRecord::Schema.define(version: 20170619075638) do
     t.string   "pay_status"
     t.text     "gifts",                    limit: 65535
     t.text     "item_list",                limit: 65535
+    t.text     "admin_remark",             limit: 65535
     t.index ["distribute_at"], name: "index_orders_on_distribute_at", using: :btree
     t.index ["distributer_id"], name: "index_orders_on_distributer_id", using: :btree
     t.index ["order_no"], name: "index_orders_on_order_no", unique: true, using: :btree
@@ -146,25 +147,25 @@ ActiveRecord::Schema.define(version: 20170619075638) do
     t.index ["user_id"], name: "index_orders_on_user_id", using: :btree
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "nickname",               default: ""
-    t.string   "encrypted_password",     default: ""
-    t.string   "open_id"
-    t.string   "phone"
-    t.string   "user_name"
-    t.string   "reset_password_token"
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.string   "nickname",               default: "",              collation: "utf8mb4_general_ci"
+    t.string   "encrypted_password",     default: "",              collation: "utf8_general_ci"
+    t.string   "open_id",                                          collation: "utf8_general_ci"
+    t.string   "phone",                                            collation: "utf8_general_ci"
+    t.string   "user_name",                                        collation: "utf8_general_ci"
+    t.string   "reset_password_token",                             collation: "utf8_general_ci"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",          default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
+    t.string   "current_sign_in_ip",                               collation: "utf8_general_ci"
+    t.string   "last_sign_in_ip",                                  collation: "utf8_general_ci"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.string   "role"
-    t.string   "email",                  default: "", null: false
-    t.index ["nickname"], name: "index_users_on_nickname", using: :btree
+    t.string   "role",                                             collation: "utf8_general_ci"
+    t.string   "email",                  default: "", null: false, collation: "utf8mb4_general_ci"
+    t.index ["nickname"], name: "index_users_on_nickname", length: { nickname: 191 }, using: :btree
     t.index ["open_id"], name: "index_users_on_open_id", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
     t.index ["role"], name: "index_users_on_role", using: :btree
