@@ -6,7 +6,7 @@ class Admin::OrdersController < Admin::BaseController
     @q  = params[:query] || {}
     # receiver_garden distribute_at_date distribute_at_time
 
-    @orders = Order.all.with_pay_status(:paid).order(distribute_at: :asc)
+    @orders = Order.all.with_pay_status(:paid).order(:created_at)
     if @status.present?
       @orders = @orders.with_status(@status)
       gon.status = @status
