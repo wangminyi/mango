@@ -74,6 +74,11 @@ class Admin::OrdersController < Admin::BaseController
     @orders = Order.where(id: params[:ids].split(","))
   end
 
+  def bulk_ingredient
+    @no_footer = true
+    @orders = Order.where(id: params[:ids].split(","))
+  end
+
   private
     def set_order
       @order = Order.find(params[:id])

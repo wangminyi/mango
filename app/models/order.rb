@@ -86,7 +86,7 @@ class Order < ApplicationRecord
 
   def ingredients_hash
     @__ingredients_hash ||= begin
-      ingredients = Ingredient.where(id: self.item_list.map{|h| h["id"]}).preload(:dishes)
+      ingredients = Ingredient.where(id: self.item_list.map{|h| h["id"]}).preload(:category)
       self.item_list.map do |i|
         [ingredients.find{|ingredient| ingredient.id == i["id"]}, i["count"]]
       end.to_h
@@ -157,6 +157,17 @@ class Order < ApplicationRecord
 
   def distribute_at_text
     "#{self.distribute_at.strftime("%F %H:00")} ~ #{self.distribute_at.since(1.hour).strftime("%H:00")}"
+  end
+
+  def self.bulk_ingredients
+    category_hash = Hash.new{|h, k| h[k] = Hash.new{|h2, k2| h2[k2] = 0}}
+    all.each do |order|
+      order.ingredients_hash.each do |ingredient, count|
+        key = "#{ingredient.name} -- ￥#{ingredient.price / 100.0} #{ingredient.unit_text}"
+        category_hash[ingredient.category.name][key] += count
+      end
+    end
+    category_hash
   end
 
   private
