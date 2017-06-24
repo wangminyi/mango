@@ -163,7 +163,7 @@ class Order < ApplicationRecord
     category_hash = Hash.new{|h, k| h[k] = Hash.new{|h2, k2| h2[k2] = 0}}
     all.each do |order|
       order.ingredients_hash.each do |ingredient, count|
-        key = "#{ingredient.name} -- ￥#{ingredient.price / 100.0} #{ingredient.unit_text}"
+        key = "#{ingredient.name} -- ￥#{(ingredient.price || 0) / 100.0} / #{ingredient.unit_text}"
         category_hash[ingredient.category.name][key] += count
       end
     end
