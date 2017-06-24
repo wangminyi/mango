@@ -1,4 +1,4 @@
-p = "订单ID：#{@order.pluck(:id).join(",")}"
+p = "订单ID：#{@orders.pluck(:id).join(",")}"
 - @orders.bulk_ingredients.each do |category_name, ingredient_hash|
   p = "#{category_name}："
   - ingredient_hash.each do |ingredient, count|
