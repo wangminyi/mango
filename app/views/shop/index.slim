@@ -19,9 +19,19 @@ template#shop-template
           .confirm-btn v-on:click="confirm_ok"
             | 确定
 
-    .item-image-modal.modal-panel v-if="show_item_image !== null" v-on:click="show_item_image = null"
+    .item-image-modal.modal-panel v-if="show_detail_item !== null" v-on:click="show_detail_item = null"
       .modal-panel-container
-        img v-bind:src="show_item_image"
+        template v-if="show_detail_item.description !== null && show_detail_item.description !== undefined"
+          .rich-description-container
+            .description-title
+              | {{show_detail_item.origin_name}}
+            template v-for="list in show_detail_item.description"
+              .description-list.plain-text v-if="list.type === 'text'"
+                | {{list.content}}
+              .description-list.image v-else-if="list.type === 'image'"
+                img v-bind:src="list.content"
+        template v-else=true
+          img v-bind:src="show_detail_item.image"
 
     transition v-bind:name="slide_direction"
       .shop-page-container.page-container v-if="current_page === 'shopping'" key="shopping_page"
@@ -36,8 +46,8 @@ template#shop-template
                 | {{ category.name }}
             .ingredients-container
               .ingredients-panel v-for="item in selected_items" v-bind:key="item.id"
-                .image-container v-on:click="item.description ? show_description(item) : null"
-                  img v-bind:src="item.image" v-on:click="show_item_image = item.image"
+                .image-container
+                  img v-bind:src="item.image" v-on:click="show_item_detail(item)"
                 .ingredient-info-container
                   .name-container
                     | {{ item.name }}
@@ -153,11 +163,11 @@ template#shop-template
               | 商品清单 （共{{total_count}}件）
             .panel-block.scrollable
               .item-box v-for="gift in gift_list"
-                img v-bind:src="gift.image" v-on:click="show_item_image = gift.image"
+                img v-bind:src="gift.image" v-on:click="show_item_detail(gift)"
                 .hint
                   | 赠品
               .item-box v-for="item in shopping_cart_list"
-                img v-bind:src="item.image" v-on:click="show_item_image = item.image"
+                img v-bind:src="item.image" v-on:click="show_item_detail(item)"
                 .hint
                   | x{{item.count}}
 
