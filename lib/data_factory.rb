@@ -191,7 +191,7 @@ class DataFactory
     end
 
     def ingredient_details
-      name = %w(本地玉米 本地丝瓜 本地黄瓜 本地茄子 本地薄皮青椒 本地小叶韭菜 本地红苋菜 本地西瓜)
+      name = %w(本地玉米 本地丝瓜 本地黄瓜 本地茄子 本地薄皮青椒 本地小叶韭菜 本地红苋菜)
       data = [
         [
           {
@@ -382,57 +382,7 @@ class DataFactory
             type: :text,
             content: "本地红苋菜和市售红苋菜最大的区别在于，市售的是整颗红苋菜（连根部），本地的红苋菜只取苋菜头部最鲜嫩的部分进行售卖，因此口感更嫩水分更多！",
           },
-        ],
-        [
-          {
-            type: :image,
-            content: "description/西瓜1.jpg",
-          },
-          {
-            type: :image,
-            content: "description/西瓜2.jpg",
-          },
-          {
-            type: :image,
-            content: "description/西瓜3.jpg",
-          },
-          {
-            type: :text,
-            content: "元也生鲜的采购小分队经过大半个月的寻找和比对，才终于确定这家最好吃的8424西瓜供应商。",
-          },
-          {
-            type: :image,
-            content: "description/西瓜4.jpg",
-          },
-          {
-            type: :image,
-            content: "description/西瓜5.jpg",
-          },
-          {
-            type: :image,
-            content: "description/西瓜6.jpg",
-          },
-          {
-            type: :text,
-            content: "瓜皮颜色鲜艳分明，纹路清晰干净，瓜蒂新鲜质硬，瓜脐略小。",
-          },
-          {
-            type: :image,
-            content: "description/西瓜7.jpg",
-          },
-          {
-            type: :image,
-            content: "description/西瓜8.jpg",
-          },
-          {
-            type: :image,
-            content: "description/西瓜9.jpg",
-          },
-          {
-            type: :text,
-            content: "切开后，气味香甜扑鼻；瓜皮薄、瓜肉粉、籽少且白；挖取一勺，水分充盈；尝一口，果肉甘甜，肉质细嫩，非常好吃。",
-          },
-        ],
+        ]
       ]
 
       name.each_with_index do |n, index|
