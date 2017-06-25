@@ -100,7 +100,7 @@ class Admin::OrdersController < Admin::BaseController
               [
                 order.id,
                 order.receiver_address,
-                order.distribute_at,
+                order.distribute_at.strftime("%F %T"),
               ]
             else
               [
