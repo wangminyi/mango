@@ -89,6 +89,7 @@ class Admin::OrdersController < Admin::BaseController
       商品名称
       份数
       单价
+      总价
     )
     data = CSV.generate do |csv|
       csv << field_names
@@ -112,6 +113,7 @@ class Admin::OrdersController < Admin::BaseController
               ingredent["name"],
               ingredent["count"],
               "%.2f" % (ingredent["price"].to_i / 100.0),
+              "%.2f" % (ingredent["price"].to_i * ingredent["count"].to_i / 100.0),
             ]
           csv << row
         end
