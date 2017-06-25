@@ -1,6 +1,7 @@
 class Admin::OrdersController < Admin::BaseController
   before_action :require_admin
   before_action :set_order, only: [:show, :update, :next_state, :abandon, :invoice]
+
   def index
     @status = params[:status]
     @q  = params[:query] || {}
@@ -77,6 +78,46 @@ class Admin::OrdersController < Admin::BaseController
   def bulk_ingredient
     @no_footer = true
     @orders = Order.where(id: params[:ids].split(","))
+  end
+
+  def bulk_export_csv
+    @orders = Order.where(id: params[:ids].split(","))
+    field_names = %w(
+      订单号
+      地址
+      配送时间
+      商品名称
+      份数
+      单价
+    )
+    data = CSV.generate do |csv|
+      csv << field_names
+      @orders.each do |order|
+        first_row = true
+        order.item_details.each do |ingredent|
+          row = if first_row
+              first_row = false
+              [
+                order.id,
+                order.receiver_address,
+                order.distribute_at,
+              ]
+            else
+              [
+                nil,
+                nil,
+                nil,
+              ]
+            end + [
+              ingredent["name"],
+              ingredent["count"],
+              "%.2f" % (ingredent["price"].to_i / 100.0),
+            ]
+          csv << row
+        end
+      end
+    end
+    send_data data, filename: "订单.csv"
   end
 
   private

@@ -26,6 +26,7 @@
     .btn.btn-primary.bulk-push 批量推进状态
     .btn.btn-primary.bulk-invoice 批量打印小票
     .btn.btn-primary.bulk-ingredients 批量清单
+    .btn.btn-primary.bulk-export-csv 导出订单
 
   table.table.table-hover.table-bordered.table-striped
     thead.print-hidden
@@ -130,6 +131,16 @@ javascript:
         alert("请至少选中一个订单");
       } else {
         window.open("/admin/orders/bulk_ingredient?ids=" + ids.join(","))
+      }
+    });
+
+    $(".bulk-export-csv").on("click", function(){
+      var ids = get_selected_ids();
+
+      if (ids.length === 0) {
+        alert("请至少选中一个订单");
+      } else {
+        window.open("/admin/orders/bulk_export_csv?ids=" + ids.join(","))
       }
     });
 
