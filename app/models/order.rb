@@ -178,7 +178,7 @@ class Order < ApplicationRecord
 
     def generate_item_details
       self.item_details = self.ingredients_hash.map do |ingredient, count|
-        ingredient.as_json.merge(count: count)
+        ingredient.as_json.except(:description).merge(count: count)
       end
     end
 
