@@ -12,7 +12,7 @@ class Ingredient < ApplicationRecord
       id:     self.id,
       name:   self.alias || self.name,
       origin_name: self.name,
-      image:  ActionController::Base.helpers.asset_url(self.image || "http://i6.pdim.gs/7667ccffb013006e7b63a25edb15607d.jpeg"),
+      image:  (ActionController::Base.helpers.asset_url(self.image) rescue ""),
       label:  self.dishes.present? ? "推荐食谱：#{self.dishes.first(3).map(&:name).join('、')}" : "",
       tags:   self.tags&.split(",") || [],
       price:    self.price,
