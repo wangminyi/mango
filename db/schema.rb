@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170623011750) do
+ActiveRecord::Schema.define(version: 20170628031253) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -169,6 +169,74 @@ ActiveRecord::Schema.define(version: 20170623011750) do
     t.index ["open_id"], name: "index_users_on_open_id", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
     t.index ["role"], name: "index_users_on_role", using: :btree
+  end
+
+  create_table "wholesale_entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.text     "summary",    limit: 65535
+    t.text     "detail",     limit: 65535
+    t.text     "tips",       limit: 65535
+    t.integer  "min_count"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.index ["name"], name: "index_wholesale_entries_on_name", using: :btree
+  end
+
+  create_table "wholesale_instances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "wholesale_entry_id"
+    t.string   "name"
+    t.integer  "min_count"
+    t.integer  "current_count"
+    t.datetime "distribute_time_from"
+    t.datetime "distribute_time_to"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.index ["wholesale_entry_id"], name: "index_wholesale_instances_on_wholesale_entry_id", using: :btree
+  end
+
+  create_table "wholesale_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "wholesale_entry_id"
+    t.string   "name"
+    t.string   "alias"
+    t.string   "image"
+    t.integer  "price"
+    t.string   "unit_text"
+    t.text     "description",        limit: 65535
+    t.integer  "sales_volume"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.index ["wholesale_entry_id"], name: "index_wholesale_items_on_wholesale_entry_id", using: :btree
+  end
+
+  create_table "wholesale_orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.string   "order_no"
+    t.string   "pay_status"
+    t.string   "status"
+    t.integer  "wholesale_instance_id"
+    t.integer  "wholesale_item_id"
+    t.integer  "item_count"
+    t.text     "item_detail",           limit: 65535
+    t.integer  "item_price"
+    t.integer  "preferential_price"
+    t.integer  "total_price"
+    t.datetime "distribute_at"
+    t.string   "receiver_name"
+    t.string   "receiver_garden"
+    t.string   "receiver_address"
+    t.string   "receiver_phone"
+    t.string   "remark"
+    t.string   "admin_remark"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.index ["distribute_at"], name: "index_wholesale_orders_on_distribute_at", using: :btree
+    t.index ["order_no"], name: "index_wholesale_orders_on_order_no", using: :btree
+    t.index ["pay_status"], name: "index_wholesale_orders_on_pay_status", using: :btree
+    t.index ["receiver_garden"], name: "index_wholesale_orders_on_receiver_garden", using: :btree
+    t.index ["status"], name: "index_wholesale_orders_on_status", using: :btree
+    t.index ["user_id"], name: "index_wholesale_orders_on_user_id", using: :btree
+    t.index ["wholesale_instance_id"], name: "index_wholesale_orders_on_wholesale_instance_id", using: :btree
+    t.index ["wholesale_item_id"], name: "index_wholesale_orders_on_wholesale_item_id", using: :btree
   end
 
 end

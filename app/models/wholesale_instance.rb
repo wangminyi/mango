@@ -1,0 +1,2 @@
+class WholesaleInstance < ApplicationRecord
+end

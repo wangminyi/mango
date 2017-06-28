@@ -1,0 +1,2 @@
+class WholesaleEntry < ApplicationRecord
+end
