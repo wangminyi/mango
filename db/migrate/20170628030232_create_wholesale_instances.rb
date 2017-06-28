@@ -9,8 +9,8 @@ class CreateWholesaleInstances < ActiveRecord::Migration[5.0]
       t.integer :current_count
 
       t.datetime :close_at
-      t.datetime :distribute_time_from
-      t.datetime :distribute_time_to
+      t.date :distribute_date_from
+      t.date :distribute_date_to
 
       t.timestamps
     end

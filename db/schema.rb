@@ -174,12 +174,14 @@ ActiveRecord::Schema.define(version: 20170628031253) do
   create_table "wholesale_entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
     t.string   "status"
-    t.text     "summary",    limit: 65535
-    t.text     "detail",     limit: 65535
-    t.text     "tips",       limit: 65535
+    t.string   "cover_image"
+    t.text     "detail_images", limit: 65535
+    t.text     "summary",       limit: 65535
+    t.text     "detail",        limit: 65535
+    t.text     "tips",          limit: 65535
     t.integer  "min_count"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.index ["name"], name: "index_wholesale_entries_on_name", using: :btree
     t.index ["status"], name: "index_wholesale_entries_on_status", using: :btree
   end
@@ -191,8 +193,8 @@ ActiveRecord::Schema.define(version: 20170628031253) do
     t.integer  "min_count"
     t.integer  "current_count"
     t.datetime "close_at"
-    t.datetime "distribute_time_from"
-    t.datetime "distribute_time_to"
+    t.date     "distribute_date_from"
+    t.date     "distribute_date_to"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.index ["close_at"], name: "index_wholesale_instances_on_close_at", using: :btree

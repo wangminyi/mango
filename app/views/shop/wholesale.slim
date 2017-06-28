@@ -1,0 +1,225 @@
+- content_for :page_js
+  = javascript_include_tag 'page/wholesale'
+  = javascript_include_tag 'http://res.wx.qq.com/open/js/jweixin-1.2.0.js'
+
+- content_for :page_css
+  = stylesheet_link_tag    'page/wholesale'
+
+#wholesale-vue-anchor
+
+template#wholesale-template
+  .yylife-wrapper
+    .confirm-modal-overlay v-show="confirm_params.show"
+      .confirm-modal
+        .content-container
+          | {{ confirm_params.text }}
+        .action-container
+          .confirm-btn v-if="confirm_params.cancel_callback" v-on:click="confirm_cancel"
+            | 取消
+          .confirm-btn v-on:click="confirm_ok"
+            | 确定
+
+    transition v-bind:name="slide_direction"
+      .entries-page.page-container v-if="current_page === 'entry'" key="entry_page"
+        .entry-panel v-for="entry in entries"
+          .image-container
+            img v-bind:src="entry.cover_image"
+          .entry-info-container
+            .name-container
+              | {{ entry.name }}
+            .price-container
+              .price
+                | {{ entry_price(entry) | price_text }}
+              .weight
+                | {{ entry.unit_text }}
+            .select-btn v-on:click="select_entry(entry)"
+              | 立即参加
+            .hint-container
+              | {{ entry.summary }}
+
+      .detail-page.page-container v-else-if="current_page === 'detail'" key="detail_page"
+        Carousel v-bind:height="200"
+          Carousel-item v-for="img in selected_entry.detail_images"
+            img.jumbotron-container v-bind:src="img"
+
+      .order-page-container.page-container v-else-if="current_page === 'order'" key="order_page"
+        .shop-page-header
+          i.fa.fa-chevron-left v-on:click="back_to('shopping')"
+          | 提交订单
+        .page-body-wrapper
+          .page-panel.personal-info
+            .color-split
+            .panel-block.selectable-input v-on:click="forward_to('address')"
+              span v-if="selected_address === undefined"
+                | 添加送货地址
+              span v-else=true
+                | {{selected_address | address_text}}
+              i.fa.fa-chevron-right.right-side
+            .panel-block.selectable-input v-on:click="show_time_selector = true"
+              span v-if="selected_date_time_text === undefined"
+                | 选择送货时间
+              span v-else=true
+                | {{selected_date_time_text}}
+              i.fa.fa-chevron-right.right-side
+            .color-split
+
+          .page-panel.items-info
+            .panel-block
+              | 商品清单 （共{{total_count}}件）
+            .panel-block.scrollable
+              .item-box v-for="gift in gift_list"
+                img v-bind:src="gift.image" v-on:click="show_item_detail(gift)"
+                .hint
+                  | 赠品
+              .item-box v-for="item in shopping_cart_list"
+                img v-bind:src="item.image" v-on:click="show_item_detail(item)"
+                .hint
+                  | x{{item.count}}
+
+          /.page-panel.additional-info
+            .panel-block
+              | 优惠券
+              .checkbox-btn.right-side v-bind:class="coupon_enable ? 'enable' : 'disable'" v-on:click="coupon_enable = !coupon_enable"
+                .btn-circle
+
+          .page-panel.remark-container
+            .panel-block
+              | 备注
+              .remark-input.right-side
+                = text_field_tag "remark", nil, "v-model.trim" => "remark", class: "remark-input", placeholder: "若对订单有特殊要求，请在此填写"
+
+          .page-panel.order-detail
+            .panel-block
+              | 价格清单
+            .panel-block
+              span.price-label
+                | 商品金额
+              .price-tag.right-side
+                | {{ total_price | price_text }}
+            .panel-block
+              span.price-label
+                | 运费
+              .price-tag.right-side
+                span
+                  | {{ distribute_price | price_text }}
+            .panel-block v-show="coupon_enable"
+              span.price-label
+                | 优惠
+              .price-tag.right-side
+                | {{ (-preferential_price) | price_text }}
+            .panel-block
+              span.price-label
+                | 应付金额
+              .price-tag.right-side
+                | {{ order_price | price_text }}
+
+        .page-footer.order-price-container
+          | 应付：{{ order_price | price_text }}
+          .footer-btn v-on:click="submit_order"
+            | 微信支付
+
+        .select-time-container.modal-panel v-show="show_time_selector" v-on:click.self="show_time_selector = false"
+          transition name="slide-up"
+            .time-selector v-show="show_time_selector"
+              .time-selector-header
+                .cancel-btn v-on:click="cancel_time_handler"
+                  | 取消
+                .submit-btn v-on:click="submit_time_handler"
+                  | 完成
+              .time-selector-body
+                .date
+                  .option v-for="date in selectable_date()" v-on:click="date_option_handler(date)" v-bind:class="{ selected: date_selected(date) }"
+                    | {{ date[0]}}
+                .time
+                  .option v-for="time in selectable_time()" v-on:click="time_option_handler(time)" v-bind:class="{ selected: time_selected(time) }"
+                    | {{ time[0] }}
+
+
+      .address-page-container.page-container v-else-if="current_page === 'address'" key="address_page"
+        .shop-page-header
+          i.fa.fa-chevron-left v-on:click="back_to('order')"
+          | 我的送货地址
+
+        .page-body-wrapper
+          transition-group name="fade-out" tag="div"
+            .address-info-container v-for="address in address_info" v-bind:key="address"
+              .page-panel
+                .panel-block v-on:click.self="select_address(address)"
+                  | {{address | address_text}}
+                .panel-block.address-operation
+                  .left-side
+                    template v-if="address.is_default"
+                      i.fa.fa-check-circle
+                      span
+                        | 默认地址
+                    template v-else=true
+                      | &nbsp;
+                  .right-side
+                    span v-on:click="edit_address(address)"
+                      i.fa.fa-edit
+                      | 编辑
+                    span v-on:click="delete_address(address)"
+                      i.fa.fa-trash-o
+                      | 删除
+
+        .add-address-container
+          .add-address-btn v-on:click="add_address"
+            | 添加送货地址
+
+
+      .edit-address-page.page-container v-else-if="current_page === 'edit_address'" key="edit_address"
+        .shop-page-header
+          i.fa.fa-chevron-left v-on:click="back_to('address')"
+          | 添加送货地址
+        .page-body-wrapper
+          .page-panel
+            .panel-block
+              | 姓名
+              .right-side
+                = text_field_tag nil, nil, "v-model.trim" => "editing_address.name", placeholder: "请填写姓名"
+            .panel-block
+              | 性别
+              .right-side
+                .radiobox-container v-on:click="editing_address.gender = 'female'"
+                  .custom-radio-btn v-bind:class="{ selected: editing_address.gender == 'female' }"
+                    i.fa.fa-check
+                  label for="male"
+                    | 女士
+                .radiobox-container v-on:click="editing_address.gender = 'male'"
+                  .custom-radio-btn v-bind:class="{ selected: editing_address.gender == 'male' }"
+                    i.fa.fa-check
+                  label for="female"
+                    | 先生
+            .panel-block
+              | 联系电话
+              .right-side
+                = text_field_tag nil, nil, "v-model.trim" => "editing_address.phone", placeholder: "请输入您的手机号码"
+
+          .page-panel
+            .panel-block v-on:click="show_garden_selector = true"
+              | 小区名称
+              .right-side
+                span
+                  | {{ editing_address.garden || " " }}
+                i.fa.fa-chevron-right
+            .panel-block
+              | 门牌号
+              .right-side
+                = text_field_tag nil, nil, "v-model.trim" => "editing_address.house_number", placeholder: "如5幢802"
+
+          .page-panel
+            .panel-block
+              | 设为默认地址
+              .checkbox-btn.right-side v-bind:class="editing_address.is_default ? 'enable' : 'disable'" v-on:click="editing_address.is_default = !editing_address.is_default"
+                .btn-circle
+
+          .submit-address-container
+            .submit-address-btn v-on:click="submit_address"
+              | {{ submitting_address ? "保存中..." : "保存地址" }}
+
+        .select-garden-container.modal-panel v-show="show_garden_selector" v-on:click.self="show_garden_selector = false"
+          transition name="slide-up"
+            .garden-selector v-show="show_garden_selector"
+              .garden-selector-body
+                .option v-for="garden in support_gardens" v-on:click="select_garden_handler(garden)"
+                  | {{ garden }}

@@ -8,7 +8,8 @@ class WholesaleItem < ApplicationRecord
       price: self.price,
       unit_text: self.unit_text,
       description: self.description,
-      sales_volume: self.sales_volume
+      sales_volume: self.sales_volume || 0,
+      count: 0,
     }
   end
 end

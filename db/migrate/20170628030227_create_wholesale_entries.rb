@@ -4,6 +4,9 @@ class CreateWholesaleEntries < ActiveRecord::Migration[5.0]
       t.string :name
       t.string :status
 
+      t.string :cover_image
+      t.text :detail_images
+
       t.text :summary
       t.text :detail
       t.text :tips

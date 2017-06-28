@@ -389,5 +389,49 @@ class DataFactory
         Ingredient.find_by(name: n)&.update(description: data[index])
       end
     end
+
+    def init_wholesale_seed
+      entry = WholesaleEntry.create(
+        name: "现包小笼／锅贴 每份10只",
+        cover_image: "ingredients/元也特色/小笼.jpg",
+        detail_images: ["ingredients/元也特色/小笼.jpg", "ingredients/元也特色/小笼.jpg"],
+        summary: "每周六配送，满5只即成团",
+        detail: "纯手工制作，新鲜现做，采用优质双汇猪肉，每只小笼／锅贴都包含满满的汤汁，小笼面皮薄透，久蒸不破，锅贴面皮适中，松软不柴，回购率达到300%！",
+        tips: "1. 点心团满10份即成功成团，将在团日配送，即周三、周五和周天；\n2. 若至截止日期还没满团，则团不成立，订购金额将退回至原账户；\n3. 订购1份也享受送货上门服务，拼团产品不与其他产品一起结算；",
+        min_count: 10,
+      )
+
+      entry.wholesale_items.create(
+        name: "现包小笼",
+        image: "ingredients/元也特色/小笼.jpg",
+        price: 1200,
+        unit_text: "每份",
+      )
+
+      entry.wholesale_items.create(
+        name: "现包锅贴",
+        image: "ingredients/元也特色/小笼.jpg",
+        price: 1800,
+        unit_text: "每份",
+      )
+
+      entry.wholesale_instances.create(
+        name: "周三团（xxx）",
+        min_count: 10,
+        current_count: 0,
+        close_at: 3.days.since,
+        distribute_date_from: Date.today.since(3.days),
+        distribute_date_to: Date.today.since(4.days),
+      )
+
+      entry.wholesale_instances.create(
+        name: "周五团（xxx）",
+        min_count: 10,
+        current_count: 0,
+        close_at: 5.days.since,
+        distribute_date_from: Date.today.since(5.days),
+        distribute_date_to: Date.today.since(6.days),
+      )
+    end
   end
 end
