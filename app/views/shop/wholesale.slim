@@ -42,6 +42,31 @@ template#wholesale-template
           Carousel-item v-for="img in selected_entry.detail_images"
             img.jumbotron-container v-bind:src="img"
 
+        .entry-detail-info.page-panel
+          .panel-block
+            .title
+              | {{ selected_entry.name }}
+            .detail
+              | {{ selected_entry.detail }}
+            .price-container
+              .price v-if="selected_entry.min_price === selected_entry.max_price"
+                | {{ selected_entry.min_price | price_text}}
+              .price v-else=true
+                | {{ selected_entry.min_price | price_text }} ~ {{ selected_entry.max_price | price_text}}
+              .unit-text
+                | {{ selected_entry.unit_text }}
+
+        .entry-instances-info.page-panel
+          .entry-instance.panel-block v-for="instance in selected_entry.instances"
+            .name
+              | {{ instance.name }}
+            .count-info v-if="instance.min_count > instance.current_count"
+              | 还差{{ instance.min_count - instance.current_count }}份即可成团
+            .count-info v-else=true
+              | 已成团
+        .tips.page-panel
+          .panel-block v-html="selected_entry.tips"
+
       .order-page-container.page-container v-else-if="current_page === 'order'" key="order_page"
         .shop-page-header
           i.fa.fa-chevron-left v-on:click="back_to('shopping')"

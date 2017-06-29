@@ -267,27 +267,27 @@ $header-height: 50px;
   }
 }
 
-.slide-left-enter-active, .slide-left-leave-active, .slide-right-enter-active, .slide-right-leave-active, .slide-up-enter-active, .slide-up-leave-active, .slide-down-enter-active, .slide-down-leave-active {
+.page-slide-left-enter-active, .page-slide-left-leave-active, .page-slide-right-enter-active, .page-slide-right-leave-active, .page-slide-up-enter-active, .page-slide-up-leave-active, .page-slide-down-enter-active, .page-slide-down-leave-active {
   @include transition(all, .3s, ease);
 }
 
-.fade-out-leave-active {
+.page-fade-out-leave-active {
   @include transition(all, .8s, ease);
 }
 
-.slide-left-leave-active, .slide-right-enter, {
+.page-slide-left-leave-active, .page-slide-right-enter, {
   @include transform(translateX(100%));
 }
 
-.slide-left-enter, .slide-right-leave-active {
+.page-slide-left-enter, .page-slide-right-leave-active {
   @include transform(translateX(-100%));
 }
 
-.slide-up-leave-active, .slide-down-enter, {
+.page-slide-up-leave-active, .page-slide-down-enter, {
   @include transform(translateY(-100%));
 }
 
-.slide-up-enter, .slide-down-leave-active {
+.page-slide-up-enter, .page-slide-down-leave-active {
   @include transform(translateY(100%));
 }
 
@@ -361,12 +361,65 @@ $header-height: 50px;
 }
 
 .detail-page {
+  background-color: $bg-light-gray;
+  position: relative;
   .ivu-carousel-item {
     text-align: center;
     .jumbotron-container {
       height: 100%;
       margin: auto;
     }
+  }
+
+  .entry-detail-info {
+    .title {
+      font-size: 18px;
+      color: $theme-black;
+    }
+
+    .detail {
+      font-size: 14px;
+      color: $theme-light-gray;
+    }
+
+    .price-container {
+      .price, .unit-text {
+        display: inline-block;
+        vertical-align: baseline;
+      }
+
+      .price {
+        font-size: 22px;
+        color: #D60B0B;
+      }
+
+      .unit-text {
+        font-size: 14px;
+        color: $theme-light-gray;
+      }
+    }
+  }
+
+  .entry-instances-info {
+    .entry-instance {
+      @include flex-container;
+      .name {
+        font-size: 14px;
+        color: $theme-black;
+        @include flex(1);
+      }
+
+      .count-info {
+        font-size: 14px;
+        color: $theme-light-gray;
+        @include flex(none);
+      }
+    }
+  }
+
+  .tips {
+    color: $theme-light-gray;
+    font-size: 14px;
   }
 }
 

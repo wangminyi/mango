@@ -30,7 +30,7 @@ $(function(){
       },
 
       // 过渡相关
-      slide_direction: "slide-right",
+      slide_direction: "page-slide-right",
 
       // 入口页面
       selected_entry: undefined,
@@ -184,11 +184,11 @@ $(function(){
         $.cookie("cache_items", this.cookie_item_list);
       },
       forward_to: function(page) {
-        this.slide_direction = "slide-right";
+        this.slide_direction = "page-slide-right";
         this.current_page = page;
       },
       back_to: function(page) {
-        this.slide_direction = "slide-left";
+        this.slide_direction = "page-slide-left";
         this.current_page = page;
       },
 

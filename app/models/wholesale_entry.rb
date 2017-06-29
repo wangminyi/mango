@@ -10,7 +10,7 @@ class WholesaleEntry < ApplicationRecord
   ], scope: true, default: :visible
 
   has_many :wholesale_instances
-  has_many :visible_wholesale_instances, -> { with_status(:visible) }, class_name: "WholesaleInstance"
+  has_many :visible_wholesale_instances, -> { with_status(:visible).where("close_at > ?", Time.now) }, class_name: "WholesaleInstance"
   has_many :wholesale_items
 
   def instance_template
@@ -39,5 +39,22 @@ class WholesaleEntry < ApplicationRecord
 
   def unit_text
     self.wholesale_items.first.unit_text
+  end
+
+  def as_json
+    {
+      name: self.name,
+      cover_image: self.cover_image_url,
+      detail_images: self.detail_images_url,
+      summary: self.summary,
+      detail: self.detail,
+      tips: self.tips.gsub("\n", "<br/>"),
+      min_count: self.min_count,
+      min_price: self.min_price,
+      max_price: self.max_price,
+      unit_text: "/" + (self.unit_text || ""),
+      instances: self.wholesale_instances.map(&:as_json),
+      items: self.wholesale_items.map(&:as_json),
+    }
   end
 end
