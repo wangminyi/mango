@@ -44,6 +44,7 @@ class WholesaleEntry < ApplicationRecord
   def as_json
     {
       name: self.name,
+      alias: self.alias || self.name,
       cover_image: self.cover_image_url,
       detail_images: self.detail_images_url,
       summary: self.summary,

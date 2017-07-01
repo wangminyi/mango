@@ -26,7 +26,7 @@ template#wholesale-template
             img v-bind:src="entry.cover_image"
           .entry-info-container
             .name-container
-              | {{ entry.name }}
+              | {{ entry.alias }}
             .price-container
               .price
                 | {{ entry_price(entry) | price_text }}
@@ -38,38 +38,88 @@ template#wholesale-template
               | {{ entry.summary }}
 
       .detail-page.page-container v-else-if="current_page === 'detail'" key="detail_page"
-        Carousel v-bind:height="200"
-          Carousel-item v-for="img in selected_entry.detail_images"
-            img.jumbotron-container v-bind:src="img"
+        .shop-page-header
+          i.fa.fa-chevron-left v-on:click="back_to('entry')"
+          | {{ selected_entry.name }}
+        .page-body-wrapper
+          Carousel v-bind:height="200"
+            Carousel-item v-for="img in selected_entry.detail_images" v-bind:key="img"
+              img.jumbotron-container v-bind:src="img"
 
-        .entry-detail-info.page-panel
-          .panel-block
-            .title
-              | {{ selected_entry.name }}
-            .detail
-              | {{ selected_entry.detail }}
-            .price-container
-              .price v-if="selected_entry.min_price === selected_entry.max_price"
-                | {{ selected_entry.min_price | price_text}}
-              .price v-else=true
-                | {{ selected_entry.min_price | price_text }} ~ {{ selected_entry.max_price | price_text}}
-              .unit-text
-                | {{ selected_entry.unit_text }}
+          .entry-detail-info.page-panel
+            .panel-block
+              .title
+                | {{ selected_entry.alias }}
+              .detail
+                | {{ selected_entry.detail }}
+              .price-container
+                .price v-if="selected_entry.min_price === selected_entry.max_price"
+                  | {{ selected_entry.min_price | price_text}}
+                .price v-else=true
+                  | {{ selected_entry.min_price | price_text }} ~ {{ selected_entry.max_price | price_text}}
+                .unit-text
+                  | {{ selected_entry.unit_text }}
 
-        .entry-instances-info.page-panel
-          .entry-instance.panel-block v-for="instance in selected_entry.instances"
-            .name
-              | {{ instance.name }}
-            .count-info v-if="instance.min_count > instance.current_count"
-              | 还差{{ instance.min_count - instance.current_count }}份即可成团
-            .count-info v-else=true
-              | 已成团
-        .tips.page-panel
-          .panel-block v-html="selected_entry.tips"
+          .entry-instances-info.page-panel
+            .entry-instance.panel-block v-for="instance in selected_entry.instances"
+              .name
+                | {{ instance.name }}
+              .count-info v-if="instance.min_count > instance.current_count"
+                | 还差{{ instance.min_count - instance.current_count }}份即可成团
+              .count-info v-else=true
+                | 已成团
+
+          .tips.page-panel
+            .panel-block
+              | 拼团小贴士
+            .panel-block v-html="selected_entry.tips"
+
+        .page-footer v-on:click="show_entry_form = true"
+          | 立即订购参团
+
+        .entry-form-container.modal-panel v-show="show_entry_form" v-on:click.self="show_entry_form = false"
+          transition name="page-slide-up"
+            .entry-form v-show="show_entry_form"
+              .input-group-container
+                .input-label
+                  | 选择产品：
+                .input-wrapper
+                  .input-button v-for="item in selected_entry.items" v-on:click="select_item(item)" v-bind:class="{selected: selected_item === item}"
+                    .name
+                      | {{ item.name }}
+
+              .input-group-container
+                .input-label
+                  | 选择团：
+                .input-wrapper
+                  .input-button v-for="instance in selected_entry.instances" v-on:click="selected_instance = instance" v-bind:class="{selected: selected_instance === instance}"
+                    .name
+                      | {{ instance.short_name }}
+                    .count.reached v-if="instance.current_count < instance.min_count"
+                      | （差{{instance.min_count - instance.current_count}}份）
+                    .count.unreach v-else=true
+                      | （已成团）
+              .input-group-container
+                .input-label
+                  | 购买数量：
+                .input-wrapper
+                  .operation-container
+                    .decrease v-on:click="decrease_count()"
+                      | -
+                    .count
+                      | {{ buy_count }}
+                    .increase v-on:click="increase_count()"
+                      | +
+
+              .form-submit-footer
+                span.price
+                  | {{ total_price | price_text }}
+                .submit-btn v-on:click="go_to_order"
+                  | 去结算
 
       .order-page-container.page-container v-else-if="current_page === 'order'" key="order_page"
         .shop-page-header
-          i.fa.fa-chevron-left v-on:click="back_to('shopping')"
+          i.fa.fa-chevron-left v-on:click="back_to('detail')"
           | 提交订单
         .page-body-wrapper
           .page-panel.personal-info
@@ -80,7 +130,7 @@ template#wholesale-template
               span v-else=true
                 | {{selected_address | address_text}}
               i.fa.fa-chevron-right.right-side
-            .panel-block.selectable-input v-on:click="show_time_selector = true"
+            .panel-block.selectable-input v-on:click="open_time_selector"
               span v-if="selected_date_time_text === undefined"
                 | 选择送货时间
               span v-else=true
@@ -90,22 +140,12 @@ template#wholesale-template
 
           .page-panel.items-info
             .panel-block
-              | 商品清单 （共{{total_count}}件）
+              | 商品清单 （共{{buy_count}}件）
             .panel-block.scrollable
-              .item-box v-for="gift in gift_list"
-                img v-bind:src="gift.image" v-on:click="show_item_detail(gift)"
+              .item-box
+                img v-bind:src="selected_item.image" v-on:click="show_item_detail(selected_item)"
                 .hint
-                  | 赠品
-              .item-box v-for="item in shopping_cart_list"
-                img v-bind:src="item.image" v-on:click="show_item_detail(item)"
-                .hint
-                  | x{{item.count}}
-
-          /.page-panel.additional-info
-            .panel-block
-              | 优惠券
-              .checkbox-btn.right-side v-bind:class="coupon_enable ? 'enable' : 'disable'" v-on:click="coupon_enable = !coupon_enable"
-                .btn-circle
+                  | x{{buy_count}}
 
           .page-panel.remark-container
             .panel-block
@@ -123,17 +163,6 @@ template#wholesale-template
                 | {{ total_price | price_text }}
             .panel-block
               span.price-label
-                | 运费
-              .price-tag.right-side
-                span
-                  | {{ distribute_price | price_text }}
-            .panel-block v-show="coupon_enable"
-              span.price-label
-                | 优惠
-              .price-tag.right-side
-                | {{ (-preferential_price) | price_text }}
-            .panel-block
-              span.price-label
                 | 应付金额
               .price-tag.right-side
                 | {{ order_price | price_text }}
@@ -144,7 +173,7 @@ template#wholesale-template
             | 微信支付
 
         .select-time-container.modal-panel v-show="show_time_selector" v-on:click.self="show_time_selector = false"
-          transition name="slide-up"
+          transition name="page-slide-up"
             .time-selector v-show="show_time_selector"
               .time-selector-header
                 .cancel-btn v-on:click="cancel_time_handler"

@@ -6,6 +6,11 @@
   -webkit-overflow-scrolling: touch;
 }
 
+body {
+  font-size: 14px !important;
+  line-height: 1.42857143 !important;
+}
+
 html, body, .yylife-wrapper, .yylife-wrapper > * {
   width: 100%;
   height: 100%;
@@ -19,8 +24,8 @@ html, body, .yylife-wrapper, .yylife-wrapper > * {
   color: $theme-black;
 }
 
-$footer-height: 50px;
 $header-height: 50px;
+$footer-height: 50px;
 
 .confirm-modal-overlay {
   position: fixed;
@@ -156,6 +161,9 @@ $header-height: 50px;
   bottom: $footer-height;
   width: 100%;
   overflow: auto;
+  &.without-header {
+    top: 0;
+  }
 }
 
 .page-footer {
@@ -363,6 +371,12 @@ $header-height: 50px;
 .detail-page {
   background-color: $bg-light-gray;
   position: relative;
+
+  .shop-page-header {
+    background-color: $theme-green;
+    color: white;
+  }
+
   .ivu-carousel-item {
     text-align: center;
     .jumbotron-container {
@@ -372,6 +386,7 @@ $header-height: 50px;
   }
 
   .entry-detail-info {
+    margin-top: 0;
     .title {
       font-size: 18px;
       color: $theme-black;
@@ -418,8 +433,122 @@ $header-height: 50px;
   }
 
   .tips {
-    color: $theme-light-gray;
+    color: $theme-black;
     font-size: 14px;
+  }
+
+  .page-footer {
+    background-color: #E78511;
+    color: white;
+    font-size: 18px;
+    line-height: 50px;
+    text-align: center;
+  }
+
+  .entry-form-container {
+    .entry-form {
+      background-color: white;
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      .input-group-container {
+        padding: 10px 15px;
+        .input-label {
+          font-size: 14px;
+          color: $theme-black;
+        }
+        .input-wrapper {
+          .input-button {
+            display: inline-block;
+            vertical-align: middle;
+            padding: 0 20px;
+            border: 1px solid #979797;
+            margin-right: 10px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            .name, .count {
+              line-height: 35px;
+              display: inline-block;
+              vertical-align: middle;
+            }
+            .name {
+              font-size: 14px;
+              color: $theme-black;
+            }
+            .count {
+              font-size: 12px;
+              color: $theme-light-gray;
+            }
+
+            &.selected {
+              border-color: #E78511;
+              background-color: #E78511;
+              .name, .count {
+                color: white;
+              }
+            }
+          }
+
+          .operation-container {
+            padding-top: 5px;
+            .decrease, .increase, .count {
+              display: inline-block;
+              vertical-align: middle;
+            }
+
+            .count {
+              margin: 0 8px;
+              font-size: 14px;
+            }
+
+            .decrease, .increase {
+              width: 22px;
+              height: 22px;
+              border-radius: 50%;
+              text-align: center;
+              line-height: 18px;
+
+              &.decrease {
+                color: $theme-green;
+                border: 1px solid $theme-green;
+              }
+
+              &.increase {
+                color: white;
+                background-color: $theme-green;
+                &.disabled {
+                  background-color: $theme-green;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .form-submit-footer {
+        height: 50px;
+        background-color: #454349;
+        position: relative;
+        margin-top: 20px;
+        span {
+          line-height: 50px;
+          color: white;
+          padding-left: 15px;
+          font-size: 20px;
+        }
+        .submit-btn {
+          width: 100px;
+          line-height: $footer-height;
+          text-align: center;
+          background-color: $theme-green;
+          color: white;
+          font-size: 16px;
+          position: absolute;
+          right: 0;
+          top: 0;
+        }
+      }
+    }
   }
 }
 

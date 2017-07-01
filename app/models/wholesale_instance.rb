@@ -12,6 +12,7 @@ class WholesaleInstance < ApplicationRecord
     {
       id: self.id,
       name: self.name,
+      short_name: self.name.split(/[(（]/)[0],
       min_count: self.min_count,
       current_count: self.current_count,
       distribute_date_from: distribute_date_from,

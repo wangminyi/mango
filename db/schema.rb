@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170628031253) do
+ActiveRecord::Schema.define(version: 20170701031605) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -173,6 +173,7 @@ ActiveRecord::Schema.define(version: 20170628031253) do
 
   create_table "wholesale_entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
+    t.string   "alias"
     t.string   "status"
     t.string   "cover_image"
     t.text     "detail_images", limit: 65535

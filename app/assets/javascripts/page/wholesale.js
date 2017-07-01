@@ -12,15 +12,24 @@ $(function(){
   });
 
   moment.locale("zh-CN");
-  var entries = gon.entries,
+  var weekday_name = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+      entries = gon.entries,
       addresses = gon.addresses;
+
+  test_data = {
+    selected_entry: entries[0],
+    show_entry_form: true,
+    selected_instance: entries[0].instances[0],
+    selected_item: entries[0].items[0],
+    buy_count: 1,
+  }
 
   window.vue = new Vue({
     el: "#wholesale-vue-anchor",
     template: "#wholesale-template",
-    data: {
+    data: $.extend({
       // 全局变量
-      current_page: "entry", // 当前所在页面 entry detail order address edit_address
+      current_page: "detail", // 当前所在页面 entry detail order address edit_address
       // 弹出框
       confirm_params: {
         show: false,
@@ -37,9 +46,10 @@ $(function(){
       entries: entries, // 商品对象
 
       // 拼团详情
+      show_entry_form: false,
       selected_instance: undefined,
       selected_item: undefined,
-      buy_count: 1,
+      buy_count: 0,
 
       // 订单页面
         // 表单字段slot
@@ -69,28 +79,19 @@ $(function(){
         is_default: false,
       }, // 正在编辑的地址 json
       support_gardens: gon.settings.gardens,
-    },
+    }, test_data),
     computed: {
-      // 选中类型的商品
+      // 选中团购的商品
       selected_items: function() {
         return this.selected_entry.items;
       },
-      // 选购商品的总数
-      total_count: function(){
-        var count = 0;
-        $.each(this.shopping_cart_list, function(index, item) {
-          count += item.count;
-        });
-        return count;
-      },
       // 选购商品的总价
       total_price: function(){
-        var price = 0,
-            that  = this;
-        $.each(this.shopping_cart_list, function(index, item) {
-          price += item.count * that.item_price(item);
-        });
-        return price;
+        if (this.selected_item === undefined) {
+          return 0;
+        } else {
+          return this.buy_count * this.selected_item.price;
+        }
       },
       selected_date_time_text: function() {
         if (this.selected_date !== undefined && this.selected_time !== undefined) {
@@ -111,29 +112,8 @@ $(function(){
           return undefined;
         }
       },
-      // 免运费原因
-      free_distribution_reason: function() {
-        if (this.total_price >= this.free_distribution) {
-          return "满10元免配送费";
-        }
-        // else if (this.can_immediately) {
-        //   return "会员权益";
-        // }
-      },
-      distribute_price: function() {
-        if (this.free_distribution_reason) {
-          return 0;
-        } else {
-          return this.distribution_price;
-        }
-      },
       order_price: function() {
-        var result = this.total_price + this.distribute_price;
-
-        if (this.coupon_enable) {
-          result -= this.preferential_price;
-        }
-        return Math.max( result, 0 );
+        return this.total_price;
       }
     },
     filters: {
@@ -142,46 +122,38 @@ $(function(){
       },
       address_text: function(addr) {
         return addr.name + "  " + addr.phone + "\n" + addr.garden + addr.house_number;
-      },
-      sales_volume_text: function(sales_volume) {
-        return "月售" + sales_volume;
       }
     },
     methods: {
       select_entry: function(entry) {
         this.selected_entry = entry;
+        this.selected_instance = entry.instances[0];
+        this.selected_item = entry.items[0];
+        this.buy_count = 0;
         this.forward_to("detail");
+      },
+      select_item: function(item) {
+        this.selected_item = item;
       },
       entry_price: function(entry) {
         return entry.min_price;
       },
-      can_increase: function(item, number) {
-        var result_count = item.count + (number || 1);
-        return result_count <= (item.order_limit || 100);
-      },
-      increase_item: function(item, number) {
+      increase_count: function(number) {
         number = number || 1;
-        // xx份起卖
-        if ($.isNumeric(item.limit_count) && item.limit_count > item.count + number) {
-          number = item.limit_count;
-        }
-        if (this.can_increase(item, number)) {
-          item.count += number;
-          $.cookie("cache_items", this.cookie_item_list);
-        }
+        this.buy_count += number;
       },
-      decrease_item: function(item, number) {
-        number = number || 1;
-        if (item.count >= number) {
-          item.count -= number;
+      decrease_count: function(number) {
+        number = Math.min(this.buy_count, number || 1);
+        this.buy_count -= number;
+      },
+      go_to_order: function() {
+        if (this.selected_entry !== undefined && this.selected_instance !== undefined && this.selected_item !== undefined && this.buy_count > 0) {
+          this.forward_to('order');
+        } else {
+          this.show_confirm_dialog({
+            text: "请选择您要参加的团和购买的数量"
+          });
         }
-        if (item.count < item.limit_count) {
-          item.count = 0;
-        }
-        if (this.shopping_cart_list.length === 0) {
-          this.show_shopping_cart = false;
-        }
-        $.cookie("cache_items", this.cookie_item_list);
       },
       forward_to: function(page) {
         this.slide_direction = "page-slide-right";
@@ -192,25 +164,26 @@ $(function(){
         this.current_page = page;
       },
 
+      open_time_selector: function() {
+        this.show_time_selector = true;
+        if (this.temp_selected_date === undefined) {
+          this.temp_selected_date = this.selected_date()[0];
+        }
+      },
       // 可选择日期 @Array [label, value]
       selectable_date: function() {
         var result = [],
-            hour = moment().hour();
-        if (hour < 14) {
+            from = moment(this.selected_instance.distribute_date_from),
+            to = moment(this.selected_instance.distribute_date_to);
+        while (from <= to) {
           result.push(
             [
-              "今天",
-              moment().format("YYYY-MM-DD")
+              from.format("MM") + "月" + from.format("DD") + "日 " + weekday_name[from.weekday()],
+              from.format("YYYY-MM-DD")
             ]
           );
+          from.add(1, "d");
         }
-
-        result.push(
-          [
-            "明天",
-            moment().add(1, "d").format("YYYY-MM-DD")
-          ]
-        );
 
         return result;
       },
@@ -221,11 +194,9 @@ $(function(){
           return [];
         }
 
-        var result = [],
-            time = moment(),
-            now = moment(),
-            morning_slot = [],
-            afternoon_slot = [];
+        var morning_slot = [],
+            afternoon_slot = [],
+            time = moment();
 
         // 上午
         for(var i = 9 ; i < 11 ; i += 1) {
@@ -247,13 +218,7 @@ $(function(){
           );
         }
 
-        if ("今天" !== this.temp_selected_date[0] || now.hour() < 8) {
-          // 次日送达 或 今日送达且当前时间小于8点
-          result = morning_slot.concat(afternoon_slot);
-        } else {
-          result = afternoon_slot;
-        }
-        return result;
+        return morning_slot.concat(afternoon_slot);
       },
       // 是否选择了某日期
       date_selected: function(date) {
@@ -404,7 +369,6 @@ $(function(){
                   total_price: this.order_price, // 订单总价 double check
                   distribute_at: this.selected_date_time_value,
                   distribution_price: this.distribute_price,
-                  free_distribution_reason: this.free_distribution_reason,
                   preferential_price: this.coupon_enable ? this.preferential_price : 0,
                   receiver_name: addr.name,
                   receiver_phone: addr.phone,
