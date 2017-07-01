@@ -4,6 +4,7 @@ class Settings
   PREFERENTIAL_PRICE = 300
   GARDENS = %w(
               周浦兰廷九龙仓
+              周浦逸亭佳苑
               周浦印象春城
               周浦明天华城
               周浦繁荣华庭
