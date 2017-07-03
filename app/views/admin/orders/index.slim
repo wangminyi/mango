@@ -24,7 +24,6 @@
   .group-action.print-hidden
     .btn.btn-primary.bulk-open 显示 / 隐藏全部详情
     .btn.btn-primary.bulk-push 批量推进状态
-    .btn.btn-primary.bulk-invoice 批量打印小票
     .btn.btn-primary.bulk-ingredients 批量清单
     .btn.btn-primary.bulk-export-csv 导出订单
 
@@ -111,16 +110,6 @@ javascript:
             location.reload();
           });
         }
-      }
-    });
-
-    $(".bulk-invoice").on("click", function() {
-      var ids = get_selected_ids();
-
-      if (ids.length === 0) {
-        alert("请至少选中一个订单");
-      } else {
-        window.open("/admin/orders/bulk_invoice?ids=" + ids.join(","))
       }
     });
 

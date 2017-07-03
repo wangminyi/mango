@@ -40,7 +40,6 @@ Rails.application.routes.draw do
 
       collection do
         post :bulk_push
-        get :bulk_invoice
         get :bulk_ingredient
         get :bulk_export_csv
       end

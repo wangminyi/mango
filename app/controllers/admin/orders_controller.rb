@@ -70,11 +70,6 @@ class Admin::OrdersController < Admin::BaseController
     @no_footer = true
   end
 
-  def bulk_invoice
-    @no_footer = true
-    @orders = Order.where(id: params[:ids].split(","))
-  end
-
   def bulk_ingredient
     @no_footer = true
     @orders = Order.where(id: params[:ids].split(","))
