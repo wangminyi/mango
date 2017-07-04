@@ -6,7 +6,9 @@ class WholesaleInstance < ApplicationRecord
     :invisible,
   ], scope: true, default: :visible
 
-  belongs_to :wholesale_instance
+  belongs_to :wholesale_entry
+
+  delegate :type, to: :wholesale_entry
 
   def as_json
     {

@@ -30,11 +30,13 @@ class WholesaleOrder < ApplicationRecord
 
   def paid!
     super
+    # 根据拼团类型判断
     self.wholesale_instance.update(current_count: self.wholesale_instance.current_count + self.item_count)
   end
 
   def abandon!
     super
+    # 根据拼团类型判断
     self.wholesale_instance.update(current_count: self.wholesale_instance.current_count - self.item_count)
   end
 
