@@ -23,6 +23,7 @@ class Order < ApplicationRecord
   enumerize :pay_status, in: [
     :unpaid,
     :paid,
+    :refunded,
   ], scope: true, default: :unpaid
 
   ## associations
