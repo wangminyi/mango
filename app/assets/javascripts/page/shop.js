@@ -78,6 +78,26 @@ $(function(){
       selected_items: function() {
         return this.selected_category.items;
       },
+      // 二级分类后的商品
+      // { "叶菜": [{..}, {..}, ...]}
+      items_for_render: function() {
+        var _items_json = {}
+        if (this.selected_category.with_secondary_tag) {
+          $.each(this.selected_items, function(index, item) {
+            var _tag = item.secondary_tag || "其他";
+            if (_items_json[_tag] === undefined) {
+              _items_json[_tag] = [];
+            }
+            _items_json[_tag].push(item);
+          });
+        } else {
+          _items_json["其他"] = this.selected_items;
+        }
+        return _items_json;
+      },
+      secondary_tags: function() {
+        return Object.keys(this.items_for_render);
+      },
       // 所有食材对象的hash
       items_hash: function(){
         var hash = {};
@@ -193,7 +213,7 @@ $(function(){
     methods: {
       change_category: function(category) {
         this.selected_category = category;
-        $(".ingredients-container").scrollTop(0);
+        $(".ingredients-list-container").scrollTop(0);
       },
       // 展示详情
       show_item_detail: function(item) {

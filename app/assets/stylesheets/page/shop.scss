@@ -375,127 +375,149 @@ $header-height: 50px;
     .ingredients-container {
       @include flex(1);
       height: 100%;
-      overflow: auto;
+      position: relative;
 
-      .unsellhint-container {
-        background-color: $bg-gray;
-        font-size: 12px;
-        margin: 10px;
-        padding: 10px;
-        color: $theme-green;
-        white-space: pre-wrap;
-      }
-
-      .ingredients-panel {
-        margin-left: 10px;
-        padding: 10px 10px 10px 0;
-        border-bottom: 1px solid $border-color;
-
-        @include flex-container;
-        .image-container {
-          @include flex(none);
-          width: 25%;
-          img {
-            width: 100%;
+      .secondary-tag-container {
+        background-color: #F8F8F8;
+        overflow-x: auto;
+        .secondary-tag {
+          display: inline-block;
+          line-height: 30px;
+          text-align: center;
+          padding: 0 20px;
+          color: $theme-light-gray;
+          &.selected {
+            color: $theme-green;
           }
         }
+      }
 
-        .ingredient-info-container {
-          @include flex(1);
-          padding-left: 10px;
-          position: relative;
-          .name-container {
-            font-size: 16px;
-          }
+      .ingredients-list-container {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        overflow: auto;
+        &.padding-top {
+          top: 30px;
+        }
+        .secondary-tag-header {
+          color: $theme-light-gray;
+          line-height: 30px;
+          padding-left: 20px;
+          background-color: #F8F8F8;
+        }
 
-          .tag-container {
-            .tag {
-              display: inline-block;
-              vertical-align: middle;
-              padding: 0 2px;
-              margin-right: 10px;
-              border-radius: 10px;
-              line-height: 13px;
-              font-size: 12px;
-              color: #E17C15;
-              border: 1px solid $theme-orange;
+        .ingredients-panel {
+          margin-left: 10px;
+          padding: 10px 10px 10px 0;
+          border-bottom: 1px solid $border-color;
+
+          @include flex-container;
+          .image-container {
+            @include flex(none);
+            width: 25%;
+            img {
+              width: 100%;
             }
           }
 
-          .texture {
-            font-size: 12px;
-            color: $theme-light-gray;
-          }
-
-          .relate-dishes-container {
-            margin-top: 5px;
-            font-size: 12px;
-            color: $theme-gray;
-            line-height: 18px;
-            min-height: 36px;
-          }
-
-          .sales-volume-container {
-            color: $theme-light-gray;
-            font-size: 12px;
-            margin-top: 5px;
-          }
-
-          .price-container {
-            margin-top: 5px;
-            .price, .weight {
-              display: inline-block;
-              vertical-align: bottom;
-            }
-
-            .price {
+          .ingredient-info-container {
+            @include flex(1);
+            padding-left: 10px;
+            position: relative;
+            .name-container {
               font-size: 16px;
-              color: $theme-orange;
-              &.unsellable {
+            }
+
+            .tag-container {
+              .tag {
+                display: inline-block;
+                vertical-align: middle;
+                padding: 0 2px;
+                margin-right: 10px;
+                border-radius: 10px;
+                line-height: 13px;
                 font-size: 12px;
+                color: #E17C15;
+                border: 1px solid $theme-orange;
               }
             }
 
-            .weight {
-              margin-left: 5px;
+            .texture {
               font-size: 12px;
               color: $theme-light-gray;
             }
-          }
 
-          .operation-container {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            line-height: 1;
-
-            .decrease, .increase, .count {
-              display: inline-block;
-              vertical-align: middle;
-            }
-
-            .count {
-              margin: 0 8px;
-              font-size: 14px;
-            }
-
-            .decrease, .increase {
-              width: 22px;
-              height: 22px;
-              border-radius: 50%;
-              text-align: center;
+            .relate-dishes-container {
+              margin-top: 5px;
+              font-size: 12px;
+              color: $theme-gray;
               line-height: 18px;
+              min-height: 36px;
+            }
 
-              &.decrease {
-                color: $theme-green;
-                border: 1px solid $theme-green;
+            .sales-volume-container {
+              color: $theme-light-gray;
+              font-size: 12px;
+              margin-top: 5px;
+            }
+
+            .price-container {
+              margin-top: 5px;
+              .price, .weight {
+                display: inline-block;
+                vertical-align: bottom;
               }
 
-              &.increase {
-                color: white;
-                background-color: $theme-green;
-                &.disabled {
+              .price {
+                font-size: 16px;
+                color: $theme-orange;
+                &.unsellable {
+                  font-size: 12px;
+                }
+              }
+
+              .weight {
+                margin-left: 5px;
+                font-size: 12px;
+                color: $theme-light-gray;
+              }
+            }
+
+            .operation-container {
+              position: absolute;
+              right: 0;
+              bottom: 0;
+              line-height: 1;
+
+              .decrease, .increase, .count {
+                display: inline-block;
+                vertical-align: middle;
+              }
+
+              .count {
+                margin: 0 8px;
+                font-size: 14px;
+              }
+
+              .decrease, .increase {
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 18px;
+
+                &.decrease {
+                  color: $theme-green;
+                  border: 1px solid $theme-green;
+                }
+
+                &.increase {
+                  color: white;
                   background-color: $theme-green;
+                  &.disabled {
+                    background-color: $theme-green;
+                  }
                 }
               }
             }

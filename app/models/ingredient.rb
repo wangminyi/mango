@@ -22,7 +22,8 @@ class Ingredient < ApplicationRecord
       order_limit: self.order_limit, # 上限
       limit_count: self.limit_count, # 起卖
       description: parsed_description,
-      sales_volume: self.sales_volume || 0
+      sales_volume: self.sales_volume || 0,
+      secondary_tag: self.secondary_tag,
     }
   end
 

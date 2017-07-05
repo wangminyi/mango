@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170701031605) do
+ActiveRecord::Schema.define(version: 20170704093119) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -82,17 +82,18 @@ ActiveRecord::Schema.define(version: 20170701031605) do
     t.string   "alias"
     t.string   "image"
     t.integer  "price"
-    t.text     "description",  limit: 65535
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.text     "description",   limit: 65535
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.string   "tags"
     t.string   "texture"
     t.integer  "category_id"
     t.integer  "order_limit"
     t.string   "unit_text"
     t.integer  "limit_count"
-    t.integer  "sales_volume",               default: 0
-    t.integer  "priority",                   default: 0
+    t.integer  "sales_volume",                default: 0
+    t.integer  "priority",                    default: 0
+    t.string   "secondary_tag"
     t.index ["alias"], name: "index_ingredients_on_alias", using: :btree
     t.index ["category_id"], name: "index_ingredients_on_category_id", using: :btree
     t.index ["name"], name: "index_ingredients_on_name", using: :btree

@@ -45,33 +45,40 @@ template#shop-template
                   | {{ category_count(category) }}
                 | {{ category.name }}
             .ingredients-container
-              .ingredients-panel v-for="item in selected_items" v-bind:key="item.id"
-                .image-container
-                  img v-bind:src="item.image" v-on:click="show_item_detail(item)"
-                .ingredient-info-container
-                  .name-container
-                    | {{ item.name }}
-                  .tag-container
-                    .tag v-for="tag in item.tags"
-                      | {{ tag }}
-                  .texture v-if="item.texture"
-                    | {{item.texture}}
-                  .relate-dishes-container
-                    | {{ item.label }}
-                  .sales-volume-container v-if="item.sales_volume > 0"
-                    | {{ item.sales_volume | sales_volume_text }}
-                  .price-container
-                    .price
-                      | {{ item_price(item) | price_text }}
-                    .weight
-                      | {{ item.unit_text }}
-                  .operation-container
-                    .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
-                      | -
-                    .count v-show="item.count > 0"
-                      | {{ item.count }}
-                    .increase v-on:click="increase_item(item)"
-                      | +
+              .secondary-tag-container v-if="secondary_tags.length > 1"
+                .secondary-tag v-for="tag in secondary_tags"
+                  | {{ tag }}
+              .ingredients-list-container v-bind:class="{'padding-top': secondary_tags.length > 1}"
+                template v-for="(items, tag) in items_for_render"
+                  .secondary-tag-header v-if="secondary_tags.length > 1"
+                    | {{ tag }}
+                  .ingredients-panel v-for="item in items" v-bind:key="item.id"
+                    .image-container
+                      img v-bind:src="item.image" v-on:click="show_item_detail(item)"
+                    .ingredient-info-container
+                      .name-container
+                        | {{ item.name }}
+                      .tag-container
+                        .tag v-for="tag in item.tags"
+                          | {{ tag }}
+                      .texture v-if="item.texture"
+                        | {{item.texture}}
+                      .relate-dishes-container
+                        | {{ item.label }}
+                      .sales-volume-container v-if="item.sales_volume > 0"
+                        | {{ item.sales_volume | sales_volume_text }}
+                      .price-container
+                        .price
+                          | {{ item_price(item) | price_text }}
+                        .weight
+                          | {{ item.unit_text }}
+                      .operation-container
+                        .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
+                          | -
+                        .count v-show="item.count > 0"
+                          | {{ item.count }}
+                        .increase v-on:click="increase_item(item)"
+                          | +
 
         .shopping-info-container.page-footer
           .shopping-cart-empty v-if="total_count === 0"

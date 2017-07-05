@@ -11,9 +11,11 @@ class ShopController < ApplicationController
 
     # 普通食材
     Category.order(updated_at: :desc).each do |category|
+      visible_ingredients = category.ingredients.where.not(price: nil).preload(:dishes).order(priority: :desc, id: :asc).map(&:as_json)
       base_info = {
         name: category.name,
-        items: category.ingredients.where.not(price: nil).preload(:dishes).order(priority: :desc).map(&:as_json),
+        items: visible_ingredients,
+        with_secondary_tag: visible_ingredients.any?{|vi| vi[:secondary_tag].present?},
       }
 
       categories.push(base_info)
