@@ -214,6 +214,29 @@ $(function(){
       change_category: function(category) {
         this.selected_category = category;
         $(".ingredients-list-container").scrollTop(0);
+        this.$nextTick(function(){
+          this.update_secondary_tag_header();
+        });
+      },
+      scroll_to_tag: function(tag) {
+        var $target = $(".secondary-tag-header[data-tag=" + tag + "]"),
+            $container = $(".ingredients-list-container");
+        $container.animate({scrollTop: $target[0].offsetTop});
+      },
+      update_secondary_tag_header: function() {
+        var $current_ele = undefined;
+        $(".secondary-tag-header").each(function(index, ele) {
+          var $ele = $(ele);
+          if ($ele.position().top <= 0) {
+            $current_ele = $ele;
+          } else {
+            return false;
+          }
+        });
+        if ($current_ele !== undefined) {
+          $(".secondary-tag").removeClass("selected");
+          $(".secondary-tag[data-tag=" + $current_ele.data("tag") + "]").addClass("selected");
+        }
       },
       // 展示详情
       show_item_detail: function(item) {

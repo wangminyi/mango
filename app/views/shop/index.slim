@@ -46,11 +46,11 @@ template#shop-template
                 | {{ category.name }}
             .ingredients-container
               .secondary-tag-container v-if="secondary_tags.length > 1"
-                .secondary-tag v-for="tag in secondary_tags"
+                .secondary-tag v-for="tag in secondary_tags" v-on:click="scroll_to_tag(tag)" v-bind:data-tag="tag"
                   | {{ tag }}
-              .ingredients-list-container v-bind:class="{'padding-top': secondary_tags.length > 1}"
+              .ingredients-list-container v-bind:class="{'padding-top': secondary_tags.length > 1}" v-on:scroll="update_secondary_tag_header"
                 template v-for="(items, tag) in items_for_render"
-                  .secondary-tag-header v-if="secondary_tags.length > 1"
+                  .secondary-tag-header v-if="secondary_tags.length > 1" v-bind:data-tag="tag"
                     | {{ tag }}
                   .ingredients-panel v-for="item in items" v-bind:key="item.id"
                     .image-container
