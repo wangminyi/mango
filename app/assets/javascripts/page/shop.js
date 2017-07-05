@@ -216,13 +216,16 @@ $(function(){
         this.selected_category = category;
         $(".ingredients-list-container").scrollTop(0);
         this.$nextTick(function(){
-          this.update_secondary_tag_header();
-        });
+          $(".secondary-tag-container").scrollTop(0);
+          $(".secondary-tag-container .secondary-tag:first").addClass("selected");
+        })
       },
+      // 标签点击事件
       header_tag_handler: function(tag) {
         this.header_scroll_to_tag(tag);
         this.list_scroll_to_tag(tag);
       },
+      // 垂直滚动事件
       list_scroll_handler: function() {
         if (this.tag_scrolling) {
           return;
@@ -240,13 +243,16 @@ $(function(){
       },
       // 水平滚动 + 选择状态
       header_scroll_to_tag: function(tag) {
-        var $tag = $(".secondary-tag[data-tag=" + tag + "]"),
-            $container = $(".secondary-tag-container");
-        $(".secondary-tag").removeClass("selected");
-        $tag.addClass("selected");
-        $container.stop().animate({scrollLeft: $tag[0].offsetLeft}, 300);
+        var current_tag = $(".secondary-tag.selected").data("tag");
+        if (current_tag !== tag) {
+          var $tag = $(".secondary-tag[data-tag=" + tag + "]"),
+              $container = $(".secondary-tag-container");
+          $(".secondary-tag").removeClass("selected");
+          $tag.addClass("selected");
+          $container.stop().animate({scrollLeft: $tag[0].offsetLeft}, 300);
+        }
       },
-      // 垂直滚动
+      // 垂直滚动到标签
       list_scroll_to_tag: function(tag) {
         var $target = $(".secondary-tag-header[data-tag=" + tag + "]"),
             $container = $(".ingredients-list-container"),
@@ -255,24 +261,6 @@ $(function(){
         $container.animate({scrollTop: $target[0].offsetTop}, 300, function(){
           that.tag_scrolling = false;
         });
-      },
-      update_secondary_tag_header: function() {
-        var $current_ele = undefined;
-        $(".secondary-tag-header").each(function(index, ele) {
-          var $ele = $(ele);
-          if ($ele.position().top <= 0) {
-            $current_ele = $ele;
-          } else {
-            return false;
-          }
-        });
-        if ($current_ele !== undefined) {
-          var $tag = $(".secondary-tag[data-tag=" + $current_ele.data("tag") + "]"),
-              $container = $(".secondary-tag-container");
-          $(".secondary-tag").removeClass("selected");
-          $tag.addClass("selected");
-          $container.stop().animate({scrollLeft: $tag[0].offsetLeft}, 300);
-        }
       },
       // 展示详情
       show_item_detail: function(item) {
