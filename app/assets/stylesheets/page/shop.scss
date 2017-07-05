@@ -376,10 +376,11 @@ $header-height: 50px;
       @include flex(1);
       height: 100%;
       position: relative;
-
+      overflow: hidden;
       .secondary-tag-container {
         background-color: #F8F8F8;
         overflow-x: auto;
+        white-space: nowrap;
         .secondary-tag {
           display: inline-block;
           line-height: 30px;

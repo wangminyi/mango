@@ -40,6 +40,7 @@ $(function(){
       // 购物页面
       selected_category: categories[0], // 选中的商品类别
       show_shopping_cart: false, // 购物页面是否显示购物车详情
+      tag_scrolling: false,
       first_order: gon.first_order, // 是否是第一次下单
       categories: categories, // 商品对象
       gifts: gon.gifts || [],
@@ -218,10 +219,42 @@ $(function(){
           this.update_secondary_tag_header();
         });
       },
-      scroll_to_tag: function(tag) {
+      header_tag_handler: function(tag) {
+        this.header_scroll_to_tag(tag);
+        this.list_scroll_to_tag(tag);
+      },
+      list_scroll_handler: function() {
+        if (this.tag_scrolling) {
+          return;
+        }
+        var tag = undefined;
+        $(".secondary-tag-header").each(function(index, ele) {
+          var $ele = $(ele);
+          if ($ele.position().top <= 0) {
+            tag = $ele.data("tag");
+          } else {
+            return false;
+          }
+        });
+        this.header_scroll_to_tag(tag);
+      },
+      // 水平滚动 + 选择状态
+      header_scroll_to_tag: function(tag) {
+        var $tag = $(".secondary-tag[data-tag=" + tag + "]"),
+            $container = $(".secondary-tag-container");
+        $(".secondary-tag").removeClass("selected");
+        $tag.addClass("selected");
+        $container.stop().animate({scrollLeft: $tag[0].offsetLeft}, 300);
+      },
+      // 垂直滚动
+      list_scroll_to_tag: function(tag) {
         var $target = $(".secondary-tag-header[data-tag=" + tag + "]"),
-            $container = $(".ingredients-list-container");
-        $container.animate({scrollTop: $target[0].offsetTop});
+            $container = $(".ingredients-list-container"),
+            that = this;
+        this.tag_scrolling = true;
+        $container.animate({scrollTop: $target[0].offsetTop}, 300, function(){
+          that.tag_scrolling = false;
+        });
       },
       update_secondary_tag_header: function() {
         var $current_ele = undefined;
@@ -234,8 +267,11 @@ $(function(){
           }
         });
         if ($current_ele !== undefined) {
+          var $tag = $(".secondary-tag[data-tag=" + $current_ele.data("tag") + "]"),
+              $container = $(".secondary-tag-container");
           $(".secondary-tag").removeClass("selected");
-          $(".secondary-tag[data-tag=" + $current_ele.data("tag") + "]").addClass("selected");
+          $tag.addClass("selected");
+          $container.stop().animate({scrollLeft: $tag[0].offsetLeft}, 300);
         }
       },
       // 展示详情
