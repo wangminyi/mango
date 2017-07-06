@@ -1,5 +1,6 @@
 class ShopController < ApplicationController
   before_action :require_login, only: [:index, :wholesale]
+
   def index
     categories = []
 
@@ -47,12 +48,21 @@ class ShopController < ApplicationController
   end
 
   def wholesale
-    entries = WholesaleEntry.with_status(:visible).preload(:visible_wholesale_instances, :wholesale_items).order(updated_at: :desc).map(&:as_json)
+    entries = WholesaleEntry.with_status(:visible)
+      .preload(:wholesale_items)
+      .order(updated_at: :desc)
+      .map(&:as_json)
 
     gon.entries = entries
     gon.addresses = current_user.addresses_json
 
     gon.settings = Settings.as_json
     gon.js_config_params = Wx.js_config_params(shop_wholesale_url)
+  end
+
+  def wholesale_instances
+    render json: {
+      instances: WholesaleEntry.find(params[:id]).visible_wholesale_instances.map(&:as_json)
+    }
   end
 end

@@ -17,11 +17,12 @@ $(function(){
       addresses = gon.addresses;
 
   test_data = {
-    selected_entry: entries[0],
-    show_entry_form: true,
-    selected_instance: entries[0].instances[0],
-    selected_item: entries[0].items[0],
-    buy_count: 1,
+    // selected_entry: entries[0],
+    // show_entry_form: true,
+    // selected_instance: entries[0].instances[0],
+    // selected_item: entries[0].items[0],
+    // buy_count: 1,
+    // current_page: "detail",
   }
 
   window.vue = new Vue({
@@ -29,7 +30,8 @@ $(function(){
     template: "#wholesale-template",
     data: $.extend({
       // 全局变量
-      current_page: "detail", // 当前所在页面 entry detail order address edit_address
+      current_page: "entry", // 当前所在页面 entry detail order address edit_address
+      pending: false, // loading
       // 弹出框
       confirm_params: {
         show: false,
@@ -47,9 +49,11 @@ $(function(){
 
       // 拼团详情
       show_entry_form: false,
-      selected_instance: undefined,
-      selected_item: undefined,
-      buy_count: 0,
+      instances: [],
+      selected_instance: undefined, // 选择的批次
+      selected_item: undefined, // 选购的产品
+      buy_count: 0, // 购买数量
+      show_share_hint: false,
 
       // 订单页面
         // 表单字段slot
@@ -125,12 +129,38 @@ $(function(){
       }
     },
     methods: {
+      pending_ajax: function(options) {
+        var that = this,
+            pending_timeout_id;
+
+        pending_timeout_id = setTimeout(function(){
+          that.pending = true
+        }, 500);
+
+        $.ajax(options).always(function(){
+          clearTimeout(that.pending_timeout_id);
+          that.pending = false;
+        });
+      },
       select_entry: function(entry) {
-        this.selected_entry = entry;
-        this.selected_instance = entry.instances[0];
-        this.selected_item = entry.items[0];
-        this.buy_count = 0;
-        this.forward_to("detail");
+        var that = this;
+        this.pending_timeout_id = setTimeout(function(){
+          that.pending = true
+        }, 500);
+
+        $.get("wholesale_instances", {
+          id: entry.id,
+        }).done(function(data){
+          that.selected_entry = entry;
+          that.instances = data.instances;
+          that.selected_instance = data.instances[0];
+          that.selected_item = entry.items[0];
+          that.buy_count = 0;
+          that.forward_to("detail");
+        }).always(function(){
+          clearTimeout(that.pending_timeout_id);
+          that.pending = false;
+        });
       },
       select_item: function(item) {
         this.selected_item = item;

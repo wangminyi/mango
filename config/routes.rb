@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   namespace :shop do
     get :index
     get :wholesale
+    get :wholesale_instances
   end
 
   namespace :addresses do

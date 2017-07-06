@@ -3,6 +3,11 @@ class WholesaleEntry < ApplicationRecord
 
   serialize :detail_images, JSON
 
+  enumerize :type, in: [
+    :platform, # 平台定期开团
+    :user, # 用户开团
+  ], scope: true
+
   enumerize :status, in: [
     :visible,
     :invisible,
@@ -43,18 +48,20 @@ class WholesaleEntry < ApplicationRecord
 
   def as_json
     {
+      id: self.id,
       name: self.name,
       alias: self.alias || self.name,
+      type: self.type,
       cover_image: self.cover_image_url,
       detail_images: self.detail_images_url,
       summary: self.summary,
       detail: self.detail,
-      tips: self.tips.gsub("\n", "<br/>"),
+      tips: self.tips,
       min_count: self.min_count,
       min_price: self.min_price,
       max_price: self.max_price,
+      original_price: self.type.user? ? self.wholesale_items.first&.original_price : nil,
       unit_text: "/" + (self.unit_text || ""),
-      instances: self.wholesale_instances.map(&:as_json),
       items: self.wholesale_items.map(&:as_json),
     }
   end

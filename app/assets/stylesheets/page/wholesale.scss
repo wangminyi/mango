@@ -103,41 +103,11 @@ $footer-height: 50px;
     }
   }
 
-  &.item-image-modal {
+  &.pending-block {
+    width: 100%;
     text-align: center;
-    .modal-panel-container {
-      width: 100%;
-      max-width: 300px;
-      .rich-description-container {
-        height: 500px;
-        background-color: white;
-        overflow: auto;
-        padding: 20px;
-        .description-title {
-          width: 220px;
-          line-height: 34px;
-          font-size: 16px;
-          color: white;
-          background-color: #48CFAE;
-          text-align: center;
-          margin: auto;
-          border-radius: 8px;
-        }
-
-        .description-list {
-          margin-top: 15px;
-          &.plain-text {
-            color: $theme-black;
-            font-size: 14px;
-            text-align: left;
-          }
-        }
-      }
-
-      img {
-        width: 100%;
-      }
-    }
+    font-size: 24px;
+    color: white;
   }
 }
 
@@ -335,7 +305,7 @@ $footer-height: 50px;
       }
 
       .price-container {
-        .price, .weight {
+        .price, .weight, .original-price {
           display: inline-block;
           vertical-align: bottom;
         }
@@ -347,6 +317,13 @@ $footer-height: 50px;
 
         .weight {
           color: $theme-black;
+        }
+
+        .original-price {
+          color: $theme-light-gray;
+          font-size: 12px;
+          text-decoration: line-through;
+          margin-left: 10px;
         }
       }
 
@@ -373,15 +350,13 @@ $footer-height: 50px;
   position: relative;
 
   .shop-page-header {
-    background-color: $theme-green;
+    background-color: $theme-black;
     color: white;
   }
 
   .ivu-carousel-item {
-    text-align: center;
     .jumbotron-container {
-      height: 100%;
-      margin: auto;
+      width: 100%;
     }
   }
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170704093119) do
+ActiveRecord::Schema.define(version: 20170705081744) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -175,6 +175,7 @@ ActiveRecord::Schema.define(version: 20170704093119) do
   create_table "wholesale_entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
     t.string   "alias"
+    t.string   "type"
     t.string   "status"
     t.string   "cover_image"
     t.text     "detail_images", limit: 65535
@@ -191,6 +192,8 @@ ActiveRecord::Schema.define(version: 20170704093119) do
   create_table "wholesale_instances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "wholesale_entry_id"
     t.string   "status"
+    t.string   "type"
+    t.integer  "user_id"
     t.string   "name"
     t.integer  "min_count"
     t.integer  "current_count"
@@ -200,6 +203,7 @@ ActiveRecord::Schema.define(version: 20170704093119) do
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.index ["close_at"], name: "index_wholesale_instances_on_close_at", using: :btree
+    t.index ["user_id"], name: "index_wholesale_instances_on_user_id", using: :btree
     t.index ["wholesale_entry_id"], name: "index_wholesale_instances_on_wholesale_entry_id", using: :btree
   end
 
@@ -209,6 +213,7 @@ ActiveRecord::Schema.define(version: 20170704093119) do
     t.string   "alias"
     t.string   "image"
     t.integer  "price"
+    t.integer  "original_price"
     t.string   "unit_text"
     t.text     "description",        limit: 65535
     t.integer  "sales_volume"
