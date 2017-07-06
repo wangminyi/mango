@@ -9,7 +9,7 @@ class Wx
         secret = ENV["wx_secret"]
         res = JSON.parse(RestClient.get("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{id}&secret=#{secret}"))
         token_redis.value = res["access_token"]
-        token_redis.expire res["expires_in"].seconds
+        token_redis.expire (res["expires_in"] - 60).seconds
       end
 
       token_redis.value
