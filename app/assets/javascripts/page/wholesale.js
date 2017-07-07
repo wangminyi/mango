@@ -52,7 +52,7 @@ $(function(){
       instances: [],
       selected_instance: undefined, // 选择的批次
       selected_item: undefined, // 选购的产品
-      buy_count: 0, // 购买数量
+      buy_count: 1, // 购买数量
       show_share_hint: false,
 
       // 订单页面
@@ -155,7 +155,7 @@ $(function(){
           that.instances = data.instances;
           that.selected_instance = data.instances[0];
           that.selected_item = entry.items[0];
-          that.buy_count = 0;
+          that.buy_count = 1;
           that.forward_to("detail");
         }).always(function(){
           clearTimeout(that.pending_timeout_id);
