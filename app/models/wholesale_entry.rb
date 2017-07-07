@@ -3,7 +3,7 @@ class WholesaleEntry < ApplicationRecord
 
   serialize :detail_images, JSON
 
-  enumerize :type, in: [
+  enumerize :mode, in: [
     :platform, # 平台定期开团
     :user, # 用户开团
   ], scope: true
@@ -51,7 +51,7 @@ class WholesaleEntry < ApplicationRecord
       id: self.id,
       name: self.name,
       alias: self.alias || self.name,
-      type: self.type,
+      mode: self.mode,
       cover_image: self.cover_image_url,
       detail_images: self.detail_images_url,
       summary: self.summary,
@@ -60,7 +60,7 @@ class WholesaleEntry < ApplicationRecord
       min_count: self.min_count,
       min_price: self.min_price,
       max_price: self.max_price,
-      original_price: self.type.user? ? self.wholesale_items.first&.original_price : nil,
+      original_price: self.mode.user? ? self.wholesale_items.first&.original_price : nil,
       unit_text: "/" + (self.unit_text || ""),
       items: self.wholesale_items.map(&:as_json),
     }

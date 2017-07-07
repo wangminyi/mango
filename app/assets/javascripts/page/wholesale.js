@@ -391,15 +391,14 @@ $(function(){
                   count: item.count,
                 };
               }));
-              $.post("/orders", {
+              $.post("/wholesale_orders", {
                 order: {
-                  item_list: item_list,
-                  gifts: JSON.stringify(this.gift_list),
+                  wholesale_instance_id: this.selected_instance.id,
+                  wholesale_item_id: this.selected_item.id,
+                  item_count: this.buy_count,
                   item_price: this.total_price, // 商品总价
                   total_price: this.order_price, // 订单总价 double check
-                  distribute_at: this.selected_date_time_value,
-                  distribution_price: this.distribute_price,
-                  preferential_price: this.coupon_enable ? this.preferential_price : 0,
+                  preferential_price: 0,
                   receiver_name: addr.name,
                   receiver_phone: addr.phone,
                   receiver_garden: addr.garden,

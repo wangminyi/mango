@@ -74,16 +74,16 @@ template#wholesale-template
                 .unit-text
                   | {{ selected_entry.unit_text }}
 
-          .entry-instances-info.page-panel v-if="selected_entry.type === 'platform'"
-            .entry-instance.panel-block v-for="instance in instances"
+          .entry-instances-info.page-panel v-if="selected_entry.mode === 'platform'"
+            .entry-platform-instance.panel-block v-for="instance in instances"
               .name
                 | {{ instance.name }}
               .count-info v-if="instance.min_count > instance.current_count"
                 | 还差{{ instance.min_count - instance.current_count }}份即可成团
               .count-info v-else=true
-                | 已成团
+                | 已成团，建议参加此团
           .entry-instances-info.page-panel v-else=true
-            .
+            .entry-user-instance.panel-block v-for="instance in instances"
 
           .tips.page-panel
             .panel-block

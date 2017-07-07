@@ -3,6 +3,7 @@ class WholesaleItem < ApplicationRecord
 
   def as_json
     {
+      id: self.id,
       name: self.alias || self.name,
       image: ActionController::Base.helpers.asset_url(self.image),
       price: self.price,

@@ -29,6 +29,55 @@ class WholesaleOrder < ApplicationRecord
   before_create :generate_item_details
   after_create :update_sales_volume
 
+  ## validates
+  # validate :check_stock
+  validate :check_validate, on: [:create]
+  validates_presence_of :receiver_name, :receiver_address, :receiver_phone
+
+  def check_validate
+    total = self.wholesale_item.price * self.item_count
+
+    if total != self.total_price.to_i
+      self.errors.add :total_price, "订单金额不符"
+    end
+
+    if WholesaleOrder.exists?(wholesale_instance_id: self.wholesale_instance_id, user_id: self.user_id)
+      self.errors.add :user_exist, "您已参加过该次拼团"
+    end
+
+    self.total_price = 1 if STAFF_IDS.include?(user.id)
+  end
+
+  def apply_prepay ip: "127.0.0.1"
+    wx_params = {
+      body: '元也拼团',
+      out_trade_no: self.order_no,
+      total_fee: self.total_price,
+      spbill_create_ip: ip,
+      notify_url: 'http://www.yylife.shop/wx/notify',
+      trade_type: 'JSAPI',
+      openid: self.user.open_id,
+    }
+
+    try_times = 0
+    begin
+      response = WxPay::Service.invoke_unifiedorder(wx_params)
+      origin_data = WxPay::Service.generate_js_pay_req({
+        prepayid: response["prepay_id"],
+        noncestr: response["nonce_str"],
+      })
+      origin_data[:timestamp] = origin_data.delete(:timeStamp)
+      origin_data
+    rescue
+      if try_times < 3
+        try_times += 1
+        retry
+      else
+        return nil
+      end
+    end
+  end
+
   def paid!
     super
     # 根据拼团类型判断

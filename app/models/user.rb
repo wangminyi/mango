@@ -13,6 +13,7 @@ class User < ApplicationRecord
   ], scope: true, default: :user
 
   has_many :orders
+  has_many :wholesale_orders
   has_many :addresses
   has_many :history_logs
 

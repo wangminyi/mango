@@ -5,8 +5,6 @@ class Order < ApplicationRecord
 
   stores_emoji_characters :remark
 
-  STAFF_IDS = [2, 3]
-
   serialize :item_list, JSON
   serialize :item_details, JSON
   serialize :gifts, JSON

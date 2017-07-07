@@ -1,7 +1,7 @@
 class WholesaleInstance < ApplicationRecord
   extend Enumerize
 
-  enumerize :type, in: [
+  enumerize :mode, in: [
     :platform,
     :user,
   ], scope: true
@@ -20,7 +20,7 @@ class WholesaleInstance < ApplicationRecord
       id: self.id,
       name: self.name,
       short_name: self.name.split(/[(（]/)[0],
-      type: self.type,
+      mode: self.mode,
       min_count: self.min_count,
       current_count: self.current_count,
       distribute_date_from: distribute_date_from,

@@ -391,7 +391,7 @@ $footer-height: 50px;
   }
 
   .entry-instances-info {
-    .entry-instance {
+    .entry-platform-instance {
       @include flex-container;
       .name {
         font-size: 14px;
@@ -404,6 +404,10 @@ $footer-height: 50px;
         color: $theme-light-gray;
         @include flex(none);
       }
+    }
+
+    .entry-user-instance {
+
     }
   }
 

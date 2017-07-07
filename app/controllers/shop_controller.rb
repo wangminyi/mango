@@ -61,6 +61,13 @@ class ShopController < ApplicationController
   end
 
   def wholesale_instances
+    entry = WholesaleEntry.find(params[:id])
+    instances = if entry.mode.platform?
+      entry.visible_wholesale_instances
+    else
+      entry.visible_wholesale_instances.preload(wholesale_order: :user)
+    end
+
     render json: {
       instances: WholesaleEntry.find(params[:id]).visible_wholesale_instances.map(&:as_json)
     }

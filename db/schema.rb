@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170705081744) do
+ActiveRecord::Schema.define(version: 20170707030553) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -175,7 +175,7 @@ ActiveRecord::Schema.define(version: 20170705081744) do
   create_table "wholesale_entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
     t.string   "alias"
-    t.string   "type"
+    t.string   "mode"
     t.string   "status"
     t.string   "cover_image"
     t.text     "detail_images", limit: 65535
@@ -192,7 +192,7 @@ ActiveRecord::Schema.define(version: 20170705081744) do
   create_table "wholesale_instances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "wholesale_entry_id"
     t.string   "status"
-    t.string   "type"
+    t.string   "mode"
     t.integer  "user_id"
     t.string   "name"
     t.integer  "min_count"
@@ -216,9 +216,9 @@ ActiveRecord::Schema.define(version: 20170705081744) do
     t.integer  "original_price"
     t.string   "unit_text"
     t.text     "description",        limit: 65535
-    t.integer  "sales_volume"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.integer  "sales_volume",                     default: 0
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
     t.index ["wholesale_entry_id"], name: "index_wholesale_items_on_wholesale_entry_id", using: :btree
   end
 
@@ -230,7 +230,7 @@ ActiveRecord::Schema.define(version: 20170705081744) do
     t.integer  "wholesale_instance_id"
     t.integer  "wholesale_item_id"
     t.integer  "item_count"
-    t.text     "item_detail",           limit: 65535
+    t.text     "item_details",          limit: 65535
     t.integer  "item_price"
     t.integer  "preferential_price"
     t.integer  "total_price"
