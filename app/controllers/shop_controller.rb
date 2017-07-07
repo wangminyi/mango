@@ -48,7 +48,7 @@ class ShopController < ApplicationController
   end
 
   def wholesale
-    if !Rails.env.production? || Order::STAFF_IDS.include? (current_user.id)
+    if !Rails.env.production? || Order::STAFF_IDS.include?(current_user.id)
       entries = WholesaleEntry.with_status(:visible)
         .preload(:wholesale_items)
         .order(updated_at: :desc)

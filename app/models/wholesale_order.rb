@@ -79,14 +79,12 @@ class WholesaleOrder < ApplicationRecord
   end
 
   def paid!
-    super
-    # 根据拼团类型判断
+    self.update(pay_status: :paid)
     self.wholesale_instance.update(current_count: self.wholesale_instance.current_count + self.item_count)
   end
 
   def abandon!
-    super
-    # 根据拼团类型判断
+    self.update(status: :abandon)
     self.wholesale_instance.update(current_count: self.wholesale_instance.current_count - self.item_count)
   end
 
