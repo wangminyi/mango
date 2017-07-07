@@ -32,7 +32,7 @@ class WholesaleOrder < ApplicationRecord
   ## validates
   # validate :check_stock
   validate :check_validate, on: [:create]
-  validates_presence_of :receiver_name, :receiver_address, :receiver_phone
+  validates_presence_of :receiver_name, :receiver_address, :receiver_phone, :distribute_at
 
   def check_validate
     total = self.wholesale_item.price * self.item_count
@@ -41,7 +41,7 @@ class WholesaleOrder < ApplicationRecord
       self.errors.add :total_price, "订单金额不符"
     end
 
-    if WholesaleOrder.exists?(wholesale_instance_id: self.wholesale_instance_id, user_id: self.user_id)
+    if self.wholesale_instance.mode.user? && WholesaleOrder.exists?(wholesale_instance_id: self.wholesale_instance_id, user_id: self.user_id)
       self.errors.add :user_exist, "您已参加过该次拼团"
     end
 

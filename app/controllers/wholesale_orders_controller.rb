@@ -19,7 +19,7 @@ class WholesaleOrdersController < ApplicationController
       if js_pay_req.present?
         render json: {
           pay_params: js_pay_req,
-          order_url: order_url(order),
+          order_url: wholesale_order_url(order),
         }
       else
         render json: {error: "微信支付失败，请稍后再试"}, status: 501
@@ -52,6 +52,7 @@ class WholesaleOrdersController < ApplicationController
         :item_price,
         :total_price,
         :preferential_price,
+        :distribute_at,
         :receiver_name,
         :receiver_garden,
         :receiver_phone,

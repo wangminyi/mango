@@ -399,6 +399,7 @@ $(function(){
                   item_price: this.total_price, // 商品总价
                   total_price: this.order_price, // 订单总价 double check
                   preferential_price: 0,
+                  distribute_at: this.selected_date_time_value,
                   receiver_name: addr.name,
                   receiver_phone: addr.phone,
                   receiver_garden: addr.garden,
