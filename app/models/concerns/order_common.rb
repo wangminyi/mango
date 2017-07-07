@@ -2,7 +2,7 @@ module OrderCommon
   extend ActiveSupport::Concern
 
   included do
-    STAFF_IDS = [2, 3]
+    STAFF_IDS = [2, 3, 4]
 
     def paid!
       self.update(pay_status: :paid)
