@@ -1,0 +1,21 @@
+- content_for :page_css
+  = stylesheet_link_tag 'page/order_index'
+
+.orders-container
+  - @orders.each do |order|
+    = link_to wholesale_order_path(order)
+      .order-box
+        .order-block.clearfix
+          span.pull-left
+            = order.created_at.strftime("%F %T")
+          span.pull-right
+            = "共#{order.item_count}件"
+        .order-block.scrollable
+          - order.item_details.each do |item|
+            .item-box
+              = image_tag item["image"]
+              .hint
+                = "x#{item["count"]}"
+        .order-block.clearfix
+          span.pull-right
+            = "总价：￥#{order.total_price_yuan}"

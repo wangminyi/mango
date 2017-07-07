@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   namespace :shop do
     get :index
     get :wholesale
+    get :wholesale_instances
   end
 
   namespace :addresses do
@@ -28,6 +29,7 @@ Rails.application.routes.draw do
   end
 
   resources :orders, only: [:index, :show, :create]
+  resources :wholesale_orders, only: [:index, :show, :create]
 
   namespace :admin do
     root "orders#index"

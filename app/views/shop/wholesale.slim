@@ -19,6 +19,18 @@ template#wholesale-template
           .confirm-btn v-on:click="confirm_ok"
             | 确定
 
+    .modal-panel.pending-block v-show="pending"
+      .modal-panel-container
+        i.fa.fa-spinner.fa-spin
+
+    .modal-panel.wechat-share v-show="show_share_hint" v-on:click="show_share_hint = false"
+      .share-arrow-container
+        = image_tag "wholesale/share_arrow.png"
+        .text-container
+          | 点击右上角“…”，将此拼团分享
+          br
+          | 给你的微信好友或朋友圈
+
     transition v-bind:name="slide_direction"
       .entries-page.page-container v-if="current_page === 'entry'" key="entry_page"
         .entry-panel v-for="entry in entries"
@@ -27,22 +39,24 @@ template#wholesale-template
           .entry-info-container
             .name-container
               | {{ entry.alias }}
+            .hint-container
+              | {{ entry.summary }}
             .price-container
               .price
                 | {{ entry_price(entry) | price_text }}
               .weight
                 | {{ entry.unit_text }}
+              .original-price v-if="entry.original_price"
+                | 原价{{ entry.original_pirce | price_text }}{{ entry.unit_text }}
             .select-btn v-on:click="select_entry(entry)"
               | 立即参加
-            .hint-container
-              | {{ entry.summary }}
 
       .detail-page.page-container v-else-if="current_page === 'detail'" key="detail_page"
         .shop-page-header
           i.fa.fa-chevron-left v-on:click="back_to('entry')"
           | {{ selected_entry.name }}
         .page-body-wrapper
-          Carousel v-bind:height="200"
+          Carousel
             Carousel-item v-for="img in selected_entry.detail_images" v-bind:key="img"
               img.jumbotron-container v-bind:src="img"
 
@@ -60,19 +74,22 @@ template#wholesale-template
                 .unit-text
                   | {{ selected_entry.unit_text }}
 
-          .entry-instances-info.page-panel
-            .entry-instance.panel-block v-for="instance in selected_entry.instances"
+          .entry-instances-info.page-panel v-if="selected_entry.mode === 'platform'"
+            .entry-platform-instance.panel-block v-for="instance in instances"
               .name
                 | {{ instance.name }}
               .count-info v-if="instance.min_count > instance.current_count"
                 | 还差{{ instance.min_count - instance.current_count }}份即可成团
               .count-info v-else=true
-                | 已成团
+                | 已成团，建议参加此团
+          .entry-instances-info.page-panel v-else=true
+            .entry-user-instance.panel-block v-for="instance in instances"
 
           .tips.page-panel
             .panel-block
               | 拼团小贴士
-            .panel-block v-html="selected_entry.tips"
+            .panel-block
+              | {{ selected_entry.tips}}
 
         .page-footer v-on:click="show_entry_form = true"
           | 立即订购参团
@@ -92,7 +109,7 @@ template#wholesale-template
                 .input-label
                   | 选择团：
                 .input-wrapper
-                  .input-button v-for="instance in selected_entry.instances" v-on:click="selected_instance = instance" v-bind:class="{selected: selected_instance === instance}"
+                  .input-button v-for="instance in instances" v-on:click="selected_instance = instance" v-bind:class="{selected: selected_instance === instance}"
                     .name
                       | {{ instance.short_name }}
                     .count.reached v-if="instance.current_count < instance.min_count"

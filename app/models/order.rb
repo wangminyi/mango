@@ -5,8 +5,6 @@ class Order < ApplicationRecord
 
   stores_emoji_characters :remark
 
-  STAFF_IDS = [2, 3]
-
   serialize :item_list, JSON
   serialize :item_details, JSON
   serialize :gifts, JSON
@@ -37,7 +35,7 @@ class Order < ApplicationRecord
   ## validates
   # validate :check_stock
   validate :check_price, on: [:create]
-  validates_presence_of :receiver_name, :receiver_address, :receiver_phone
+  validates_presence_of :receiver_name, :receiver_address, :receiver_phone, :distribute_at
 
   def check_price
     total = self.ingredients_hash.map do |i, count|

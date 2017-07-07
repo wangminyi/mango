@@ -4,6 +4,20 @@ zh-CN:
       pay_status:
         paid: 已支付
         unpaid: 未支付
+        refunded: 已退款
+      status:
+        submitted:  待处理
+        arranging: 正在配单
+        arranged:  等待发货
+        distributing: 正在送货
+        finished: 完成订单
+        abandon: 废弃
+
+    wholesale_order:
+      pay_status:
+        paid: 已支付
+        unpaid: 未支付
+        refunded: 已退款
       status:
         submitted:  待处理
         arranging: 正在配单
