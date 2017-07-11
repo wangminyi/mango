@@ -6,6 +6,7 @@ module OrderCommon
 
     def paid!
       self.update(pay_status: :paid)
+      SlackNotifier.notify_order(self)
     end
 
     def can_abandon?
