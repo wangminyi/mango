@@ -248,7 +248,13 @@ $(function(){
           );
         }
 
-        return morning_slot.concat(afternoon_slot);
+        if (this.selected_instance.distribute_scope === "morning") {
+          return morning_slot;
+        } else if (this.selected_instance.distribute_scope === "afternoon") {
+          return afternoon_slot;
+        } else {
+          return morning_slot.concat(afternoon_slot);
+        }
       },
       // 是否选择了某日期
       date_selected: function(date) {

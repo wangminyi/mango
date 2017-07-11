@@ -11,6 +11,12 @@ class WholesaleInstance < ApplicationRecord
     :invisible,
   ], scope: true, default: :visible
 
+  enumerize :distribute_scope, in: [
+    :morning,
+    :afternoon,
+    :all_day,
+  ], scope: true, default: :all_day
+
   belongs_to :wholesale_entry
   belongs_to :user
   has_many :wholesale_orders
@@ -23,6 +29,7 @@ class WholesaleInstance < ApplicationRecord
       mode: self.mode,
       min_count: self.min_count,
       current_count: self.current_count,
+      distribute_scope: self.distribute_scope,
       distribute_date_from: distribute_date_from,
       distribute_date_to: distribute_date_to,
     }
