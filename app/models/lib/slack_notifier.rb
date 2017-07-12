@@ -14,7 +14,7 @@ class SlackNotifier
 
   def self.notify_order order
     retry_time = 0
-    @notifier ||= Slack::Notifier.new "https://hooks.slack.com/services/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", username: "来订单喽！", channel: "order"
+    @order_notifier ||= Slack::Notifier.new "https://hooks.slack.com/services/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", username: "来订单喽！", channel: "order"
     begin
       content = [
         "ID: #{order.id}",
