@@ -21,6 +21,7 @@ class SlackNotifier
         "金额: #{order.total_price_yuan}",
         "姓名: #{order.receiver_name}",
         "地址: #{order.receiver_address}",
+        "时间: #{order.distribute_at_text}",
         "电话：#{order.receiver_phone}",
         "备注：#{order.remark}",
       ].join("\n")
