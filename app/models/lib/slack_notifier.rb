@@ -24,7 +24,7 @@ class SlackNotifier
         "电话：#{order.receiver_phone}",
         "备注：#{order.remark}",
       ].join("\n")
-      @notifier.ping content unless Rails.env.development?
+      @order_notifier.ping content unless Rails.env.development?
     rescue
       if retry_time < 3
         retry_time += 1
