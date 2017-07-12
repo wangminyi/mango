@@ -5,8 +5,10 @@ module OrderCommon
     STAFF_IDS = [2, 3, 4]
 
     def paid!
-      self.update(pay_status: :paid)
-      SlackNotifier.notify_order(self)
+      if self.pay_status.unpaid?
+        self.update(pay_status: :paid)
+        SlackNotifier.notify_order(self)
+      end
     end
 
     def can_abandon?
