@@ -42,9 +42,11 @@ class WxController < ApplicationController
         action: :sign_in,
       )
       redirect_to stored_location_for(:user) || root_path
-    else
+    elsif omniauth[:extra][:raw_info][:errcode] == 40001
       SlackNotifier.notify(omniauth.to_json)
-      redirect_to 404
+      redirect_to stored_location_for(:user)
+    else
+      head 404
     end
   end
 
