@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170707030553) do
+ActiveRecord::Schema.define(version: 20170707095129) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -202,6 +202,7 @@ ActiveRecord::Schema.define(version: 20170707030553) do
     t.date     "distribute_date_to"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.string   "distribute_scope"
     t.index ["close_at"], name: "index_wholesale_instances_on_close_at", using: :btree
     t.index ["user_id"], name: "index_wholesale_instances_on_user_id", using: :btree
     t.index ["wholesale_entry_id"], name: "index_wholesale_instances_on_wholesale_entry_id", using: :btree

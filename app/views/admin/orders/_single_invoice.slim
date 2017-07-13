@@ -34,6 +34,12 @@
           .count
           .price = format_price_without_unit(order.distribution_price)
 
+      - order.gifts.each do |g|
+        .item
+          .name = g["name"]
+          .count = "x #{g["count"]}"
+          .price = "赠品"
+
   hr
 
   .total-price
