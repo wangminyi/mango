@@ -2,7 +2,7 @@ module OrderCommon
   extend ActiveSupport::Concern
 
   included do
-    STAFF_IDS = [2, 3, 4]
+    STAFF_IDS = [2, 3, 4, 5]
 
     def paid!
       if self.pay_status.unpaid?
