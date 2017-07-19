@@ -12,6 +12,7 @@ class Settings
               周浦御沁园
               周浦绿地梧桐苑
               周浦绿地景汇佳苑
+              康桥城中花园
             )
   class << self
     def as_json
