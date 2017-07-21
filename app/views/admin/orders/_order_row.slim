@@ -15,3 +15,4 @@ tr.list.print-hidden
     - if order.can_abandon?
       = link_to "废弃", abandon_admin_order_path(order), remote: true, method: :post, class: "abandon"
     = link_to "小票", invoice_admin_order_path(order), target: "_blank"
+    = link_to "修改", edit_admin_order_path(order), target: "_blank"

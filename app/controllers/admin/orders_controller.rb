@@ -1,6 +1,6 @@
 class Admin::OrdersController < Admin::BaseController
   before_action :require_admin
-  before_action :set_order, only: [:show, :update, :next_state, :abandon, :invoice]
+  before_action :set_order, only: [:show, :edit, :update, :next_state, :abandon, :invoice]
 
   def index
     @status = params[:status]
@@ -30,6 +30,9 @@ class Admin::OrdersController < Admin::BaseController
   end
 
   def show
+  end
+
+  def edit
   end
 
   def update
