@@ -49,7 +49,7 @@ class ShopController < ApplicationController
 
   def wholesale
     if !Rails.env.production? || Order::STAFF_IDS.include?(current_user.id)
-      entries = WholesaleEntry.with_status(:visible)
+      entries = WholesaleEntry.where(visible: true)
         .preload(:wholesale_items)
         .order(updated_at: :desc)
         .map(&:as_json)

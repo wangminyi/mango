@@ -46,5 +46,17 @@ Rails.application.routes.draw do
         get :bulk_export_csv
       end
     end
+
+    resources :wholesale_orders, only: [:index, :show] do
+      member do
+        post :next_state
+        post :abandon
+        get :invoice
+      end
+
+      collection do
+        get :bulk_export_csv
+      end
+    end
   end
 end

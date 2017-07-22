@@ -1,0 +1,18 @@
+tr.list
+  td.operation.select
+    = check_box_tag "order_#{order.id}", nil, false, {"data-id" => order.id}
+  td = order.id
+  td = "#{order.item_details[0]["name"]} * #{order.item_count}"
+  td = order.receiver_name
+  td = order.receiver_phone
+  td = order.receiver_address
+  td = order.created_at.strftime("%F %T")
+  td = order.distribute_at.strftime("%F %T")
+  td = format_price(order.item_price)
+  td = order.status_text
+  td.operation
+    - if order.can_push_state?
+      = link_to order.next_state_text, next_state_admin_wholesale_order_path(order), remote: true, method: :post, class: "next-state"
+    - if order.can_abandon?
+      = link_to "废弃", abandon_admin_wholesale_order_path(order), remote: true, method: :post, class: "abandon"
+    = link_to "小票", invoice_admin_wholesale_order_path(order), target: "_blank"
