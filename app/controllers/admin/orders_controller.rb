@@ -1,13 +1,13 @@
 class Admin::OrdersController < Admin::BaseController
   before_action :require_admin
-  before_action :set_order, only: [:show, :update, :next_state, :abandon, :invoice]
+  before_action :set_order, only: [:show, :edit, :update, :next_state, :abandon, :invoice]
 
   def index
     @status = params[:status]
     @q  = params[:query] || {}
     # receiver_garden distribute_at_date distribute_at_time
 
-    @orders = Order.all.with_pay_status(:paid).order(:created_at)
+    @orders = Order.all.with_pay_status(:paid).order(:distribute_at)
     if @status.present?
       @orders = @orders.with_status(@status)
       gon.status = @status
@@ -30,6 +30,9 @@ class Admin::OrdersController < Admin::BaseController
   end
 
   def show
+  end
+
+  def edit
   end
 
   def update

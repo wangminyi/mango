@@ -1,0 +1,23 @@
+.container
+  = form_for @order, url: admin_order_path(@order), remote: true do |f|
+    .form-group
+      = f.label "配送时间"
+      = f.datetime_field :distribute_at, class: "form-control"
+    = f.submit "更新", class: "btn btn-primary"
+
+scss:
+  form {
+    width: 300px;
+    button {
+      margin-left: 10px;
+    }
+  }
+
+javascript:
+  $(function(){
+    $("form").on("ajax:success", function(){
+      alert("更新成功");
+    }).on("ajax:error", function(){
+      alert("更新失败");
+    });
+  });

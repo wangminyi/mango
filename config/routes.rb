@@ -33,7 +33,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root "orders#index"
-    resources :orders, only: [:index, :show, :update] do
+    resources :orders, only: [:index, :show, :update, :edit] do
       member do
         post :next_state
         post :abandon
