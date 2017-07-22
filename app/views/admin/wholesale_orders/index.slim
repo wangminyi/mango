@@ -1,0 +1,95 @@
+- content_for :page_css
+  = stylesheet_link_tag    'admin/wholesale_order_index', media: "all"
+
+.admin-wholesale-order-container
+  /.filter-container.panel.panel-default
+    .panel-heading 筛选
+    .panel-body
+      = form_tag request.url, method: :get do ||
+        = hidden_field_tag :status, @status
+        .filter-wrapper
+          label 批次
+          = select "query", "receiver_garden", @instances.pluck(:id, :, include_blank: true, selected: @q[:receiver_garden]
+        .action-container
+          = submit_tag "筛选", class: "btn btn-primary"
+
+  table.table.table-hover.table-bordered.table-striped
+    thead.print-hidden
+      th.all
+        = check_box_tag "all"
+      th
+        | ID
+      th
+        | 商品
+      th
+        | 姓名
+      th
+        | 手机
+      th
+        | 地址
+      th
+        | 下单时间
+      th
+        | 配送时间
+      th
+        | 订单金额
+      th
+        | 订单状态
+      th
+        | 操作
+    tbody
+      - @orders.each do |order|
+        = render partial: "order_row", locals: {order: order}
+
+javascript:
+  $(function(){
+    var $evt_adapter = $(".admin-wholesale-order-container");
+
+    // 推进
+    $evt_adapter.on("ajax:before", ".next-state", function() {
+      return confirm("确定将该订单推进至下一状态？");
+    }).on("ajax:success", ".next-state", function(evt, data) {
+      $(this).parents("tr").remove();
+    })
+
+    // 废弃
+    $evt_adapter.on("ajax:before", ".abandon", function(){
+      return confirm("确定废弃该订单？");
+    }).on("ajax:success", ".abandon", function(evt, data) {
+      $(this).parents("tr").remove();
+    });
+
+    $("th.all input").on("change", function() {
+      $("td.select input").prop( "checked", $(this).is(":checked") );
+    });
+
+    $(".bulk-open").on("click", function() {
+      if ($("tr.detail.hidden").length > 0) {
+        $("tr.detail.hidden").removeClass("hidden");
+      } else {
+        $("tr.detail").addClass("hidden");
+      }
+    });
+
+    $(".bulk-export-csv").on("click", function(){
+      var ids = get_selected_ids();
+
+      if (ids.length === 0) {
+        alert("请至少选中一个订单");
+      } else {
+        window.open("/admin/wholesale_orders/bulk_export_csv?ids=" + ids.join(","))
+      }
+    });
+
+    $(".filter-container .clear").on("click", function() {
+      $(".filter-container .filter-wrapper").find("input, select").val("");
+    });
+
+    $("table").on("ajax:success", "form", function(){
+      alert("保存成功");
+    });
+
+    function get_selected_ids () {
+      return $.map($("td.operation.select input:checked"), function(ele){return $(ele).data("id")});
+    }
+  });

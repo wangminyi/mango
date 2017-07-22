@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170707095129) do
+ActiveRecord::Schema.define(version: 20170722084605) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -69,12 +69,14 @@ ActiveRecord::Schema.define(version: 20170707095129) do
     t.string   "action"
     t.integer  "user_id"
     t.integer  "order_id"
-    t.text     "details",    limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.text     "details",            limit: 65535
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "wholesale_order_id"
     t.index ["action"], name: "index_history_logs_on_action", using: :btree
     t.index ["order_id"], name: "index_history_logs_on_order_id", using: :btree
     t.index ["user_id"], name: "index_history_logs_on_user_id", using: :btree
+    t.index ["wholesale_order_id"], name: "index_history_logs_on_wholesale_order_id", using: :btree
   end
 
   create_table "ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -176,17 +178,16 @@ ActiveRecord::Schema.define(version: 20170707095129) do
     t.string   "name"
     t.string   "alias"
     t.string   "mode"
-    t.string   "status"
     t.string   "cover_image"
     t.text     "detail_images", limit: 65535
     t.text     "summary",       limit: 65535
     t.text     "detail",        limit: 65535
     t.text     "tips",          limit: 65535
     t.integer  "min_count"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.boolean  "vislble",                     default: true
     t.index ["name"], name: "index_wholesale_entries_on_name", using: :btree
-    t.index ["status"], name: "index_wholesale_entries_on_status", using: :btree
   end
 
   create_table "wholesale_instances", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -200,9 +201,10 @@ ActiveRecord::Schema.define(version: 20170707095129) do
     t.datetime "close_at"
     t.date     "distribute_date_from"
     t.date     "distribute_date_to"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.string   "distribute_scope"
+    t.boolean  "visible",              default: true
     t.index ["close_at"], name: "index_wholesale_instances_on_close_at", using: :btree
     t.index ["user_id"], name: "index_wholesale_instances_on_user_id", using: :btree
     t.index ["wholesale_entry_id"], name: "index_wholesale_instances_on_wholesale_entry_id", using: :btree

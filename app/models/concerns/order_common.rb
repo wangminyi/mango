@@ -1,9 +1,8 @@
 module OrderCommon
   extend ActiveSupport::Concern
+  STAFF_IDS = [2, 3, 4]
 
   included do
-    STAFF_IDS = [2, 3, 4]
-
     def paid!
       if self.pay_status.unpaid?
         self.update(pay_status: :paid)

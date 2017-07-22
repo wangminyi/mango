@@ -8,14 +8,8 @@ class WholesaleEntry < ApplicationRecord
     :user, # 用户开团
   ], scope: true
 
-  enumerize :status, in: [
-    :visible,
-    :invisible,
-    :deprecated,
-  ], scope: true, default: :visible
-
   has_many :wholesale_instances
-  has_many :visible_wholesale_instances, -> { with_status(:visible).where("close_at > ?", Time.now) }, class_name: "WholesaleInstance"
+  has_many :visible_wholesale_instances, -> { where(visible: true).where("close_at > ?", Time.now) }, class_name: "WholesaleInstance"
   has_many :wholesale_items
 
   def instance_template

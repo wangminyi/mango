@@ -7,9 +7,10 @@ class WholesaleInstance < ApplicationRecord
   ], scope: true
 
   enumerize :status, in: [
-    :visible,
-    :invisible,
-  ], scope: true, default: :visible
+    :ungrouped, # 不满足人数
+    :grouped,   # 满足人数
+    :distributed, # 已处理完毕
+  ], scope: true, default: :ungrouped
 
   enumerize :distribute_scope, in: [
     :morning,

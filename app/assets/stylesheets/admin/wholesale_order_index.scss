@@ -1,0 +1,53 @@
+.admin-wholesale-order-container {
+  margin: 20px;
+
+  .filter-container {
+    .filter-wrapper {
+      display: inline-block;
+      margin-right: 15px;
+
+      label {
+        margin-right: 10px;
+      }
+    }
+
+    .action-container {
+      margin-top: 20px;
+      .btn {
+        margin-right: 5px;
+      }
+    }
+  }
+
+  .group-action {
+    margin-top: 20px;
+    .btn {
+      margin-right: 5px;
+    }
+  }
+
+  table {
+    margin-top: 20px;
+    .operation {
+      & > a:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+
+    .item {
+      font-size: 14px;
+      line-height: 25px;
+    }
+
+    tr.list {
+      cursor: pointer;
+    }
+
+    tr.detail {
+      textarea {
+        width: 300px;
+        height: 100px;
+      }
+    }
+  }
+}
