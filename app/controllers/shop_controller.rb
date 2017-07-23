@@ -22,7 +22,7 @@ class ShopController < ApplicationController
       categories.push(base_info)
     end
 
-    gon.categories = categories
+    gon.categories = categories.reject{|c| c[:items].blank?}
     gon.addresses = current_user.addresses_json
 
     if !(Rails.env.production? && current_user.orders.with_pay_status(:paid).exists?)
