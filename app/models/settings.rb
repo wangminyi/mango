@@ -16,6 +16,7 @@ class Settings
               周浦汇丽苑
               周浦文馨苑
               美林小城
+              周浦菱翔苑
             )
   class << self
     def as_json
