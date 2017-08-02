@@ -12,7 +12,7 @@ class ShopController < ApplicationController
 
     # 普通食材
     Category.order(updated_at: :desc).each do |category|
-      visible_ingredients = category.ingredients.where.not(price: nil).preload(:dishes).order(priority: :desc, id: :asc).map(&:as_json)
+      visible_ingredients = category.ingredients.where.not(price: nil).where.not(image: nil).preload(:dishes).order(priority: :desc, id: :asc).map(&:as_json)
       base_info = {
         name: category.name,
         items: visible_ingredients,

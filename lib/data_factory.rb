@@ -21,6 +21,35 @@ class DataFactory
       end
     end
 
+    def add_categories_v2
+      %w(熟食卤味 下饭酱菜 半成品菜 现做食品).each do |name|
+        Category.find_or_create_by(name: name)
+      end
+    end
+
+    def import_ingredient_v4
+      CSV.foreach("./data_files/v4.csv") do |line|
+        next if line[0].blank?
+        name, category_text, unit_text, price_yuan = line
+
+        alias_text = "#{name} #{unit_text}"
+        unit = "1#{unit_text[-1]}"
+        category = Category.where("name like ?", "%#{category_text}%").first
+        price = price_yuan.to_i * 100
+
+        if !Ingredient.exists?(name: name)
+          ingredient = Ingredient.create(
+            name: name,
+            alias: alias_text,
+            category: category,
+            unit_text: unit,
+            price: price,
+          )
+          import_ingredients_img(ingredient)
+        end
+      end
+    end
+
     def import_ingredient
       Category.all.each do |category|
         CSV.foreach("./data_files/#{category.name}.csv") do |line|
@@ -116,11 +145,7 @@ class DataFactory
       relative_path = nil
 
       suffixes.each do |suffix|
-        temp_path = if ingredient.category.present?
-          "ingredients/#{ingredient.category.name}/#{ingredient.name}.#{suffix}"
-        else
-          "ingredients/v3/#{ingredient.name}.#{suffix}"
-        end
+        temp_path = "ingredients/v4/#{ingredient.name}.#{suffix}"
 
         file = File.join(dir_path, temp_path)
         if File.exists? file
