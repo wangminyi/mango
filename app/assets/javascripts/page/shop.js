@@ -23,6 +23,7 @@ $(function(){
       distribution_price: gon.settings.distribution_price, // 配送费
       free_distribution: gon.settings.free_distribution, // 免配送费金额
       current_page: "shopping", // 当前所在页面 shopping order address edit_address
+      is_admin: gon.is_admin,
       // 弹出框
       confirm_params: {
         show: false,
@@ -44,6 +45,9 @@ $(function(){
       first_order: gon.first_order, // 是否是第一次下单
       categories: categories, // 商品对象
       gifts: gon.gifts || [],
+      in_search: false, // 是否处于搜索状态
+      search_keyword: "", // 搜索关键字
+      searched_items: null,
 
       // 订单页面
         // 表单字段slot
@@ -212,6 +216,26 @@ $(function(){
       }
     },
     methods: {
+      forward_to_search: function() {
+        this.in_search = true;
+        this.$nextTick(function(){
+          $(".search-input-container input").focus();
+        });
+      },
+      locale_search_handler: function() {
+        var that = this,
+            items_array = [];
+        if ($.trim(this.search_keyword).length > 0) {
+          $.each(this.categories, function(index, category) {
+            $.each(category.items, function(index, item) {
+              if (item.name.indexOf(that.search_keyword) >= 0) {
+                items_array.push(item);
+              }
+            })
+          });
+        }
+        this.searched_items = items_array;
+      },
       change_category: function(category) {
         this.selected_category = category;
         $(".ingredients-list-container").scrollTop(0);
