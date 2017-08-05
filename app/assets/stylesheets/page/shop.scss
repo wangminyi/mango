@@ -428,6 +428,10 @@ $header-height: 50px;
         bottom: 0;
         width: 100%;
         overflow: auto;
+        .no-result {
+          text-align: center;
+        }
+
         &.padding-top {
           top: 30px;
         }

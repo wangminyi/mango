@@ -42,9 +42,11 @@ template#shop-template
             input.search-input placeholder="商品搜索" v-model="search_keyword"
             .btn v-on:click="locale_search_handler"
               | 搜索
-          .goods-container v-bind:class="{is_admin: is_admin}"
+          .goods-container v-if="searched_items !== null" v-bind:class="{is_admin: is_admin}"
             .ingredients-container
               .ingredients-list-container
+                .no-result v-if="searched_items.length === 0"
+                  | 无搜索结果
                 .ingredients-panel v-for="item in searched_items"
                   .image-container
                     img v-bind:src="item.image" v-on:click="show_item_detail(item)"
