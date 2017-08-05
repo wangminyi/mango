@@ -50,6 +50,12 @@ class DataFactory
       end
     end
 
+    def supply_ingredients_image
+      Ingredient.where(image: nil).each do |ingredient|
+        self.import_ingredients_img ingredient
+      end
+    end
+
     def import_ingredient
       Category.all.each do |category|
         CSV.foreach("./data_files/#{category.name}.csv") do |line|
