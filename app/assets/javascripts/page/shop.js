@@ -222,13 +222,22 @@ $(function(){
           $(".search-input-container input").focus();
         });
       },
+      keyword_keypress_handler: function(event) {
+        if (event.keyCode === 13) {
+          this.locale_search_handler();
+        }
+      },
       locale_search_handler: function() {
-        var that = this,
+        var keyword = $.trim(this.search_keyword),
             items_array = [];
-        if ($.trim(this.search_keyword).length > 0) {
+        if (keyword.length > 0) {
+          $.post("/history_logs", {
+            action_type: "ingredients_search",
+            details: keyword,
+          })
           $.each(this.categories, function(index, category) {
             $.each(category.items, function(index, item) {
-              if (item.name.indexOf(that.search_keyword) >= 0) {
+              if (item.name.indexOf(keyword) >= 0) {
                 items_array.push(item);
               }
             })

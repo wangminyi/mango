@@ -7,6 +7,7 @@ class HistoryLog < ApplicationRecord
     :abandon_order,
     :handle_wholesale_order,
     :abandon_wholesale_order,
+    :ingredients_search,
   ], scope: true
 
   belongs_to :order

@@ -28,6 +28,8 @@ Rails.application.routes.draw do
     post :update
   end
 
+  resources :history_logs, only: [:create]
+
   resources :orders, only: [:index, :show, :create]
   resources :wholesale_orders, only: [:index, :show, :create]
 

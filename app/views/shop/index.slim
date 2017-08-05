@@ -39,7 +39,7 @@ template#shop-template
           .search-input-container
             .btn v-on:click="in_search = false"
               i.fa.fa-chevron-left
-            input.search-input placeholder="商品搜索" v-model="search_keyword"
+            input.search-input placeholder="商品搜索" v-model="search_keyword" v-on:keypress="keyword_keypress_handler"
             .btn v-on:click="locale_search_handler"
               | 搜索
           .goods-container v-if="searched_items !== null" v-bind:class="{is_admin: is_admin}"
