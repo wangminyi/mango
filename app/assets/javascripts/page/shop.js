@@ -244,6 +244,7 @@ $(function(){
           });
         }
         this.searched_items = items_array;
+        $(".search-container .ingredients-list-container").scrollTop(0);
       },
       change_category: function(category) {
         this.selected_category = category;
