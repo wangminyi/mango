@@ -312,6 +312,28 @@ $header-height: 50px;
 }
 
 .shop-page-container {
+  .search-input-container {
+    @include flex-container;
+    @include flex-center;
+    padding: 10px;
+    height: 50px;
+    .search-input {
+      @include flex(1);
+      height: 30px;
+      line-height: 30px;
+      border-radius: 15px;
+      outline: none;
+      border: 1px solid #999999;
+      padding: 0 10px;
+      i.fa {
+        margin-right: 5px;
+      }
+      span {
+        color: $theme-light-gray;
+      }
+    }
+  }
+
   .event-message-container {
     line-height: 30px;
     background-color: #FFFDE2;
@@ -328,10 +350,17 @@ $header-height: 50px;
 
   .goods-container {
     position: absolute;
-    top: 0px;
+    top: 0;
     bottom: 50px;
     left: 0;
     right: 0;
+
+    &.is_admin {
+      top: 50px;
+      &.with_message {
+        top: 80px;
+      }
+    }
 
     &.with_message {
       top: 30px;
