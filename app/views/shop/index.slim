@@ -42,7 +42,7 @@ template#shop-template
             input.search-input placeholder="商品搜索" v-model="search_keyword" v-on:keypress="keyword_keypress_handler"
             .btn v-on:click="locale_search_handler"
               | 搜索
-          .goods-container v-if="searched_items !== null" v-bind:class="{is_admin: is_admin}"
+          .goods-container v-if="searched_items !== null"
             .ingredients-container
               .ingredients-list-container
                 .no-result v-if="searched_items.length === 0"
@@ -78,11 +78,11 @@ template#shop-template
         .ingredients-container v-else=true
           .event-message-container v-if="first_order"
             | 首次订单满30元赠送中号沥水篮；满80元赠送加厚沥水洗菜篮；
-          .search-input-container v-if="is_admin"
+          .search-input-container
             .search-input v-on:click="forward_to_search"
               i.fa.fa-search
               span 商品搜索
-          .goods-container v-bind:class="{with_message: first_order, is_admin: is_admin}"
+          .goods-container v-bind:class="{with_message: first_order}"
             .items-container
               .categories-container
                 .category-label v-for="category in categories" v-bind:class="{ selected: selected_category === category }" v-on:click="change_category(category)"
