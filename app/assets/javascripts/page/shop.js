@@ -373,7 +373,7 @@ $(function(){
       selectable_date: function() {
         var result = [],
             hour = moment().hour();
-        if (hour < 14) {
+        if (hour < 15) {
           result.push(
             [
               "今天",
