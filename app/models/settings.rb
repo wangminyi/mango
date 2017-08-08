@@ -18,6 +18,7 @@ class Settings
               美林小城
               周浦菱翔苑
               南郊花园
+              绿地东上海
             )
   class << self
     def as_json
