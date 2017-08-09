@@ -9,7 +9,8 @@ class User < ApplicationRecord
 
   enumerize :role, in: [
     :user,
-    :admin
+    :admin,
+    :super_admin,
   ], scope: true, default: :user
 
   has_many :orders
@@ -28,5 +29,9 @@ class User < ApplicationRecord
 
   def addresses_json
     self.addresses.order(updated_at: :desc).map(&:as_json)
+  end
+
+  def is_super_admin?
+    !Rails.env.production? || self.id == 2
   end
 end

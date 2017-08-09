@@ -41,6 +41,9 @@ nav.navbar.navbar-default
             = link_to "已完成", admin_wholesale_orders_path(status: :finished)
           li.nav-item class=("active" if @active_nav == "abandon_wholesale_order")
             = link_to "已废弃", admin_wholesale_orders_path(status: :abandon)
+      - if current_user.is_super_admin?
+        li.nav-item
+          = link_to "文章", articles_path
 
     ul.nav.navbar-nav.navbar-right
       li.dropdown
@@ -49,6 +52,10 @@ nav.navbar.navbar-default
           | &nbsp;
           i.fa.fa-caret-down
         ul.dropdown-menu
+          - if current_user.is_super_admin?
+            li
+              = link_to new_article_path
+                span 写文章
           li
             = link_to destroy_user_session_path, method: :delete do
               i.fa.fa-sign-out

@@ -21,7 +21,7 @@ class ArticlesController < ApplicationController
   end
 
   def index
-    @articles = current_user.articles
+    @articles = current_user.articles.order(created_at: :desc)
   end
 
   private
