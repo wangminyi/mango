@@ -25,8 +25,8 @@ nav.navbar.navbar-default
             = link_to "已完成", admin_orders_path(status: :finished)
           li.nav-item class=("active" if @active_nav == "abandon_order")
             = link_to "已废弃", admin_orders_path(status: :abandon)
-          li.nav-item class=("active" if @active_nav == "_order")
-            = link_to "全部订单", admin_orders_path
+          li.nav-item class=("active" if @active_nav == "all_order")
+            = link_to "全部订单", admin_orders_path(status: :all)
 
       li.dropdown.wholesale-order
         a.dropdown-toggle href="#" class="dropdown-toggle" data-toggle="dropdown"

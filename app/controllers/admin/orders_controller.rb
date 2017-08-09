@@ -3,15 +3,15 @@ class Admin::OrdersController < Admin::BaseController
   before_action :set_order, only: [:show, :edit, :update, :next_state, :abandon, :invoice]
 
   def index
-    @status = params[:status]
+    @status = params[:status] || "submitted"
     @q  = params[:query] || {}
     # receiver_garden distribute_at_date distribute_at_time
 
     @orders = Order.all.with_pay_status(:paid).order(:distribute_at)
-    if @status.present?
+    if @status != "all"
       @orders = @orders.with_status(@status)
-      gon.status = @status
     end
+    gon.status = @status
 
     if (receiver_garden = @q[:receiver_garden]).present?
       @orders = @orders.where(receiver_garden: receiver_garden)

@@ -68,7 +68,7 @@ javascript:
       return confirm("确定将该订单推进至下一状态？");
     }).on("ajax:success", ".next-state", function(evt, data) {
       var $row = $(this).parents("tr");
-      if (typeof gon.status !== "undefined") { // 在某一状态条件下
+      if (gon.status !== "all") { // 在某一状态条件下
         $row.next().remove();
         $row.remove();
       } else {
