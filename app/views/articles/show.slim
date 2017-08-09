@@ -1,0 +1,12 @@
+- content_for :page_css
+  = stylesheet_link_tag 'page/article'
+
+.articles-container
+  h1 = @article.title
+  #article-body-container data-origin=@article.body
+
+javascript:
+  $(function(){
+    var $md_container = $("#article-body-container");
+    $md_container.html(SimpleMDE.prototype.markdown($md_container.data("origin").toString()));
+  });

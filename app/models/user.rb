@@ -16,6 +16,7 @@ class User < ApplicationRecord
   has_many :wholesale_orders
   has_many :addresses
   has_many :history_logs
+  has_many :articles
 
   def email_required?
     false

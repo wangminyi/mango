@@ -1,0 +1,11 @@
+- content_for :page_css
+  = stylesheet_link_tag 'page/article'
+
+.articles-container
+  - @articles.each do |article|
+    .article-item
+      .link-wrapper
+        = link_to article, target: "_blank"
+           = article.title
+      .timestamp
+        = article.created_at.strftime("%F %T")

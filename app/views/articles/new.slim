@@ -1,0 +1,26 @@
+= form_for @article, html: {style: "width: 600px; margin: 40px auto;"} do |f|
+  .form-group
+    = f.label "标题"
+    = f.text_field :title, class: "form-control"
+  .form-group
+    = f.text_area :body, id: "markdown-container", style: "margin-top: 2000px;"
+  = f.submit "保存", class: "btn btn-primary lg"
+
+javascript:
+  $(function(){
+    // App.cable.subscriptions.create("TestChannel", {
+    //   connected: function(){
+    //     var that = this;
+    //     $(document).on("keypress", function(){
+    //       that.perform("input", { message: "abc" });
+    //     });
+    //   },
+    //   received: function(data){
+    //     console.log(data);
+    //   }
+    // });
+
+    var markdown = new SimpleMDE({
+      element: $("#markdown-container")[0],
+    });
+  });
