@@ -24,6 +24,10 @@ class ArticlesController < ApplicationController
     @articles = current_user.articles.order(created_at: :desc)
   end
 
+  def edit
+    @article = current_user.articles.find(params[:id])
+  end
+
   private
     def article_param
       params.require(:article).permit(
