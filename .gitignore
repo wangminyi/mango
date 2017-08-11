@@ -9,3 +9,5 @@ public/assets/*
 config/application.yml
 
 .idea/*
+/public/packs
+/node_modules
