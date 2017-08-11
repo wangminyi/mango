@@ -1,6 +1,5 @@
-h1 hello world!
-
-textarea#markdown-container style="margin-top: 2000px;"
+= content_for :page_js
+  = javascript_pack_tag "hello_vue"
 
 javascript:
   $(function(){
@@ -15,8 +14,4 @@ javascript:
     //     console.log(data);
     //   }
     // });
-
-    var markdown = new SimpleMDE({
-      element: $("#markdown-container")[0],
-    });
   });
