@@ -1,6 +1,6 @@
 class ArticlesController < ApplicationController
   before_action :require_login
-
+  before_action :set_article, only: [:edit, :update]
   layout 'admin'
 
   def new
@@ -25,10 +25,18 @@ class ArticlesController < ApplicationController
   end
 
   def edit
-    @article = current_user.articles.find(params[:id])
+  end
+
+  def update
+    @article.update(article_param)
+    redirect_to article_path(@article)
   end
 
   private
+    def set_article
+      @article = current_user.articles.find(params[:id])
+    end
+
     def article_param
       params.require(:article).permit(
         :title,
