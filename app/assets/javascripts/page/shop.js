@@ -11,7 +11,7 @@ $(function(){
   });
 
   moment.locale("zh-CN");
-  var categories = gon.categories,
+  var categories = add_hot_category(gon.categories),
       addresses = gon.addresses;
 
   window.vue = new Vue({
@@ -108,7 +108,9 @@ $(function(){
         var hash = {};
         $.each(this.categories, function(index, category) {
           $.each(category.items, function(index, item) {
-            hash[item.id] = item;
+            if (hash[item.id] === undefined ) {
+              hash[item.id] = item;
+            }
           })
         });
         return hash;
@@ -665,6 +667,27 @@ $(function(){
       }
     }
   });
+
+  function add_hot_category(categories) {
+    var items = [];
+    $.each(categories, function(_, category) {
+      $.each(category.items, function(_, item) {
+        if (item.is_hot) {
+          items.push(item);
+        }
+      })
+    });
+
+    if (items.length > 0) {
+      return [{
+        name: "每日特价",
+        items: items,
+        with_secondary_tag: false,
+      }].concat(categories);
+    } else {
+      return categories;
+    }
+  }
 
   function add_to_shopping_cart(event) {
     var from_x = event.clientX - 10,

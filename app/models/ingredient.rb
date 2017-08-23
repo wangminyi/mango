@@ -24,6 +24,7 @@ class Ingredient < ApplicationRecord
       description: parsed_description,
       sales_volume: self.sales_volume || 0,
       secondary_tag: self.secondary_tag,
+      is_hot: self.is_hot,
     }
   end
 
