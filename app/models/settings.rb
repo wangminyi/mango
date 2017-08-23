@@ -19,6 +19,7 @@ class Settings
               周浦菱翔苑
               南郊花园
               绿地东上海
+              周浦泰苑公寓
             )
   class << self
     def as_json
