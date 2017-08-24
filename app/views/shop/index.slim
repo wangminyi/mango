@@ -115,6 +115,8 @@ template#shop-template
                         .price-container
                           .price
                             | {{ item_price(item) | price_text }}
+                          .original-price v-if="item.original_price"
+                            | {{ item.original_price | price_text }}
                           .weight
                             | {{ item.unit_text }}
                         .operation-container
