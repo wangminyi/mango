@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170824052151) do
+ActiveRecord::Schema.define(version: 20170824065437) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 20170824052151) do
     t.string   "alias"
     t.string   "image"
     t.integer  "price"
+    t.integer  "original_price"
     t.text     "description",    limit: 65535
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
@@ -106,7 +107,6 @@ ActiveRecord::Schema.define(version: 20170824052151) do
     t.integer  "priority",                     default: 0
     t.string   "secondary_tag"
     t.boolean  "is_hot",                       default: false
-    t.integer  "original_price"
     t.index ["alias"], name: "index_ingredients_on_alias", using: :btree
     t.index ["category_id"], name: "index_ingredients_on_category_id", using: :btree
     t.index ["name"], name: "index_ingredients_on_name", using: :btree
