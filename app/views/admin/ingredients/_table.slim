@@ -1,0 +1,35 @@
+/ locals: {ingredients: }
+
+table.table.table-hover.table-bordered.table-striped
+  thead.print-hidden
+    th
+      | 名称
+    th
+      | 价格
+    th
+      | 销量
+    th
+      | 二级分类
+    th
+      | 是否特价
+    th
+      | 原价
+    th
+      | 操作
+  tbody
+    - ingredients.each do |i|
+      tr
+        td
+          = i.alias
+        td
+          = format_price(i.price)
+        td
+          = i.sales_volume
+        td
+          = i.secondary_tag
+        td
+          = i.is_hot? ? "是" : "否"
+        td
+          = format_price(i.original_price) if i.is_hot?
+        td
+          = link_to "修改", edit_admin_ingredient_path(i), target: "_blank"

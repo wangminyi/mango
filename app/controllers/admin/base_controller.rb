@@ -1,6 +1,8 @@
 class Admin::BaseController < ApplicationController
   layout "admin"
 
+  before_action :require_admin
+
   def require_admin
     if current_user.blank?
       store_location_for(:user, request.url)

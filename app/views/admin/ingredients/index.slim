@@ -1,0 +1,19 @@
+.admin-container
+  .filter-container.panel.panel-default.print-hidden
+    .panel-heading 筛选
+    .panel-body
+      = form_tag request.url + ".json", method: :get, remote: true do ||
+        .filter-wrapper
+          label 名称
+          = text_field_tag "keyword", nil, class: "form-control"
+        .action-container
+          = submit_tag "搜索", class: "btn btn-primary"
+
+  #ingredients-tabel-container
+
+javascript:
+  $(function() {
+    $("form").on("ajax:success", function(e, data) {
+      $("#ingredients-tabel-container").html(data.html)
+    })
+  });

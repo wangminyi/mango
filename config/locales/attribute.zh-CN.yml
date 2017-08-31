@@ -1,0 +1,10 @@
+zh-CN:
+  activerecord:
+    attributes:
+      ingredient:
+        alias: 名称
+        price: 价格
+        sales_volume: 销售量
+        secondary_tag: 二级标签
+        original_price: 原价
+        is_hot: 特价

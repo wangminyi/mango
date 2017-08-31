@@ -62,5 +62,7 @@ Rails.application.routes.draw do
         get :bulk_export_csv
       end
     end
+
+    resources :ingredients, only: [:index, :edit, :update]
   end
 end

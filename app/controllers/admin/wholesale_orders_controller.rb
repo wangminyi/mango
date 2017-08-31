@@ -1,5 +1,4 @@
 class Admin::WholesaleOrdersController < Admin::BaseController
-  before_action :require_admin
   before_action :set_order, only: [:show, :update, :next_state, :abandon, :invoice]
 
   def index
