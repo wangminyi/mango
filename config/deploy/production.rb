@@ -60,5 +60,8 @@ server "47.92.36.220", user: "root", roles: %w{app db web}
 #     # password: "please use keys"
 #   }
 
+## Nginx
+set :nginx_server_name, 'yylife.shop www.yylife.shop yylife-sh.com www.yylife-sh.com'
+
 ## Puma
 set :puma_bind, 'tcp://127.0.0.1:5000'
