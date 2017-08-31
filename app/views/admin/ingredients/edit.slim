@@ -1,0 +1,17 @@
+.admin-container
+  = simple_form_for [:admin, @ingredient], remote: true do |f|
+    = f.input :alias
+    = f.input :price
+    = f.input :sales_volume
+    = f.input :secondary_tag
+    = f.input :original_price
+    = f.input :is_hot
+
+    = f.submit "更新", class: "btn btn-primary"
+
+javascript:
+  $(function() {
+    $("form").on("ajax:success", function() {
+      alert("更新成功");
+    });
+  })

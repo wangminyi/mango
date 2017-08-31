@@ -25,7 +25,7 @@ class Ingredient < ApplicationRecord
       sales_volume: self.sales_volume || 0,
       secondary_tag: self.secondary_tag,
       is_hot: self.is_hot,
-      original_price: self.original_price,
+      original_price: self.original_price || self.price,
     }
   end
 
