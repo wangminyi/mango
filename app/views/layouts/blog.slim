@@ -1,0 +1,27 @@
+doctype html
+
+html
+  head
+    title Mango
+    meta content="width=device-width, initial-scale=1.0" name="viewport"
+    = csrf_meta_tags
+
+    = stylesheet_link_tag    'application', media: 'all'
+    = stylesheet_link_tag    'blog/main', media: 'all'
+
+    = yield :page_css
+
+    = javascript_include_tag 'application'
+
+    = include_gon
+
+  body
+    nav.navbar.navbar-default
+      .header-container.container-fluid
+        .navbar-header
+          = link_to 'Mango', articles_path, class: 'navbar-brand'
+
+    .body-container
+      = yield
+
+    = yield :page_js

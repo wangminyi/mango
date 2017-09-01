@@ -33,7 +33,9 @@ Rails.application.routes.draw do
   resources :orders, only: [:index, :show, :create]
   resources :wholesale_orders, only: [:index, :show, :create]
 
-  resources :articles
+  resources :articles do
+    resources :comments, only: [:create]
+  end
 
   namespace :admin do
     root "orders#index"

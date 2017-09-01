@@ -1,7 +1,9 @@
 class ArticlesController < ApplicationController
-  before_action :require_login
+  before_action :require_login, except: [:index, :show]
+  before_action :require_super_admin, except: [:index, :show]
+
   before_action :set_article, only: [:edit, :update]
-  layout 'admin'
+  layout 'blog'
 
   def new
     @article = Article.new
@@ -21,7 +23,7 @@ class ArticlesController < ApplicationController
   end
 
   def index
-    @articles = current_user.articles.order(created_at: :desc)
+    @articles = Article.all.order(created_at: :desc)
   end
 
   def edit
@@ -42,5 +44,11 @@ class ArticlesController < ApplicationController
         :title,
         :body,
       )
+    end
+
+    def require_super_admin
+      if !current_user.is_super_admin?
+        head :not_found
+      end
     end
 end

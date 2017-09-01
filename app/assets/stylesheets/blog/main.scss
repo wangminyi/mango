@@ -1,0 +1,59 @@
+@import "macro";
+
+$page_width: 1000px;
+$bg_color: rgb(243, 243, 243);
+body {
+  background-color: $bg_color;
+}
+
+.header-container {
+  max-width: $page_width;
+}
+
+.body-container {
+  max-width: $page_width;
+  padding: 15px;
+  margin: auto;
+  background-color: white;
+  .article-item {
+    @include flex-container;
+    @include flex-center;
+    border-bottom: 1px solid #EEEEEE;
+    padding: 20px;
+    .link-wrapper {
+      @include flex(1);
+      font-size: 20px;
+    }
+    .timestamp {
+      @include flex(1);
+      text-align: right;
+    }
+  }
+
+  #article-body-container {
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .article-comments-container {
+    margin-top: 100px;
+  }
+
+  .article-comment-item {
+    margin-bottom: 20px;
+    .floor {
+      font-size: 18px;
+    }
+    .timestamp {
+      margin-top: 5px;
+    }
+    .content {
+      margin-top: 5px;
+    }
+  }
+
+  .article-comment-form {
+    margin-top: 50px;
+  }
+}

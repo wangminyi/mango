@@ -45,10 +45,6 @@ nav.navbar.navbar-default
       li.nav-item
         = link_to "商品", admin_ingredients_path
 
-      - if current_user.is_super_admin?
-        li.nav-item
-          = link_to "文章", articles_path
-
     ul.nav.navbar-nav.navbar-right
       li.dropdown
         a.dropdown-toggle data-toggle="dropdown" href="javascript:;"
@@ -56,10 +52,6 @@ nav.navbar.navbar-default
           | &nbsp;
           i.fa.fa-caret-down
         ul.dropdown-menu
-          - if current_user.is_super_admin?
-            li
-              = link_to new_article_path
-                span 写文章
           li
             = link_to destroy_user_session_path, method: :delete do
               i.fa.fa-sign-out

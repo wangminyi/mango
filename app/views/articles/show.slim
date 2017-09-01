@@ -1,14 +1,26 @@
-- content_for :page_css
-  = stylesheet_link_tag 'page/article'
+h1 = @article.title
+#article-body-container data-origin=@article.body
 
-.articles-container
-  h1 = @article.title
-  #article-body-container data-origin=@article.body
+.panel.panel-default.article-comments-container
+  .panel-heading 评论
 
+  .panel-body
+    - @article.comments.each_with_index do |comment, i|
+      .article-comment-item
+        .floor ##{i + 1}
+        .timestamp = comment.created_at.strftime("%F %T")
+        .content = simple_format(comment.content)
+
+    .article-comment-form
+      label 说点什么...
+      = simple_form_for @article.comments.build, url: article_comments_path(@article) do |f|
+        = f.input :content, label: false, as: :text
+        = f.submit "提交", class: "btn btn-primary"
+
+- if current_user&.is_super_admin?
   = link_to edit_article_path(@article) do ||
     .btn.btn-primary
       | 编辑
-
 
 javascript:
   $(function(){

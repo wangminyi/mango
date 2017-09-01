@@ -12,7 +12,7 @@ module Mango
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    config.assets.precompile += %w( page/* admin/*)
+    config.assets.precompile += %w( page/* admin/* blog/*)
     config.time_zone = 'Beijing'
     config.active_record.default_timezone = :utc
 

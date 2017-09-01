@@ -1,6 +1,6 @@
 / article
 
-= form_for article, html: {style: "width: 600px; margin: 40px auto;"} do |f|
+= form_for article do |f|
   .form-group
     = f.label "标题"
     = f.text_field :title, class: "form-control"

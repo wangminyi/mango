@@ -1,11 +1,10 @@
-- content_for :page_css
-  = stylesheet_link_tag 'page/article'
+- if current_user&.is_super_admin?
+  = link_to "写文章", new_article_path, class: "btn btn-primary"
 
-.articles-container
-  - @articles.each do |article|
-    .article-item
-      .link-wrapper
-        = link_to article, target: "_blank"
-           = article.title
-      .timestamp
-        = article.created_at.strftime("%F %T")
+- @articles.each do |article|
+  .article-item
+    .link-wrapper
+      = link_to article, target: "_blank"
+         = article.title
+    .timestamp
+      = article.created_at.strftime("%F %T")
