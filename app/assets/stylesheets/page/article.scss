@@ -1,7 +1,7 @@
 @import "macro";
 
 .articles-container {
-  width: 600px;
+  max-width: 1000px;
   margin: auto;
   .article-item {
     @include flex-container;
@@ -16,5 +16,11 @@
       @include flex(1);
       text-align: right;
     }
+  }
+
+  #article-body-container {
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 1.8;
   }
 }
