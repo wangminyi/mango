@@ -253,6 +253,7 @@ $(function(){
         $(".ingredients-list-container").scrollTop(0);
         this.$nextTick(function(){
           $(".secondary-tag-container").scrollTop(0);
+          $(".secondary-tag-container .secondary-tag").removeClass("selected");
           $(".secondary-tag-container .secondary-tag:first").addClass("selected");
         })
       },
