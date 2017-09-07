@@ -61,7 +61,7 @@ class Order < ApplicationRecord
       out_trade_no: self.order_no,
       total_fee: self.total_price,
       spbill_create_ip: ip,
-      notify_url: 'http://www.yylife.shop/wx/notify',
+      notify_url: 'http://www.yylife-sh.com/wx/notify',
       trade_type: 'JSAPI',
       openid: self.user.open_id,
     }
