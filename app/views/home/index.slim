@@ -1,5 +1,5 @@
 .wrap
-  canvas width="1500px" height="1000px"
+  canvas
 
 = content_for :page_js
   = javascript_pack_tag "meteor"
@@ -9,6 +9,7 @@
 
 javascript:
   $(function(){
+    $("canvas").attr("height", $(window).height()).attr("width", $(window).width());
     // App.cable.subscriptions.create("TestChannel", {
     //   connected: function(){
     //     var that = this;
