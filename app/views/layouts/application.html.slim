@@ -2,7 +2,7 @@ doctype html
 
 html
   head
-    title 元也生鲜
+    title = Rails.env.development? ? "Mango" : "元也生鲜"
     meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" name="viewport"
     = csrf_meta_tags
 

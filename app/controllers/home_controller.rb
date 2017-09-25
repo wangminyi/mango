@@ -3,6 +3,9 @@ class HomeController < ApplicationController
 
   end
 
+  def react_demo
+  end
+
   def trigger_error
     raise Exception.new("test error")
   end
