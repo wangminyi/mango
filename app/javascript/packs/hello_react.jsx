@@ -30,11 +30,11 @@ class Hello extends React.Component {
   }
 
   componentDidMount() {
-    // setInterval(() => {
-    //   this.setState({
-    //     index: (this.state.index + 1) % this.props.name.length
-    //   })
-    // }, 1000)
+    setInterval(() => {
+      this.setState({
+        index: (this.state.index + 1) % this.props.name.length
+      })
+    }, 1000)
   }
 
   change_index = () => {
@@ -66,7 +66,7 @@ class Hello extends React.Component {
 // )
 
 Hello.defaultProps = {
-  name: 'David'
+  name: ['David', 'Emmy']
 }
 
 Hello.propTypes = {
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const names = ["a", "b", "c"]
   ReactDOM.render(
     <div>
-      <Hello name={names} />
+      <Hello/>
       <FunctionalComponent />
     </div>,
     document.body.appendChild(document.createElement('div')),

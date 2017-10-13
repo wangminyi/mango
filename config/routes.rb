@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     get :index
     get :wholesale
     get :wholesale_instances
+    get :category_data
   end
 
   namespace :addresses do

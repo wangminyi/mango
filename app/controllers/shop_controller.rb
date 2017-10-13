@@ -48,6 +48,23 @@ class ShopController < ApplicationController
     gon.js_config_params = Wx.js_config_params(shop_index_url)
   end
 
+  def category_data
+    categories = []
+
+    Category.order(updated_at: :desc).each do |category|
+      visible_ingredients = category.ingredients.where.not(price: nil).where.not(image: nil).preload(:dishes).order(priority: :desc, id: :asc).map(&:as_json)
+      base_info = {
+        name: category.name,
+        items: visible_ingredients,
+        with_secondary_tag: visible_ingredients.any?{|vi| vi[:secondary_tag].present?},
+      }
+
+      categories.push(base_info)
+    end
+
+    render json: categories.reject{|c| c[:items].blank?}
+  end
+
   def wholesale
     if !Rails.env.production? || Order::STAFF_IDS.include?(current_user.id)
       entries = WholesaleEntry.where(visible: true)
