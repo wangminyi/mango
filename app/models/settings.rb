@@ -23,9 +23,16 @@ class Settings
               东丰林居
             )
   class << self
+    def gardens
+      Garden.where(visible: true).map do |garden|
+        garden.attributes.slice("name", "address", "distribution_price")
+      end
+    end
+
     def as_json
       {
         gardens: GARDENS, # 小区名称
+        new_gardens: self.gardens, # 结构化小区
         distribution_price: DISTRIBUTION_PRICE, # 配送费
         free_distribution: FREE_DISTRIBUTION, # 免配送费金额
         preferential_price: PREFERENTIAL_PRICE, # 优惠金额

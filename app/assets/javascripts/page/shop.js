@@ -77,6 +77,9 @@ $(function(){
         is_default: false,
       }, // 正在编辑的地址 json
       support_gardens: gon.settings.gardens,
+      // support_gardens: $.map(gon.settings.new_gardens, function(garden) {
+      //   return garden.name;
+      // }),
     },
     computed: {
       // 选中类型的商品

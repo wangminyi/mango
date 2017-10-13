@@ -2,6 +2,27 @@ class DataFactory
   require "csv"
 
   class << self
+    def import_gardens
+      CSV.foreach("./data_files/gardens.csv", headers: :first_row) do |line|
+        distance = line[3].match(/[0-9\.]*/).to_s.to_f
+        distance *= 1000 if distance < 10
+        distribution_price = case distance
+        when 0...500
+          400
+        when 500...1000
+          800
+        else
+          1200
+        end
+
+        Garden.create!(
+          name: line[1],
+          address: line[2].presence,
+          distribution_price: distribution_price
+        )
+      end
+    end
+
     def clean_data
       Category.delete_all
       Ingredient.delete_all
