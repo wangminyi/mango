@@ -241,11 +241,13 @@ $(function(){
             details: keyword,
           })
           $.each(this.categories, function(index, category) {
-            $.each(category.items, function(index, item) {
-              if (item.name.indexOf(keyword) >= 0) {
-                items_array.push(item);
-              }
-            })
+            if (category.id) { // 跳过今日特价
+              $.each(category.items, function(index, item) {
+                if (item.name.indexOf(keyword) >= 0) {
+                  items_array.push(item);
+                }
+              })
+            }
           });
         }
         this.searched_items = items_array;
@@ -684,6 +686,7 @@ $(function(){
 
     if (items.length > 0) {
       return [{
+        id: null,
         name: "每日特价",
         items: items,
         with_secondary_tag: false,

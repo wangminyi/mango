@@ -14,6 +14,7 @@ class ShopController < ApplicationController
     Category.order(updated_at: :desc).each do |category|
       visible_ingredients = category.ingredients.where.not(price: nil).where.not(image: nil).preload(:dishes).order(priority: :desc, id: :asc).map(&:as_json)
       base_info = {
+        id: category.id,
         name: category.name,
         items: visible_ingredients,
         with_secondary_tag: visible_ingredients.any?{|vi| vi[:secondary_tag].present?},
