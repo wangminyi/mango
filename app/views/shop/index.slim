@@ -90,10 +90,12 @@ template#shop-template
                     | {{ category_count(category) }}
                   | {{ category.name }}
               .ingredients-container
+                .category-hint v-if="selected_category.name === '熟食卤味'"
+                  | 提醒：元也生鲜与阿兵熟食店合作，代购食品，请尽早食用。
                 .secondary-tag-container v-if="secondary_tags.length > 1"
                   .secondary-tag v-for="tag in secondary_tags" v-on:click="header_tag_handler(tag)" v-bind:data-tag="tag"
                     | {{ tag }}
-                .ingredients-list-container v-bind:class="{'padding-top': secondary_tags.length > 1}" v-on:scroll="list_scroll_handler"
+                .ingredients-list-container v-on:scroll="list_scroll_handler"
                   template v-for="(items, tag) in items_for_render"
                     .secondary-tag-header v-if="secondary_tags.length > 1" v-bind:data-tag="tag"
                       | {{ tag }}

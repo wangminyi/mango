@@ -399,6 +399,16 @@ $header-height: 50px;
       height: 100%;
       position: relative;
       overflow: hidden;
+      @include flex-container;
+      flex-direction: column;
+
+      .category-hint {
+        background-color: #FFFDE2;
+        color: #953609;
+        margin-left: 10px;
+        padding: 5px;
+      }
+
       .secondary-tag-container {
         background-color: #F6F6F6;
         overflow-x: auto;
@@ -416,18 +426,13 @@ $header-height: 50px;
       }
 
       .ingredients-list-container {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
+        @include flex(1);
+        position: relative;
         overflow: auto;
         .no-result {
           text-align: center;
         }
 
-        &.padding-top {
-          top: 30px;
-        }
         .secondary-tag-header {
           color: $theme-light-gray;
           line-height: 30px;
