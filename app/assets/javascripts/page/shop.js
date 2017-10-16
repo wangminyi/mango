@@ -12,74 +12,49 @@ $(function(){
 
   moment.locale("zh-CN");
   var categories = add_hot_category(gon.categories),
-      addresses = gon.addresses;
+      addresses = ;
 
   window.vue = new Vue({
     el: "#shop-vue-anchor",
     template: "#shop-template",
-    data: {
-      // 全局变量
-      show_detail_item: null, // 显示详情
-      distribution_price: gon.settings.distribution_price, // 配送费
-      free_distribution: gon.settings.free_distribution, // 免配送费金额
-      current_page: "shopping", // 当前所在页面 shopping order address edit_address
-      is_admin: gon.is_admin,
-      // 弹出框
-      confirm_params: {
-        show: false,
-        text: undefined,
-        ok_callback: undefined,
-        cancel_callback: undefined,
-      },
+    data: function() {
+      return {
+        // 全局变量
+        show_detail_item: null, // 显示详情
+        distribution_price: gon.settings.distribution_price, // 配送费
+        free_distribution: gon.settings.free_distribution, // 免配送费金额
+        current_page: "shopping", // 当前所在页面 shopping order address edit_address
+        is_admin: gon.is_admin,
 
-      // can_immediately: false, // 能否可以立即送
-      preferential_price: gon.settings.preferential_price, // 优惠金额
+        // can_immediately: false, // 能否可以立即送
+        preferential_price: gon.settings.preferential_price, // 优惠金额
 
-      // 过渡相关
-      slide_direction: "slide-right",
+        // 过渡相关
+        slide_direction: "slide-right",
 
-      // 购物页面
-      selected_category: categories[0], // 选中的商品类别
-      show_shopping_cart: false, // 购物页面是否显示购物车详情
-      tag_scrolling: false,
-      first_order: gon.first_order, // 是否是第一次下单
-      categories: categories, // 商品对象
-      gifts: gon.gifts || [],
-      in_search: false, // 是否处于搜索状态
-      search_keyword: "", // 搜索关键字
-      searched_items: null,
+        // 购物页面
+        selected_category: categories[0], // 选中的商品类别
+        show_shopping_cart: false, // 购物页面是否显示购物车详情
+        tag_scrolling: false,
+        first_order: gon.first_order, // 是否是第一次下单
+        categories: categories, // 商品对象
+        gifts: gon.gifts || [],
+        in_search: false, // 是否处于搜索状态
+        search_keyword: "", // 搜索关键字
+        searched_items: null,
 
-      // 订单页面
-        // 表单字段slot
-      selected_address: undefined, // 选择的地址 json
-      selected_date: undefined, // 选择的送货日期 [今天，2017-4-6]
-      selected_time: undefined, // 选择的送货时间 [16:00 ~ 18:00, "16:00"]
-      coupon_enable: false,  // 是否使用优惠券
-      // pay_mode: "cod", // cod(cash on delivery) || wechat
-      remark: undefined, // 备注
-        // 局部变量
-      temp_selected_date: undefined, // 选择控件的日期值 [今天，2017-4-6]
-      temp_selected_time: undefined, // 选择控件的时间值 [16:00 ~ 18:00, "16:00"]
-      show_time_selector: false, // 是否显示时间控件
-
-      address_info: addresses,
-
-      // 编辑地址页面
-      show_garden_selector: false,
-      submitting_address: false,
-      editing_address: {
-        id: undefined,
-        name: undefined,
-        gender: undefined,
-        phone: undefined,
-        garden: undefined,
-        house_number: undefined,
-        is_default: false,
-      }, // 正在编辑的地址 json
-      support_gardens: gon.settings.gardens,
-      // support_gardens: $.map(gon.settings.new_gardens, function(garden) {
-      //   return garden.name;
-      // }),
+        // 订单页面
+        //selected_address => mixins
+        selected_date: undefined, // 选择的送货日期 [今天，2017-4-6]
+        selected_time: undefined, // 选择的送货时间 [16:00 ~ 18:00, "16:00"]
+        coupon_enable: false,  // 是否使用优惠券
+        // pay_mode: "cod", // cod(cash on delivery) || wechat
+        remark: undefined, // 备注
+          // 局部变量
+        temp_selected_date: undefined, // 选择控件的日期值 [今天，2017-4-6]
+        temp_selected_time: undefined, // 选择控件的时间值 [16:00 ~ 18:00, "16:00"]
+        show_time_selector: false, // 是否显示时间控件
+      }
     },
     computed: {
       // 选中类型的商品
@@ -210,12 +185,6 @@ $(function(){
       }
     },
     filters: {
-      price_text: function(price) {
-        return "￥" + (price / 100).toFixed(2);
-      },
-      address_text: function(addr) {
-        return addr.name + "  " + addr.phone + "\n" + addr.garden + addr.house_number;
-      },
       sales_volume_text: function(sales_volume) {
         return "月售" + sales_volume;
       }
@@ -474,92 +443,6 @@ $(function(){
         this.show_time_selector = false;
       },
 
-      // ====== 地址列表 ======
-      select_address: function(address) {
-        this.selected_address = address;
-        this.back_to("order");
-      },
-      edit_address: function(address) {
-        var that = this;
-        $.each(this.editing_address, function(attr){
-          that.editing_address[attr] = address[attr];
-        });
-
-        this.forward_to("edit_address");
-      },
-      delete_address: function(address) {
-        this.show_confirm_dialog({
-          text: "您确定要删除该地址？",
-          ok: function() {
-            var that = this;
-            $.post("/addresses/destroy", {
-              address_id: address.id
-            }).done(function(){
-              if ((index = that.address_info.indexOf(address)) >= 0) {
-                that.address_info.splice(index, 1);
-                if (that.selected_address === address) {
-                  that.selected_address = undefined;
-                }
-              }
-            }).fail(function(){
-              that.show_confirm_dialog({
-                text: "操作失败"
-              });
-            })
-          },
-          cancel: true
-        });
-      },
-      add_address: function() {
-        var that = this;
-        this.clear_editing_address();
-        this.forward_to("edit_address");
-      },
-
-      // ====== 编辑地址 ======
-      select_garden_handler: function(garden) {
-        this.editing_address.garden = garden;
-        this.show_garden_selector = false;
-      },
-
-      clear_editing_address: function() {
-        var that = this;
-        $.each(this.editing_address, function(attr){
-          if(typeof that.editing_address[attr] === "boolean") {
-            that.editing_address[attr] = false;
-          }else{
-            that.editing_address[attr] = undefined;
-          }
-        })
-      },
-      submit_address: function() {
-        if (this.submitting_address) {
-          return;
-        } else {
-          this.submitting_address = true;
-        }
-        var that = this,
-            url = (this.editing_address.id === undefined ? "/addresses/create" : "/addresses/update");
-        $.post(url, {
-          address_id: this.editing_address.id,
-          address: this.editing_address,
-        }).done(function(data){
-          that.address_info = data.addresses;
-          that.back_to("address");
-        }).fail(function(data){
-          var msg;
-          if (data.status === 422) {
-            msg = data.responseJSON.error;
-          } else {
-            msg = "操作失败";
-          }
-          that.show_confirm_dialog({
-            text: msg
-          });
-        }).always(function(){
-          that.submitting_address = false;
-        })
-      },
       submit_order: function() {
         if (this.selected_address === undefined) {
           this.show_confirm_dialog({
@@ -624,28 +507,8 @@ $(function(){
           })
         }
       },
-      // 弹框
-      show_confirm_dialog: function (options) {
-        this.confirm_params = {
-          text: options.text,
-          ok_callback: options.ok,
-          cancel_callback: options.cancel,
-          show: true
-        }
-      },
-      confirm_cancel: function () {
-        this.confirm_params.show = false;
-        if (typeof this.confirm_params.cancel_callback === "function") {
-          this.confirm_params.cancel_callback();
-        }
-      },
-      confirm_ok: function () {
-        this.confirm_params.show = false;
-        if (typeof this.confirm_params.ok_callback === "function") {
-          this.confirm_params.ok_callback.apply(this);
-        }
-      }
     },
+    mixins: [window.mixins["address"], window.mixins["utils"]],
     mounted: function () {
       // 设置默认地址
       var default_addr = undefined;
