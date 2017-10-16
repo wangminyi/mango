@@ -1,5 +1,5 @@
 $(function(){
-  window.mixins = {}
+  window.mixins = {};
   window.mixins["utils"] = {
     data: {
       // 弹出框
@@ -41,7 +41,8 @@ $(function(){
         }
       }
     }
-  }
+  };
+
   window.mixins["address"] = {
     data: {
       selected_address: undefined, // 选择的地址 json
