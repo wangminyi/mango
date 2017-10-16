@@ -32,14 +32,6 @@ $(function(){
       // 全局变量
       current_page: "entry", // 当前所在页面 entry detail order address edit_address
       pending: false, // loading
-      // 弹出框
-      confirm_params: {
-        show: false,
-        text: undefined,
-        ok_callback: undefined,
-        cancel_callback: undefined,
-      },
-
       // 过渡相关
       slide_direction: "page-slide-right",
 
@@ -57,7 +49,7 @@ $(function(){
 
       // 订单页面
         // 表单字段slot
-      selected_address: undefined, // 选择的地址 json
+      //selected_address => mixins
       selected_date: undefined, // 选择的送货日期 [今天，2017-4-6]
       selected_time: undefined, // 选择的送货时间 [16:00 ~ 18:00, "16:00"]
       coupon_enable: false,  // 是否使用优惠券
@@ -67,22 +59,6 @@ $(function(){
       temp_selected_date: undefined, // 选择控件的日期值 [今天，2017-4-6]
       temp_selected_time: undefined, // 选择控件的时间值 [16:00 ~ 18:00, "16:00"]
       show_time_selector: false, // 是否显示时间控件
-
-      address_info: addresses,
-
-      // 编辑地址页面
-      show_garden_selector: false,
-      submitting_address: false,
-      editing_address: {
-        id: undefined,
-        name: undefined,
-        gender: undefined,
-        phone: undefined,
-        garden: undefined,
-        house_number: undefined,
-        is_default: false,
-      }, // 正在编辑的地址 json
-      support_gardens: gon.settings.gardens,
     }, test_data),
     computed: {
       // 选中团购的商品
@@ -120,28 +96,7 @@ $(function(){
         return this.total_price;
       }
     },
-    filters: {
-      price_text: function(price) {
-        return "￥" + (price / 100).toFixed(2);
-      },
-      address_text: function(addr) {
-        return addr.name + "  " + addr.phone + "\n" + addr.garden + addr.house_number;
-      }
-    },
     methods: {
-      pending_ajax: function(options) {
-        var that = this,
-            pending_timeout_id;
-
-        pending_timeout_id = setTimeout(function(){
-          that.pending = true
-        }, 500);
-
-        $.ajax(options).always(function(){
-          clearTimeout(that.pending_timeout_id);
-          that.pending = false;
-        });
-      },
       select_entry: function(entry) {
         var that = this;
         this.pending_timeout_id = setTimeout(function(){
@@ -197,7 +152,7 @@ $(function(){
       open_time_selector: function() {
         this.show_time_selector = true;
         if (this.temp_selected_date === undefined) {
-          this.temp_selected_date = this.selected_date()[0];
+          this.temp_selected_date = this.selectable_date()[0];
         }
       },
       // 可选择日期 @Array [label, value]
@@ -290,92 +245,6 @@ $(function(){
         this.show_time_selector = false;
       },
 
-      // ====== 地址列表 ======
-      select_address: function(address) {
-        this.selected_address = address;
-        this.back_to("order");
-      },
-      edit_address: function(address) {
-        var that = this;
-        $.each(this.editing_address, function(attr){
-          that.editing_address[attr] = address[attr];
-        });
-
-        this.forward_to("edit_address");
-      },
-      delete_address: function(address) {
-        this.show_confirm_dialog({
-          text: "您确定要删除该地址？",
-          ok: function() {
-            var that = this;
-            $.post("/addresses/destroy", {
-              address_id: address.id
-            }).done(function(){
-              if ((index = that.address_info.indexOf(address)) >= 0) {
-                that.address_info.splice(index, 1);
-                if (that.selected_address === address) {
-                  that.selected_address = undefined;
-                }
-              }
-            }).fail(function(){
-              that.show_confirm_dialog({
-                text: "操作失败"
-              });
-            })
-          },
-          cancel: true
-        });
-      },
-      add_address: function() {
-        var that = this;
-        this.clear_editing_address();
-        this.forward_to("edit_address");
-      },
-
-      // ====== 编辑地址 ======
-      select_garden_handler: function(garden) {
-        this.editing_address.garden = garden;
-        this.show_garden_selector = false;
-      },
-
-      clear_editing_address: function() {
-        var that = this;
-        $.each(this.editing_address, function(attr){
-          if(typeof that.editing_address[attr] === "boolean") {
-            that.editing_address[attr] = false;
-          }else{
-            that.editing_address[attr] = undefined;
-          }
-        })
-      },
-      submit_address: function() {
-        if (this.submitting_address) {
-          return;
-        } else {
-          this.submitting_address = true;
-        }
-        var that = this,
-            url = (this.editing_address.id === undefined ? "/addresses/create" : "/addresses/update");
-        $.post(url, {
-          address_id: this.editing_address.id,
-          address: this.editing_address,
-        }).done(function(data){
-          that.address_info = data.addresses;
-          that.back_to("address");
-        }).fail(function(data){
-          var msg;
-          if (data.status === 422) {
-            msg = data.responseJSON.error;
-          } else {
-            msg = "操作失败";
-          }
-          that.show_confirm_dialog({
-            text: msg
-          });
-        }).always(function(){
-          that.submitting_address = false;
-        })
-      },
       submit_order: function() {
         if (this.selected_address === undefined) {
           this.show_confirm_dialog({
@@ -439,28 +308,8 @@ $(function(){
           })
         }
       },
-      // 弹框
-      show_confirm_dialog: function (options) {
-        this.confirm_params = {
-          text: options.text,
-          ok_callback: options.ok,
-          cancel_callback: options.cancel,
-          show: true
-        }
-      },
-      confirm_cancel: function () {
-        this.confirm_params.show = false;
-        if (typeof this.confirm_params.cancel_callback === "function") {
-          this.confirm_params.cancel_callback();
-        }
-      },
-      confirm_ok: function () {
-        this.confirm_params.show = false;
-        if (typeof this.confirm_params.ok_callback === "function") {
-          this.confirm_params.ok_callback.apply(this);
-        }
-      }
     },
+    mixins: [window.mixins["address"], window.mixins["utils"]],
     mounted: function () {
       // 设置默认地址
       var default_addr = undefined;
