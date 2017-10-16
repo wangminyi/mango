@@ -97,19 +97,6 @@ $(function(){
       }
     },
     methods: {
-      pending_ajax: function(options) {
-        var that = this,
-            pending_timeout_id;
-
-        pending_timeout_id = setTimeout(function(){
-          that.pending = true
-        }, 500);
-
-        $.ajax(options).always(function(){
-          clearTimeout(that.pending_timeout_id);
-          that.pending = false;
-        });
-      },
       select_entry: function(entry) {
         var that = this;
         this.pending_timeout_id = setTimeout(function(){
