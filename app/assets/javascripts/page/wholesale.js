@@ -13,8 +13,7 @@ $(function(){
 
   moment.locale("zh-CN");
   var weekday_name = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-      entries = gon.entries,
-      addresses = gon.addresses;
+      entries = gon.entries;
 
   test_data = {
     // selected_entry: entries[0],

@@ -11,8 +11,7 @@ $(function(){
   });
 
   moment.locale("zh-CN");
-  var categories = add_hot_category(gon.categories),
-      addresses = ;
+  var categories = add_hot_category(gon.categories);
 
   window.vue = new Vue({
     el: "#shop-vue-anchor",
