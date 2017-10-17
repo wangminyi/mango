@@ -25,7 +25,13 @@ class Settings
   class << self
     def gardens
       Garden.where(visible: true).map do |garden|
-        garden.attributes.slice("name", "address", "distribution_price")
+        pinyin = Pinyin.t(garden.name, split: " ")
+        garden.attributes.slice("name", "address", "distribution_price").merge(
+          "chars" => pinyin.split.join,
+          "first_letters" => pinyin.split.map{|chars| chars[0]}.join
+        )
+      end.sort_by do |garden|
+        garden["first_letters"][0]
       end
     end
 

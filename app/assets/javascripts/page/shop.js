@@ -1,4 +1,4 @@
-//= require vue/dist/vue.min
+//= require vue/dist/vue
 //= require moment
 //= require moment/locale/zh-cn
 
@@ -22,7 +22,7 @@ $(function(){
         show_detail_item: null, // 显示详情
         distribution_price: gon.settings.distribution_price, // 配送费
         free_distribution: gon.settings.free_distribution, // 免配送费金额
-        current_page: "shopping", // 当前所在页面 shopping order address edit_address
+        current_page: "select_garden", // 当前所在页面 shopping order address edit_address select_garden
         is_admin: gon.is_admin,
 
         // can_immediately: false, // 能否可以立即送

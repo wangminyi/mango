@@ -48,8 +48,8 @@ $(function(){
       selected_address: undefined, // 选择的地址 json
       address_info: gon.addresses,
       // 编辑地址页面
-      show_garden_selector: false,
       submitting_address: false,
+      garden_keyword: "",
       editing_address: {
         id: undefined,
         name: undefined,
@@ -59,10 +59,23 @@ $(function(){
         house_number: undefined,
         is_default: false,
       }, // 正在编辑的地址 json
-      support_gardens: gon.settings.gardens,
-      // support_gardens: $.map(gon.settings.new_gardens, function(garden) {
-      //   return garden.name;
-      // }),
+      // support_gardens: gon.settings.gardens,
+      support_gardens: gon.settings.new_gardens,
+    },
+
+    computed: {
+      grouped_gardens: function() {
+        var result = {},
+            keyword = this.garden_keyword;
+        $.each(this.support_gardens, function(index, garden) {
+          if (this.match_garden(garden, keyword)) {
+            var first_letter = garden.first_letters[0].toUpperCase();
+            result[first_letter] = result[first_letter] || [];
+            result[first_letter].push(garden.name);
+          }
+        }.bind(this))
+        return result;
+      }
     },
     methods: {
       // ====== 地址列表 ======
@@ -108,11 +121,6 @@ $(function(){
       },
 
       // ====== 编辑地址 ======
-      select_garden_handler: function(garden) {
-        this.editing_address.garden = garden;
-        this.show_garden_selector = false;
-      },
-
       clear_editing_address: function() {
         var that = this;
         $.each(this.editing_address, function(attr){
@@ -150,6 +158,19 @@ $(function(){
         }).always(function(){
           that.submitting_address = false;
         })
+      },
+      // 选择小区
+      match_garden: function (garden, keyword) {
+        if (keyword === "") {
+          return true;
+        } else {
+          // name chars first-letter
+          return garden.name.indexOf(keyword) >= 0 || garden.chars.indexOf(keyword) >= 0 || garden.first_letters.indexOf(keyword) >= 0;
+        }
+      },
+      select_garden_handler: function(garden) {
+        this.editing_address.garden = garden;
+        this.back_to("edit_address");
       },
     }
   }
