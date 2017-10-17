@@ -11,6 +11,7 @@ class WholesaleItem < ApplicationRecord
       unit_text: "/" + (self.unit_text || ""),
       description: self.description,
       sales_volume: self.sales_volume || 0,
+      limit_count: self.limit_count || 1,
       count: 0,
     }
   end

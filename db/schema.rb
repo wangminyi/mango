@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171013025733) do
+ActiveRecord::Schema.define(version: 20171017025322) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -253,6 +253,7 @@ ActiveRecord::Schema.define(version: 20171013025733) do
     t.integer  "sales_volume",                     default: 0
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
+    t.integer  "limit_count"
     t.index ["wholesale_entry_id"], name: "index_wholesale_items_on_wholesale_entry_id", using: :btree
   end
 

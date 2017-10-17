@@ -108,8 +108,7 @@ $(function(){
           that.selected_entry = entry;
           that.instances = data.instances;
           that.selected_instance = data.instances[0];
-          that.selected_item = entry.items[0];
-          that.buy_count = 1;
+          that.select_item(entry.items[0]);
           that.forward_to("detail");
         }).always(function(){
           clearTimeout(that.pending_timeout_id);
@@ -118,17 +117,18 @@ $(function(){
       },
       select_item: function(item) {
         this.selected_item = item;
+        this.buy_count = item.limit_count;
       },
       entry_price: function(entry) {
         return entry.min_price;
       },
-      increase_count: function(number) {
-        number = number || 1;
-        this.buy_count += number;
+      increase_count: function() {
+        this.buy_count += 1;
+        this.buy_count = Math.max(this.buy_count, this.selected_item.limit_count)
       },
-      decrease_count: function(number) {
-        number = Math.min(this.buy_count, number || 1);
-        this.buy_count -= number;
+      decrease_count: function() {
+        this.buy_count -= 1;
+        this.buy_count = Math.max(this.buy_count, this.selected_item.limit_count)
       },
       go_to_order: function() {
         if (this.selected_entry !== undefined && this.selected_instance !== undefined && this.selected_item !== undefined && this.buy_count > 0) {

@@ -50,20 +50,16 @@ class ShopController < ApplicationController
   end
 
   def wholesale
-    if !Rails.env.production? || Order::STAFF_IDS.include?(current_user.id)
-      entries = WholesaleEntry.where(visible: true)
-        .preload(:wholesale_items)
-        .order(updated_at: :desc)
-        .map(&:as_json)
+    entries = WholesaleEntry.where(visible: true)
+      .preload(:wholesale_items)
+      .order(updated_at: :desc)
+      .map(&:as_json)
 
-      gon.entries = entries
-      gon.addresses = current_user.addresses_json
+    gon.entries = entries
+    gon.addresses = current_user.addresses_json
 
-      gon.settings = Settings.as_json
-      gon.js_config_params = Wx.js_config_params(shop_wholesale_url)
-    else
-      render "/common/constructing"
-    end
+    gon.settings = Settings.as_json
+    gon.js_config_params = Wx.js_config_params(shop_wholesale_url)
   end
 
   def wholesale_instances

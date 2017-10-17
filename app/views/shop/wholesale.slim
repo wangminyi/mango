@@ -122,11 +122,11 @@ template#wholesale-template
                   | 购买数量：
                 .input-wrapper
                   .operation-container
-                    .decrease v-on:click="decrease_count()"
+                    .decrease v-on:click="decrease_count"
                       | -
                     .count
                       | {{ buy_count }}
-                    .increase v-on:click="increase_count()"
+                    .increase v-on:click="increase_count"
                       | +
 
               .form-submit-footer
