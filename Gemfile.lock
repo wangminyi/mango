@@ -68,6 +68,7 @@ GEM
       capistrano-bundler
       puma (~> 3.4)
     cd (1.0.1)
+    chinese_pinyin (1.0.1)
     clipboard (1.1.1)
     code (0.9.0)
       coderay (~> 1.1)
@@ -335,6 +336,7 @@ DEPENDENCIES
   byebug
   capistrano-rails
   capistrano3-puma
+  chinese_pinyin
   devise
   emojimmy
   enumerize

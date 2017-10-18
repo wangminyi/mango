@@ -4,22 +4,33 @@ class DataFactory
   class << self
     def import_gardens
       CSV.foreach("./data_files/gardens.csv", headers: :first_row) do |line|
-        distance = line[3].match(/[0-9\.]*/).to_s.to_f
-        distance *= 1000 if distance < 10
-        distribution_price = case distance
-        when 0...500
-          400
-        when 500...1000
-          800
-        else
-          1200
-        end
+        # distance = line[3].match(/[0-9\.]*/).to_s.to_f
+        # distance *= 1000 if distance < 10
+        distribution_price = 400
 
         Garden.create!(
           name: line[1],
           address: line[2].presence,
-          distribution_price: distribution_price
+          distribution_price: distribution_price,
+          free_price: line[0] == "周浦" ? 1000 : 5900
         )
+      end
+    end
+
+    def wash_garden
+      {
+        "周浦兰廷九龙仓" => "九龙仓兰廷",
+        "周浦印象春城" => "印象春城",
+        "周浦明天华城" => "明天华城",
+        "周浦繁荣华庭" => "繁荣华庭",
+        "康桥城中花园" => "城中花园",
+        "周浦菱翔苑" => "菱翔苑",
+        "周浦文馨园" => "文馨园",
+        "周浦泰苑公寓" => "泰苑公寓",
+        "绿地东上海" => "绿地东上海",
+        "周浦汇丽苑" => "汇丽苑",
+      }.each do |old, new|
+        Address.where(garden: old).update_all(garden: new)
       end
     end
 
