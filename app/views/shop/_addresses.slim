@@ -79,13 +79,6 @@
       .submit-address-btn v-on:click="submit_address"
         | {{ submitting_address ? "保存中..." : "保存地址" }}
 
-  /.select-garden-container.modal-panel v-show="show_garden_selector" v-on:click.self="show_garden_selector = false"
-    transition name="slide-up"
-      .garden-selector v-show="show_garden_selector"
-        .garden-selector-body
-          .option v-for="garden in support_gardens" v-on:click="select_garden_handler(garden)"
-            | {{ garden }}
-
 .select-garden-page.page-container v-else-if="current_page === 'select_garden'" key="select_garden"
   .shop-page-header
     i.fa.fa-chevron-left v-on:click="back_to('edit_address')"

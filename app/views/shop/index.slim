@@ -141,12 +141,7 @@ template#shop-template
                 | {{ total_count }}
             .shopping-price-container
               .total-price
-                span
-                  | {{ total_price | price_text }}
-                span.need-distribution v-if="total_price < free_distribution"
-                  |（另需支付运费{{ distribute_price / 100 }}元）
-              .distribute-hint
-                | 满{{free_distribution / 100}}元免配送费
+                | {{ total_price | price_text }}
             .footer-btn v-on:click="forward_to('order')"
               | 去结算
 
@@ -251,9 +246,15 @@ template#shop-template
             .panel-block
               span.price-label
                 | 运费
+                span style="margin-left: 10px;" v-if="distribution_price && distribute_price > 0"
+                  | (满
+                  | {{ free_distribution / 100 }}
+                  | 免运费)
               .price-tag.right-side
-                span
+                template v-if="distribution_price"
                   | {{ distribute_price | price_text }}
+                template v-else=true
+                  | 请先选择地址
             .panel-block v-show="coupon_enable"
               span.price-label
                 | 优惠

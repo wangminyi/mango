@@ -1,4 +1,4 @@
-//= require vue/dist/vue
+//= require vue/dist/vue.min
 //= require moment
 //= require moment/locale/zh-cn
 
@@ -20,9 +20,7 @@ $(function(){
       return {
         // 全局变量
         show_detail_item: null, // 显示详情
-        distribution_price: gon.settings.distribution_price, // 配送费
-        free_distribution: gon.settings.free_distribution, // 免配送费金额
-        current_page: "select_garden", // 当前所在页面 shopping order address edit_address select_garden
+        current_page: "shopping", // 当前所在页面 shopping order address edit_address select_garden
         is_admin: gon.is_admin,
 
         // can_immediately: false, // 能否可以立即送
@@ -127,6 +125,24 @@ $(function(){
         });
         return price;
       },
+      // 根据选择的小区计算的配送费 & 免费金额
+      selected_garden: function() {
+        if (this.selected_address) {
+          return this.support_gardens.find(function(garden){
+            return garden.name === this.selected_address.garden;
+          }.bind(this))
+        }
+      },
+      distribution_price: function() {
+        if (this.selected_garden) {
+          return this.selected_garden.distribution_price;
+        }
+      },
+      free_distribution: function() {
+        if (this.selected_garden) {
+          return this.selected_garden.free_price;
+        }
+      },
       // 赠品计算逻辑
       gift_list: function(){
         var result = [],
@@ -147,31 +163,27 @@ $(function(){
           } else {
             return this.selected_date[0] + " " + this.selected_time[0];
           }
-        } else {
-          return undefined;
         }
       },
       selected_date_time_value: function() {
         if (this.selected_date !== undefined && this.selected_time !== undefined) {
           return this.selected_date[1] + " " + this.selected_time[1];
-        } else {
-          return undefined;
         }
       },
       // 免运费原因
       free_distribution_reason: function() {
-        if (this.total_price >= this.free_distribution) {
-          return "满10元免配送费";
+        if (this.free_distribution && this.total_price >= this.free_distribution) {
+          return "满" + (this.free_distribution / 100 ) + "元免配送费";
         }
         // else if (this.can_immediately) {
         //   return "会员权益";
         // }
       },
       distribute_price: function() {
-        if (this.free_distribution_reason) {
-          return 0;
-        } else {
+        if (this.free_distribution && this.total_price < this.free_distribution) {
           return this.distribution_price;
+        } else {
+          return 0;
         }
       },
       order_price: function() {

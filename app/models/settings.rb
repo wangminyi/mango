@@ -26,7 +26,12 @@ class Settings
     def gardens
       Garden.where(visible: true).map do |garden|
         pinyin = Pinyin.t(garden.name, split: " ")
-        garden.attributes.slice("name", "address", "distribution_price").merge(
+        garden.attributes.slice(
+          "name",
+          "address",
+          "distribution_price",
+          "free_price"
+        ).merge(
           "chars" => pinyin.split.join,
           "first_letters" => pinyin.split.map{|chars| chars[0]}.join
         )
@@ -39,8 +44,6 @@ class Settings
       {
         gardens: GARDENS, # 小区名称
         new_gardens: self.gardens, # 结构化小区
-        distribution_price: DISTRIBUTION_PRICE, # 配送费
-        free_distribution: FREE_DISTRIBUTION, # 免配送费金额
         preferential_price: PREFERENTIAL_PRICE, # 优惠金额
       }
     end

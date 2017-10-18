@@ -13,29 +13,6 @@
   // @include transform(scale(.5, .5));
 }
 
-.page-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: $footer-height;
-  background-color: #333333;
-  padding-left: 20px;
-  z-index: 1;
-  .footer-btn {
-    height: $footer-height;
-    width: 25%;
-    max-width: 100px;
-    line-height: $footer-height;
-    text-align: center;
-    background-color: $theme-green;
-    color: white;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-}
-
 .page-panel {
   background-color: white;
   margin-top: 20px;
@@ -453,20 +430,11 @@
       .shopping-price-container {
         margin-left: 55px;
         .total-price {
-          span {
-            line-height: 25px;
-            color: white;
-            font-size: 20px;
-            display: inline-block;
-            vertical-align: top;
-            &.need-distribution {
-              font-size: 12px;
-            }
-          }
-        }
-        .distribute-hint {
-          color: #D5D5D5;
-          font-size: 12px;
+          line-height: 50px;
+          color: white;
+          font-size: 20px;
+          display: inline-block;
+          vertical-align: top;
         }
       }
 
