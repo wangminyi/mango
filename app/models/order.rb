@@ -42,8 +42,9 @@ class Order < ApplicationRecord
       i.price * count
     end.sum
 
-    if total < Settings::FREE_DISTRIBUTION
-      total += Settings::DISTRIBUTION_PRICE
+    garden = Garden.find_by(name: self.receiver_garden)
+    if total < garden.free_price
+      total += garden.distribution_price
     end
 
     # 优惠
