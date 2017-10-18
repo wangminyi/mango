@@ -89,7 +89,7 @@
 .select-garden-page.page-container v-else-if="current_page === 'select_garden'" key="select_garden"
   .shop-page-header
     i.fa.fa-chevron-left v-on:click="back_to('edit_address')"
-    input.search-input placeholder="小区搜索" v-model="garden_keyword"
+    input.search-input placeholder="小区搜索(兰廷/lanting/lt)" v-model="garden_keyword"
   .page-body-wrapper
     .grouped-garden-container v-for="(gardens, letter) in grouped_gardens"
       .grouped-letter
