@@ -321,7 +321,7 @@
 
             .price-container {
               margin-top: 5px;
-              .price, .weight, .original-price {
+              .price, .weight, .original-price, .stock-count {
                 display: inline-block;
                 vertical-align: bottom;
               }
@@ -342,6 +342,12 @@
 
               .original-price {
                 text-decoration: line-through;
+                font-size: 12px;
+                margin-left: 5px;
+                color: $theme-light-gray;
+              }
+
+              .stock-count {
                 font-size: 12px;
                 margin-left: 5px;
                 color: $theme-light-gray;

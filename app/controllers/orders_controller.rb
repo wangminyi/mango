@@ -30,7 +30,9 @@ class OrdersController < ApplicationController
         render json: {error: "微信支付失败，请稍后再试"}, status: 501
       end
     else
-      head :unprocessable_entity
+      render json: {
+        error: order.errors.full_messages[0]
+      }, status: :unprocessable_entity
     end
   end
 
