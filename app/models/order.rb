@@ -33,8 +33,8 @@ class Order < ApplicationRecord
   after_create :update_sales_volume
 
   ## validates
-  # validate :check_stock
   validate :check_price, on: [:create]
+  validate :check_stock, on: [:create]
   validates_presence_of :receiver_name, :receiver_address, :receiver_phone, :distribute_at
 
   def check_price
@@ -54,6 +54,15 @@ class Order < ApplicationRecord
     end
 
     self.total_price = 1 if STAFF_IDS.include?(user.id)
+  end
+
+  def check_stock
+    self.ingredients_hash.each do |i, count|
+      if i.stock_count && i.stock_count < count
+        self.errors.add :base, "订单数量超过库存，请刷新后调整购买数量"
+        break
+      end
+    end
   end
 
   def apply_prepay ip: "127.0.0.1"
@@ -86,6 +95,8 @@ class Order < ApplicationRecord
     end
   end
 
+  # Hash
+  # ingredient => count
   def ingredients_hash
     @__ingredients_hash ||= begin
       ingredients = Ingredient.where(id: self.item_list.map{|h| h["id"]}).preload(:category)
@@ -111,6 +122,14 @@ class Order < ApplicationRecord
     category_hash
   end
 
+  def paid!
+    if self.pay_status.unpaid?
+      self.update(pay_status: :paid)
+      set_stock
+      SlackNotifier.notify_order(self)
+    end
+  end
+
   private
     def generate_order_no
       self.order_no = [Time.now.strftime("%Y%m%d%H%M%S"), "0" * 10, Random.rand(10_000_000..99_999_999).to_s].join
@@ -125,6 +144,14 @@ class Order < ApplicationRecord
     def update_sales_volume
       self.ingredients_hash.each do |ingredient, count|
         ingredient.update_column(:sales_volume, (ingredient.sales_volume + count))
+      end
+    end
+
+    def set_stock
+      self.ingredients_hash.each do |i, count|
+        if i.stock_count
+          i.update(stock_count: i.stock_count - count)
+        end
       end
     end
 end

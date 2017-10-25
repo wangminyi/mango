@@ -19,13 +19,14 @@ class Ingredient < ApplicationRecord
       unit_text: "/" + (self.unit_text || "约500g"),
       count:    0,
       texture:  self.texture,
-      order_limit: self.order_limit, # 上限
+      order_limit: self.order_limit || self.stock_count, # 上限
       limit_count: self.limit_count, # 起卖
       description: parsed_description,
       sales_volume: self.sales_volume || 0,
       secondary_tag: self.secondary_tag,
       is_hot: self.is_hot,
-      original_price: self.is_hot? ? self.original_price : nil
+      original_price: self.is_hot? ? self.original_price : nil,
+      stock_count: self.stock_count || 0,
     }
   end
 

@@ -11,7 +11,7 @@ $(function(){
   });
 
   moment.locale("zh-CN");
-  var categories = add_hot_category(gon.categories);
+  var categories = add_calculated_category(gon.categories);
 
   window.vue = new Vue({
     el: "#shop-vue-anchor",
@@ -506,9 +506,9 @@ $(function(){
                   }
                   wx.chooseWXPay(params);
                 }
-              }).fail(function() {
+              }).fail(function(response) {
                 that.show_confirm_dialog({
-                  text: "订单提交失败",
+                  text: response.responseJSON.error,
                 })
               }).always(function() {
 
@@ -548,26 +548,40 @@ $(function(){
     }
   });
 
-  function add_hot_category(categories) {
-    var items = [];
+  function add_calculated_category(categories) {
+    var hot_items = [],
+        limited_items = [],
+        parse_categories = categories;
     $.each(categories, function(_, category) {
       $.each(category.items, function(_, item) {
         if (item.is_hot) {
-          items.push(item);
+          hot_items.push(item);
+        }
+        if (item.stock_count > 0) {
+          limited_items.push(item);
         }
       })
     });
 
-    if (items.length > 0) {
-      return [{
+    if (hot_items.length > 0) {
+      parse_categories.unshift({
         id: null,
         name: "每日特价",
-        items: items,
+        items: hot_items,
         with_secondary_tag: false,
-      }].concat(categories);
-    } else {
-      return categories;
+      })
     }
+
+    if (limited_items.length > 0) {
+      parse_categories.unshift({
+        id: null,
+        name: "限量抢购",
+        items: limited_items,
+        with_secondary_tag: false,
+      })
+    }
+
+    return categories;
   }
 
   function add_to_shopping_cart(event) {

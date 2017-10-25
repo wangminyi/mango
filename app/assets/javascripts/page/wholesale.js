@@ -60,10 +60,6 @@ $(function(){
       show_time_selector: false, // 是否显示时间控件
     }, test_data),
     computed: {
-      // 选中团购的商品
-      selected_items: function() {
-        return this.selected_entry.items;
-      },
       // 选购商品的总价
       total_price: function(){
         if (this.selected_item === undefined) {
