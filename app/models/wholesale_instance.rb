@@ -29,10 +29,12 @@ class WholesaleInstance < ApplicationRecord
       short_name: self.name.split(/[(（]/)[0],
       mode: self.mode,
       min_count: self.min_count,
+      max_count: self.max_count,
       current_count: self.current_count,
       distribute_scope: self.distribute_scope,
       distribute_date_from: distribute_date_from,
       distribute_date_to: distribute_date_to,
+      can_select: self.max_count.nil? || self.max_count > self.current_count,
     }
   end
 

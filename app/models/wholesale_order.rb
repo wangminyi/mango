@@ -45,6 +45,10 @@ class WholesaleOrder < ApplicationRecord
       self.errors.add :user_exist, "您已参加过该次拼团"
     end
 
+    if self.wholesale_instance.max_count && self.wholesale_instance.current_count + self.item_count > self.wholesale_instance.max_count
+      self.errors.add :base, "订单数量超过库存，请刷新后调整购买数量"
+    end
+
     self.total_price = 1 if STAFF_IDS.include?(user.id)
   end
 
@@ -81,6 +85,7 @@ class WholesaleOrder < ApplicationRecord
   def paid!
     self.update(pay_status: :paid)
     self.wholesale_instance.update(current_count: self.wholesale_instance.current_count + self.item_count)
+    SlackNotifier.notify_order(self)
   end
 
   def abandon!

@@ -60,6 +60,15 @@ $(function(){
       show_time_selector: false, // 是否显示时间控件
     }, test_data),
     computed: {
+      selectable_instances: function () {
+        if (this.instances) {
+          return $.grep(this.instances, function(instance) {
+            return instance.can_select;
+          })
+        } else {
+          return [];
+        }
+      },
       // 选购商品的总价
       total_price: function(){
         if (this.selected_item === undefined) {
@@ -103,7 +112,7 @@ $(function(){
         }).done(function(data){
           that.selected_entry = entry;
           that.instances = data.instances;
-          that.selected_instance = data.instances[0];
+          that.selected_instance = that.selectable_instances[0];
           that.select_item(entry.items[0]);
           that.forward_to("detail");
         }).always(function(){
@@ -119,12 +128,26 @@ $(function(){
         return entry.min_price;
       },
       increase_count: function() {
-        this.buy_count += 1;
-        this.buy_count = Math.max(this.buy_count, this.selected_item.limit_count)
+        if (!this.selected_instance) {
+          return;
+        }
+
+        if (!this.selected_instance.max_count || this.selected_instance.max_count - this.selected_instance.current_count > this.buy_count) {
+          this.buy_count += 1;
+        }
+        // 抢购类型的不考虑最低购买量
+        if (!this.selected_instance.max_count) {
+          this.buy_count = Math.max(this.buy_count, this.selected_item.limit_count)
+        }
       },
       decrease_count: function() {
-        this.buy_count -= 1;
-        this.buy_count = Math.max(this.buy_count, this.selected_item.limit_count)
+        if (this.buy_count > 1) {
+          this.buy_count -= 1;
+          // 抢购类型的不考虑最低购买量
+          if (!this.selected_instance.max_count) {
+            this.buy_count = Math.max(this.buy_count, this.selected_item.limit_count)
+          }
+        }
       },
       go_to_order: function() {
         if (this.selected_entry !== undefined && this.selected_instance !== undefined && this.selected_item !== undefined && this.buy_count > 0) {
@@ -291,9 +314,9 @@ $(function(){
                   }
                   wx.chooseWXPay(params);
                 }
-              }).fail(function() {
+              }).fail(function(response) {
                 that.show_confirm_dialog({
-                  text: "订单提交失败",
+                  text: response.responseJSON.error,
                 })
               }).always(function() {
 
