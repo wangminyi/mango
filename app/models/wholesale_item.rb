@@ -7,7 +7,6 @@ class WholesaleItem < ApplicationRecord
       name: self.alias || self.name,
       image: ActionController::Base.helpers.asset_url(self.image),
       price: self.price,
-      original_price: self.original_price,
       unit_text: "/" + (self.unit_text || ""),
       description: self.description,
       sales_volume: self.sales_volume || 0,

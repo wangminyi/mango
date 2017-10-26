@@ -18,6 +18,7 @@ class SlackNotifier
     begin
       content = [
         "ID: #{order.id}",
+        "类型: #{order.class == Order ? '买菜订单' : '拼团订单'}",
         "金额: #{order.total_price_yuan}",
         "姓名: #{order.receiver_name}",
         "地址: #{order.receiver_address}",

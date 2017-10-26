@@ -47,8 +47,6 @@ template#wholesale-template
                 | {{ entry_price(entry) | price_text }}
               .weight
                 | {{ entry.unit_text }}
-              .original-price v-if="entry.original_price"
-                | 原价{{ entry.original_pirce | price_text }}{{ entry.unit_text }}
             .select-btn v-on:click="select_entry(entry)"
               | 立即参加
 
@@ -79,12 +77,16 @@ template#wholesale-template
             .entry-platform-instance.panel-block v-for="instance in instances"
               .name
                 | {{ instance.name }}
-              .count-info v-if="instance.min_count > instance.current_count"
-                | 还差{{ instance.min_count - instance.current_count }}份即可成团
+              .count-info v-if="instance.max_count"
+                template v-if="instance.current_count >= instance.max_count"
+                  | 人数已满
+                template v-else=true
+                  | 还剩{{ instance.max_count - instance.current_count }}份
               .count-info v-else=true
-                | 已成团，建议参加此团
-          .entry-instances-info.page-panel v-else=true
-            .entry-user-instance.panel-block v-for="instance in instances"
+                template v-if="instance.current_count < instance.min_count"
+                  | 还差{{ instance.min_count - instance.current_count }}份即可成团
+                template v-else=true
+                  | 已成团，建议参加此团
 
           .tips.page-panel
             .panel-block
@@ -92,8 +94,10 @@ template#wholesale-template
             .panel-block
               | {{ selected_entry.tips}}
 
-        .page-footer v-on:click="show_entry_form = true"
+        .page-footer v-if="selectable_instances.length > 0" v-on:click="show_entry_form = true"
           | 立即订购参团
+        .page-footer v-else=true
+          | 下次手速要快哦
 
         .entry-form-container.modal-panel v-show="show_entry_form" v-on:click.self="show_entry_form = false"
           transition name="page-slide-up"
@@ -110,13 +114,22 @@ template#wholesale-template
                 .input-label
                   | 选择团：
                 .input-wrapper
-                  .input-button v-for="instance in instances" v-on:click="selected_instance = instance" v-bind:class="{selected: selected_instance === instance}"
+                  .input-button (
+                    v-for="instance in instances"
+                    v-if="instance.can_select"
+                    @click="selected_instance = instance"
+                    :class="{selected: selected_instance === instance}"
+                  )
                     .name
                       | {{ instance.short_name }}
-                    .count.reached v-if="instance.current_count < instance.min_count"
-                      | （差{{instance.min_count - instance.current_count}}份）
-                    .count.unreach v-else=true
-                      | （已成团）
+                    .count v-if="instance.max_count"
+                      | （还剩{{ instance.max_count - instance.current_count }}份）
+                    .count v-else=true
+                      template v-if="instance.current_count < instance.min_count"
+                        | （差{{instance.min_count - instance.current_count}}份）
+                      template v-else=true
+                        | （已成团）
+
               .input-group-container
                 .input-label
                   | 购买数量：
