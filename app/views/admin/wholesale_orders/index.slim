@@ -2,16 +2,20 @@
   = stylesheet_link_tag    'admin/wholesale_order_index', media: "all"
 
 .admin-wholesale-order-container
-  /.filter-container.panel.panel-default
+  .filter-container.panel.panel-default
     .panel-heading 筛选
     .panel-body
       = form_tag request.url, method: :get do ||
         = hidden_field_tag :status, @status
         .filter-wrapper
+          label 商品
+          = select "query", "wholesale_entry_id", WholesaleEntry.selectable_options, include_blank: true, selected: @q[:wholesale_entry_id]
+        .filter-wrapper
           label 批次
-          = select "query", "receiver_garden", @instances.pluck(:id, :, include_blank: true, selected: @q[:receiver_garden]
+          = select "query", "wholesale_instance_id", WholesaleInstance.selectable_options, include_blank: true, selected: @q[:wholesale_instance_id]
         .action-container
           = submit_tag "筛选", class: "btn btn-primary"
+          .btn.btn-default.clear 清空
 
   table.table.table-hover.table-bordered.table-striped
     thead.print-hidden

@@ -4,12 +4,17 @@ class Admin::WholesaleOrdersController < Admin::BaseController
   def index
     # 状态 meet unmeet all
     @status = params[:status] || "submitted"
+    @q  = params[:query] || {}
 
     @orders = WholesaleOrder.all.with_pay_status(:paid).with_status(@status).order(:distribute_at)
 
-    # if (receiver_garden = @q[:receiver_garden]).present?
-    #   @orders = @orders.where(receiver_garden: receiver_garden)
-    # end
+    if (entry_id = @q[:wholesale_entry_id]).present?
+      @orders = @orders.eager_load(:wholesale_instance).where(wholesale_instances: {wholesale_entry_id: entry_id})
+    end
+
+    if (instance_id = @q[:wholesale_instance_id]).present?
+      @orders = @orders.eager_load(:wholesale_instance).where(wholesale_instances: {id: instance_id})
+    end
 
     # if (distribute_at_date = @q[:distribute_at_date]).present? && (distribute_at_time = @q[:distribute_at_time]).present?
     #   distribute_at_scope = if distribute_at_time == "morning"

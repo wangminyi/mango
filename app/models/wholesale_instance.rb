@@ -40,4 +40,10 @@ class WholesaleInstance < ApplicationRecord
 
   def participants
   end
+
+  def self.selectable_options
+    self.where("wholesale_instances.close_at > ?", 1.weeks.ago).preload(:wholesale_entry).order(:close_at).map do |instance|
+      [[instance.wholesale_entry.select_option_text, instance.name].join("-"), instance.id]
+    end
+  end
 end

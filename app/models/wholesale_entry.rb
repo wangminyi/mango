@@ -59,4 +59,14 @@ class WholesaleEntry < ApplicationRecord
       items: self.wholesale_items.map(&:as_json),
     }
   end
+
+  def select_option_text
+    self.alias || self.name
+  end
+
+  def self.selectable_options
+    self.all.map do |entry|
+      [entry.select_option_text, entry.id]
+    end
+  end
 end

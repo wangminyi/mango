@@ -6,7 +6,7 @@
   .filter-container.panel.panel-default.print-hidden
     .panel-heading 筛选
     .panel-body
-      = form_tag request.url, method: :get do ||
+      = form_tag request.url, method: :get
         = hidden_field_tag :status, @status
         .filter-wrapper
           label 小区
