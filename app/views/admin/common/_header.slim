@@ -41,6 +41,8 @@ nav.navbar.navbar-default
             = link_to "已完成", admin_wholesale_orders_path(status: :finished)
           li.nav-item class=("active" if @active_nav == "abandon_wholesale_order")
             = link_to "已废弃", admin_wholesale_orders_path(status: :abandon)
+          li.nav-item class=("active" if @active_nav == "all_wholesale_order")
+            = link_to "全部订单", admin_wholesale_orders_path(status: :all)
 
       li.nav-item
         = link_to "商品", admin_ingredients_path

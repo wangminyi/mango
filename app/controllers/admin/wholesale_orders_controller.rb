@@ -1,12 +1,16 @@
 class Admin::WholesaleOrdersController < Admin::BaseController
-  before_action :set_order, only: [:show, :update, :next_state, :abandon, :invoice]
+  before_action :set_order, only: [:show, :edit, :update, :next_state, :abandon, :invoice]
 
   def index
     # 状态 meet unmeet all
     @status = params[:status] || "submitted"
     @q  = params[:query] || {}
 
-    @orders = WholesaleOrder.all.with_pay_status(:paid).with_status(@status).order(:distribute_at)
+    @orders = WholesaleOrder.all.with_pay_status(:paid).order(:distribute_at)
+
+    if @status != "all"
+      @orders = @orders.with_status(@status)
+    end
 
     if (entry_id = @q[:wholesale_entry_id]).present?
       @orders = @orders.eager_load(:wholesale_instance).where(wholesale_instances: {wholesale_entry_id: entry_id})
@@ -29,6 +33,9 @@ class Admin::WholesaleOrdersController < Admin::BaseController
   end
 
   def show
+  end
+
+  def edit
   end
 
   def update

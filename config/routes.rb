@@ -53,7 +53,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :wholesale_orders, only: [:index, :show] do
+    resources :wholesale_orders, only: [:index, :show, :update, :edit] do
       member do
         post :next_state
         post :abandon
