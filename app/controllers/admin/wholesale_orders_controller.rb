@@ -82,29 +82,17 @@ class Admin::WholesaleOrdersController < Admin::BaseController
     data = CSV.generate do |csv|
       csv << field_names
       @orders.each do |order|
-        first_row = true
-        order.item_details.each do |ingredent|
-          row = if first_row
-              first_row = false
-              [
-                order.id,
-                order.receiver_address,
-                order.distribute_at.strftime("%F %T"),
-              ]
-            else
-              [
-                nil,
-                nil,
-                nil,
-              ]
-            end + [
-              ingredent["name"],
-              ingredent["count"],
-              "%.2f" % (ingredent["price"].to_i / 100.0),
-              "%.2f" % (ingredent["price"].to_i * ingredent["count"].to_i / 100.0),
-            ]
-          csv << row
-        end
+        ingredient = order.item_details[0]
+        row = [
+          order.id,
+          order.receiver_address,
+          order.distribute_at.strftime("%F %T"),
+          ingredient["name"],
+          ingredient["count"],
+          "%.2f" % (ingredient["price"].to_i / 100.0),
+          "%.2f" % (ingredient["price"].to_i * ingredient["count"].to_i / 100.0),
+        ]
+        csv << row
       end
     end
     send_data data, filename: "订单.csv"

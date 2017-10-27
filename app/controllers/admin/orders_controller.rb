@@ -92,7 +92,7 @@ class Admin::OrdersController < Admin::BaseController
       csv << field_names
       @orders.each do |order|
         first_row = true
-        order.item_details.each do |ingredent|
+        order.item_details.each do |ingredient|
           row = if first_row
               first_row = false
               [
@@ -107,10 +107,10 @@ class Admin::OrdersController < Admin::BaseController
                 nil,
               ]
             end + [
-              ingredent["name"],
-              ingredent["count"],
-              "%.2f" % (ingredent["price"].to_i / 100.0),
-              "%.2f" % (ingredent["price"].to_i * ingredent["count"].to_i / 100.0),
+              ingredient["name"],
+              ingredient["count"],
+              "%.2f" % (ingredient["price"].to_i / 100.0),
+              "%.2f" % (ingredient["price"].to_i * ingredient["count"].to_i / 100.0),
             ]
           csv << row
         end
