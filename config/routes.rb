@@ -62,6 +62,7 @@ Rails.application.routes.draw do
 
       collection do
         get :bulk_export_csv
+        post :bulk_push
       end
     end
 

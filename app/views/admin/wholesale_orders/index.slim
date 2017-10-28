@@ -18,6 +18,7 @@
           .btn.btn-default.clear 清空
 
   .group-action
+    .btn.btn-primary.bulk-push 批量推进状态
     .btn.btn-primary.bulk-export-csv 导出订单
 
   table.table.table-hover.table-bordered.table-striped
@@ -70,11 +71,19 @@ javascript:
       $("td.select input").prop( "checked", $(this).is(":checked") );
     });
 
-    $(".bulk-open").on("click", function() {
-      if ($("tr.detail.hidden").length > 0) {
-        $("tr.detail.hidden").removeClass("hidden");
+    $(".bulk-push").on("click", function() {
+      var ids = get_selected_ids();
+
+      if (ids.length === 0) {
+        alert("请至少选中一个订单");
       } else {
-        $("tr.detail").addClass("hidden");
+        if (confirm("确定批量推进订单状态？")) {
+          $.post("/admin/wholesale_orders/bulk_push", {
+            ids: ids
+          }).done(function() {
+            location.reload();
+          });
+        }
       }
     });
 

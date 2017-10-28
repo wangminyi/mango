@@ -68,6 +68,14 @@ class Admin::WholesaleOrdersController < Admin::BaseController
     @no_footer = true
   end
 
+  def bulk_push
+    orders = WholesaleOrder.where(id: params[:ids])
+    if (next_state = orders.first.next_state_value).present?
+      orders.update_all(status: next_state)
+    end
+    head :ok
+  end
+
   def bulk_export_csv
     @orders = WholesaleOrder.where(id: params[:ids].split(","))
     field_names = %w(
