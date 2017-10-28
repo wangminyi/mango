@@ -79,7 +79,7 @@ template#wholesale-template
                 | {{ instance.name }}
               .count-info v-if="instance.max_count"
                 template v-if="instance.current_count >= instance.max_count"
-                  | 人数已满
+                  | 已售罄
                 template v-else=true
                   | 还剩{{ instance.max_count - instance.current_count }}份
               .count-info v-else=true
@@ -117,7 +117,7 @@ template#wholesale-template
                   .input-button (
                     v-for="instance in instances"
                     v-if="instance.can_select"
-                    @click="selected_instance = instance"
+                    @click="select_instance(instance)"
                     :class="{selected: selected_instance === instance}"
                   )
                     .name

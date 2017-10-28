@@ -124,6 +124,10 @@ $(function(){
         this.selected_item = item;
         this.buy_count = item.limit_count;
       },
+      select_instance: function(instance) {
+        this.selected_instance = instance;
+        this.buy_count = item.limit_count;
+      },
       entry_price: function(entry) {
         return entry.min_price;
       },
