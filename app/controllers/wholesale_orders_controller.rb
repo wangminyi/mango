@@ -53,7 +53,6 @@ class WholesaleOrdersController < ApplicationController
         :item_count,
         :item_price,
         :total_price,
-        :preferential_price,
         :distribute_at,
         :receiver_name,
         :receiver_garden,

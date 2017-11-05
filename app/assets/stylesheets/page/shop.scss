@@ -637,7 +637,7 @@
     }
   }
 
-  .remark-input {
+  .remark-input, .referral-code-input {
     width: 75%;
     input {
       width: 100%;
@@ -665,6 +665,24 @@
       margin-left: 10px;
     }
   }
+
+  .coupon-selector {
+    position: absolute;
+    width: 100%;
+    bottom: $footer-height;
+    height: 230px;
+    background-color: white;
+    font-size: 16px;
+    text-align: center;
+    overflow: auto;
+    .option {
+      padding: 10px 0;
+      &.selected {
+        color: $theme-green;
+      }
+    }
+  }
+
   // 时间选择框
   .select-time-container {
     .time-selector {

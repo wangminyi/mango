@@ -1,7 +1,6 @@
 class Settings
   DISTRIBUTION_PRICE = 400
   FREE_DISTRIBUTION = 1000
-  PREFERENTIAL_PRICE = 300
   GARDENS = %w(
               周浦兰廷九龙仓
               周浦逸亭佳苑
@@ -44,7 +43,6 @@ class Settings
       {
         gardens: GARDENS, # 小区名称
         new_gardens: self.gardens, # 结构化小区
-        preferential_price: PREFERENTIAL_PRICE, # 优惠金额
       }
     end
   end

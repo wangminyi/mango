@@ -1,0 +1,30 @@
+.image-container
+  img v-bind:src="item.image" v-on:click="show_item_detail(item)"
+.ingredient-info-container
+  .name-container
+    | {{ item.name }}
+  .tag-container
+    .tag v-for="tag in item.tags"
+      | {{ tag }}
+  .texture v-if="item.texture"
+    | {{ item.texture }}
+  .relate-dishes-container
+    | {{ item.label }}
+  .sales-volume-container v-if="item.sales_volume > 0"
+    | {{ item.sales_volume | sales_volume_text }}
+  .price-container
+    .price
+      | {{ item_price(item) | price_text }}
+    .weight
+      | {{ item.unit_text }}
+    .original-price v-if="item.original_price"
+      | {{ item.original_price | price_text }}
+    .stock-count v-if="item.stock_count > 0"
+      | {{ "仅剩" + item.stock_count + "份" }}
+  .operation-container
+    .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
+      | -
+    .count v-show="item.count > 0"
+      | {{ item.count }}
+    .increase v-on:click="increase_item(item)"
+      | +

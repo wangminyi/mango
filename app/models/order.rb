@@ -26,6 +26,7 @@ class Order < ApplicationRecord
 
   ## associations
   belongs_to :user
+  belongs_to :coupon
 
   ## callbacks
   before_create :generate_order_no
@@ -33,9 +34,16 @@ class Order < ApplicationRecord
   after_create :update_sales_volume
 
   ## validates
+  validate :check_coupon, on: [:create]
   validate :check_price, on: [:create]
   validate :check_stock, on: [:create]
   validates_presence_of :receiver_name, :receiver_address, :receiver_phone, :distribute_at
+
+  def check_coupon
+    if self.coupon && self.user.coupons.visible.exclude?(self.coupon)
+      self.errors.add :coupon_id, "优惠券不可用"
+    end
+  end
 
   def check_price
     total = self.ingredients_hash.map do |i, count|
@@ -48,6 +56,9 @@ class Order < ApplicationRecord
     end
 
     # 优惠
+    total -= self.coupon.amount if self.coupon
+
+    total = [total, 1].max
 
     if total != self.total_price.to_i
       self.errors.add :total_price, "订单金额不符"
@@ -125,7 +136,9 @@ class Order < ApplicationRecord
   def paid!
     if self.pay_status.unpaid?
       self.update(pay_status: :paid)
+      create_referee_coupon
       set_stock
+      self.coupon&.update(used_at: Time.now)
       SlackNotifier.notify_order(self)
     end
   end
@@ -152,6 +165,22 @@ class Order < ApplicationRecord
         if i.stock_count
           i.update(stock_count: i.stock_count - count)
         end
+      end
+    end
+
+    def create_referee_coupon
+      if self.user.orders.with_pay_status(:paid).one? && self.user.referee
+        self.user.referee.coupons.create(
+          desc: "邀请优惠券",
+          amount: 500,
+          price_limit: 1000,
+          coupon_type: :referral,
+          valid_begin_at: Time.now.beginning_of_day,
+          valid_end_at: Time.now.beginning_of_day.since(1.week),
+          extra_info: {
+            referrer_id: self.user_id
+          }
+        )
       end
     end
 end

@@ -49,32 +49,7 @@ template#shop-template
                 .no-result v-if="searched_items.length === 0"
                   | 无搜索结果
                 .ingredients-panel v-for="item in searched_items"
-                  .image-container
-                    img v-bind:src="item.image" v-on:click="show_item_detail(item)"
-                  .ingredient-info-container
-                    .name-container
-                      | {{ item.name }}
-                    .tag-container
-                      .tag v-for="tag in item.tags"
-                        | {{ tag }}
-                    .texture v-if="item.texture"
-                      | {{ item.texture }}
-                    .relate-dishes-container
-                      | {{ item.label }}
-                    .sales-volume-container v-if="item.sales_volume > 0"
-                      | {{ item.sales_volume | sales_volume_text }}
-                    .price-container
-                      .price
-                        | {{ item_price(item) | price_text }}
-                      .weight
-                        | {{ item.unit_text }}
-                    .operation-container
-                      .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
-                        | -
-                      .count v-show="item.count > 0"
-                        | {{ item.count }}
-                      .increase v-on:click="increase_item(item)"
-                        | +
+                  = render partial: "ingredient_item"
 
         .ingredients-container v-else=true
           .event-message-container v-if="first_order"
@@ -101,36 +76,7 @@ template#shop-template
                     .secondary-tag-header v-if="secondary_tags.length > 1" v-bind:data-tag="tag"
                       | {{ tag }}
                     .ingredients-panel v-for="item in items" v-bind:key="item.id"
-                      .image-container
-                        img v-bind:src="item.image" v-on:click="show_item_detail(item)"
-                      .ingredient-info-container
-                        .name-container
-                          | {{ item.name }}
-                        .tag-container
-                          .tag v-for="tag in item.tags"
-                            | {{ tag }}
-                        .texture v-if="item.texture"
-                          | {{ item.texture }}
-                        .relate-dishes-container
-                          | {{ item.label }}
-                        .sales-volume-container v-if="item.sales_volume > 0"
-                          | {{ item.sales_volume | sales_volume_text }}
-                        .price-container
-                          .price
-                            | {{ item_price(item) | price_text }}
-                          .weight
-                            | {{ item.unit_text }}
-                          .original-price v-if="item.original_price"
-                            | {{ item.original_price | price_text }}
-                          .stock-count v-if="item.stock_count > 0"
-                            | {{ "仅剩" + item.stock_count + "份" }}
-                        .operation-container
-                          .decrease v-show="item.count > 0" v-on:click="decrease_item(item)"
-                            | -
-                          .count v-show="item.count > 0"
-                            | {{ item.count }}
-                          .increase v-on:click="increase_item(item)"
-                            | +
+                      = render partial: "ingredient_item"
 
         .shopping-info-container.page-footer
           .shopping-cart-empty v-if="total_count === 0"
@@ -225,17 +171,23 @@ template#shop-template
                 .hint
                   | x{{item.count}}
 
-          /.page-panel.additional-info
-            .panel-block
-              | 优惠券
-              .checkbox-btn.right-side v-bind:class="coupon_enable ? 'enable' : 'disable'" v-on:click="coupon_enable = !coupon_enable"
-                .btn-circle
-
           .page-panel.remark-container
+            .panel-block v-if="first_order"
+              | 邀请码
+              .referral-code-input.right-side
+                = text_field_tag "referral_code", nil, "v-model.trim" => "referral_code", placeholder: "填写邀请码，获得优惠券"
+
+            .panel-block {
+              v-if="coupons.length > 0"
+              @click="show_coupon_selector = true"
+            }
+              | 优惠券
+              i.fa.fa-chevron-right.right-side
+
             .panel-block
               | 备注
               .remark-input.right-side
-                = text_field_tag "remark", nil, "v-model.trim" => "remark", class: "remark-input", placeholder: "若对订单有特殊要求，请在此填写"
+                = text_field_tag "remark", nil, "v-model.trim" => "remark", placeholder: "若对订单有特殊要求，请在此填写"
 
           .page-panel.order-detail
             .panel-block
@@ -257,11 +209,11 @@ template#shop-template
                   | {{ distribute_price | price_text }}
                 template v-else=true
                   | 请先选择地址
-            .panel-block v-show="coupon_enable"
+            .panel-block v-if="selected_coupon"
               span.price-label
-                | 优惠
+                | 优惠券
               .price-tag.right-side
-                | {{ (-preferential_price) | price_text }}
+                | {{ (-selected_coupon.amount) | price_text }}
             .panel-block
               span.price-label
                 | 应付金额
@@ -288,5 +240,24 @@ template#shop-template
                 .time
                   .option v-for="time in selectable_time()" v-on:click="time_option_handler(time)" v-bind:class="{ selected: time_selected(time) }"
                     | {{ time[0] }}
+
+        .select-coupon-container.modal-panel {
+          v-show="show_coupon_selector"
+          @click.self="show_coupon_selector = false"
+        }
+          transition name="slide-up"
+            .coupon-selector v-show="show_coupon_selector"
+              .coupon-selector-body
+                .option {
+                  @click="select_coupon(null)"
+                  :class="{ selected: !selected_coupon }"
+                }
+                  | 不使用优惠券
+                .option {
+                  v-for="coupon in coupons"
+                  @click="select_coupon(coupon)"
+                  :class="{ selected: coupon === selected_coupon }"
+                }
+                  | {{ coupon | coupon_text }}
 
       = render partial: "shop/addresses"

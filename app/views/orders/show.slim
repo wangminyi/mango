@@ -90,13 +90,13 @@
           = "（#{@order.free_distribution_reason}）"
         = format_price @order.distribution_price
 
-    - if @order.preferential_price > 0
+    - if @order.coupon
       .order-block
         sapn.pull-left
           | 优惠
         span.pull-right
           | -
-          = format_price @order.preferential_price
+          = format_price @order.coupon.amount
 
     .order-block
       sapn.pull-left

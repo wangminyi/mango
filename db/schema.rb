@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171026023237) do
+ActiveRecord::Schema.define(version: 20171105133510) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -61,6 +61,24 @@ ActiveRecord::Schema.define(version: 20171026023237) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["article_id"], name: "index_comments_on_article_id", using: :btree
+  end
+
+  create_table "coupons", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.string   "desc"
+    t.integer  "amount"
+    t.integer  "price_limit"
+    t.string   "coupon_type"
+    t.datetime "used_at"
+    t.datetime "valid_begin_at"
+    t.datetime "valid_end_at"
+    t.text     "extra_info",     limit: 65535
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.index ["used_at"], name: "index_coupons_on_used_at", using: :btree
+    t.index ["user_id"], name: "index_coupons_on_user_id", using: :btree
+    t.index ["valid_begin_at"], name: "index_coupons_on_valid_begin_at", using: :btree
+    t.index ["valid_end_at"], name: "index_coupons_on_valid_end_at", using: :btree
   end
 
   create_table "dishes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -173,6 +191,7 @@ ActiveRecord::Schema.define(version: 20171026023237) do
     t.text     "gifts",                    limit: 65535
     t.text     "item_list",                limit: 65535
     t.text     "admin_remark",             limit: 65535
+    t.integer  "coupon_id"
     t.index ["distribute_at"], name: "index_orders_on_distribute_at", using: :btree
     t.index ["distributer_id"], name: "index_orders_on_distributer_id", using: :btree
     t.index ["order_no"], name: "index_orders_on_order_no", unique: true, using: :btree
@@ -182,26 +201,30 @@ ActiveRecord::Schema.define(version: 20171026023237) do
     t.index ["user_id"], name: "index_orders_on_user_id", using: :btree
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "nickname",               default: "",              collation: "utf8mb4_general_ci"
-    t.string   "encrypted_password",     default: "",              collation: "utf8_general_ci"
-    t.string   "open_id",                                          collation: "utf8_general_ci"
-    t.string   "phone",                                            collation: "utf8_general_ci"
-    t.string   "user_name",                                        collation: "utf8_general_ci"
-    t.string   "reset_password_token",                             collation: "utf8_general_ci"
+    t.string   "encrypted_password",     default: ""
+    t.string   "open_id"
+    t.string   "phone"
+    t.string   "user_name"
+    t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",          default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",                               collation: "utf8_general_ci"
-    t.string   "last_sign_in_ip",                                  collation: "utf8_general_ci"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.string   "role",                                             collation: "utf8_general_ci"
+    t.string   "role"
     t.string   "email",                  default: "", null: false, collation: "utf8mb4_general_ci"
+    t.string   "referral_code"
+    t.integer  "referee_id"
     t.index ["nickname"], name: "index_users_on_nickname", length: { nickname: 191 }, using: :btree
     t.index ["open_id"], name: "index_users_on_open_id", unique: true, using: :btree
+    t.index ["referee_id"], name: "index_users_on_referee_id", using: :btree
+    t.index ["referral_code"], name: "index_users_on_referral_code", using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
     t.index ["role"], name: "index_users_on_role", using: :btree
   end

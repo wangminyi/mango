@@ -25,3 +25,7 @@ zh-CN:
         distributing: 正在送货
         finished: 完成订单
         abandon: 废弃
+
+    coupon:
+      coupon_type:
+        referral: 邀请好友

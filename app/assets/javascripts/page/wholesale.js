@@ -51,7 +51,6 @@ $(function(){
       //selected_address => mixins
       selected_date: undefined, // 选择的送货日期 [今天，2017-4-6]
       selected_time: undefined, // 选择的送货时间 [16:00 ~ 18:00, "16:00"]
-      coupon_enable: false,  // 是否使用优惠券
       // pay_mode: "cod", // cod(cash on delivery) || wechat
       remark: undefined, // 备注
         // 局部变量
@@ -295,7 +294,6 @@ $(function(){
                   item_count: this.buy_count,
                   item_price: this.total_price, // 商品总价
                   total_price: this.order_price, // 订单总价 double check
-                  preferential_price: 0,
                   distribute_at: this.selected_date_time_value,
                   receiver_name: addr.name,
                   receiver_phone: addr.phone,

@@ -18,6 +18,11 @@ class User < ApplicationRecord
   has_many :addresses
   has_many :history_logs
   has_many :articles
+  has_many :coupons
+  has_many :referrers, class_name: "User", foreign_key: "referee_id"
+  belongs_to :referee, class_name: "User"
+
+  before_create :set_referral_code
 
   def email_required?
     false
@@ -33,5 +38,17 @@ class User < ApplicationRecord
 
   def is_super_admin?
     !Rails.env.production? || self.id == 2
+  end
+
+  def set_referral_code
+    self.referral_code = loop do
+      temp = SecureRandom.rand 1000..9999
+      break temp if !User.exists?(referral_code: temp)
+    end
+  end
+
+  def generate_referral_code
+    self.set_referral_code
+    self.save
   end
 end

@@ -26,13 +26,19 @@
         .item
           .name = i["name"]
           .count = "x #{i["count"]}"
-          .price = format_price_without_unit(i["price"])
+          .price = format_price_without_unit(i["price"] * i["count"])
 
       - if order.distribution_price > 0
         .item
           .name 配送费
           .count
           .price = format_price_without_unit(order.distribution_price)
+
+      - if order.coupon
+        .item
+          .name 优惠券
+          .count
+          .price = format_price_without_unit(-order.coupon.amount)
 
       - order.gifts.each do |g|
         .item

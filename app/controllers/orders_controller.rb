@@ -13,13 +13,18 @@ class OrdersController < ApplicationController
   end
 
   def create
+    is_first = current_user.orders.with_pay_status(:paid).empty?
     order = current_user.orders.build order_param
-    gifts = current_user.orders.with_pay_status(:paid).exists? ? [] : JSON.parse(params[:order][:gifts])
+    gifts = is_first ? JSON.parse(params[:order][:gifts]) : []
     order.assign_attributes(
       item_list: JSON.parse(params[:order][:item_list]),
       gifts: gifts,
     )
     if order.save
+      if is_first && (code = params[:referral_code]).present? && (referee = User.find_by(referral_code: code)).present?
+        current_user.update(referee: referee)
+      end
+
       js_pay_req = order.apply_prepay
       if js_pay_req.present?
         render json: {
@@ -58,7 +63,7 @@ class OrdersController < ApplicationController
         :distribute_at,
         :distribution_price,
         :free_distribution_reason,
-        :preferential_price,
+        :coupon_id,
         :receiver_name,
         :receiver_garden,
         :receiver_phone,

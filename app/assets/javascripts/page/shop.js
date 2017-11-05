@@ -22,10 +22,6 @@ $(function(){
         show_detail_item: null, // 显示详情
         current_page: "shopping", // 当前所在页面 shopping order address edit_address select_garden
         is_admin: gon.is_admin,
-
-        // can_immediately: false, // 能否可以立即送
-        preferential_price: gon.settings.preferential_price, // 优惠金额
-
         // 过渡相关
         slide_direction: "slide-right",
 
@@ -44,13 +40,16 @@ $(function(){
         //selected_address => mixins
         selected_date: undefined, // 选择的送货日期 [今天，2017-4-6]
         selected_time: undefined, // 选择的送货时间 [16:00 ~ 18:00, "16:00"]
-        coupon_enable: false,  // 是否使用优惠券
+        selected_coupon: null,
         // pay_mode: "cod", // cod(cash on delivery) || wechat
-        remark: undefined, // 备注
+        remark: "", // 备注
+        referral_code: "",
+        coupons: gon.coupons,
           // 局部变量
         temp_selected_date: undefined, // 选择控件的日期值 [今天，2017-4-6]
         temp_selected_time: undefined, // 选择控件的时间值 [16:00 ~ 18:00, "16:00"]
         show_time_selector: false, // 是否显示时间控件
+        show_coupon_selector: false, // 是否显示时间控件
       }
     },
     computed: {
@@ -189,15 +188,24 @@ $(function(){
       order_price: function() {
         var result = this.total_price + this.distribute_price;
 
-        if (this.coupon_enable) {
-          result -= this.preferential_price;
+        if (this.selected_coupon) {
+          result -= this.selected_coupon.amount;
         }
-        return Math.max( result, 0 );
+        return Math.max( result, 1 );
       }
     },
     filters: {
       sales_volume_text: function(sales_volume) {
         return "月售" + sales_volume;
+      },
+      coupon_text: function(coupon) {
+        // var price_limit;
+        // if (coupon.price_limit > 0) {
+        //   price_limit = "(满" + (coupon.price_limit / 100);
+        // } else {
+        //   price_limit = "任意金额";
+        // }
+        return coupon.desc + "(减" + (coupon.amount / 100) + "元，使用期限" + coupon.valid_to + ")";
       }
     },
     methods: {
@@ -454,6 +462,11 @@ $(function(){
         this.show_time_selector = false;
       },
 
+      // 选择优惠券
+      select_coupon: function(coupon) {
+        this.selected_coupon = coupon;
+        this.show_coupon_selector = false;
+      },
       submit_order: function() {
         if (this.selected_address === undefined) {
           this.show_confirm_dialog({
@@ -476,6 +489,7 @@ $(function(){
                 };
               }));
               $.post("/orders", {
+                referral_code: this.referral_code,
                 order: {
                   item_list: item_list,
                   gifts: JSON.stringify(this.gift_list),
@@ -484,12 +498,12 @@ $(function(){
                   distribute_at: this.selected_date_time_value,
                   distribution_price: this.distribute_price,
                   free_distribution_reason: this.free_distribution_reason,
-                  preferential_price: this.coupon_enable ? this.preferential_price : 0,
                   receiver_name: addr.name,
                   receiver_phone: addr.phone,
                   receiver_garden: addr.garden,
                   receiver_address: addr.garden + addr.house_number,
                   remark: this.remark,
+                  coupon_id: this.selected_coupon && this.selected_coupon.id,
                 }
               }).done(function(data) {
                 if (wx_ready) {
