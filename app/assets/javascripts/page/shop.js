@@ -192,6 +192,17 @@ $(function(){
           result -= this.selected_coupon.amount;
         }
         return Math.max( result, 1 );
+      },
+      ordered_coupons: function () {
+        var result = []
+        $.each(this.coupons, function (index, coupon) {
+          if (this.can_select_coupon(coupon)) {
+            result.unshift(coupon);
+          } else {
+            result.push(coupon);
+          }
+        }.bind(this));
+        return result;
       }
     },
     filters: {
@@ -199,13 +210,13 @@ $(function(){
         return "月售" + sales_volume;
       },
       coupon_text: function(coupon) {
-        // var price_limit;
-        // if (coupon.price_limit > 0) {
-        //   price_limit = "(满" + (coupon.price_limit / 100);
-        // } else {
-        //   price_limit = "任意金额";
-        // }
-        return coupon.desc + "(减" + (coupon.amount / 100) + "元，使用期限" + coupon.valid_to + ")";
+        var price_limit;
+        if (coupon.price_limit > 0) {
+          price_limit = "满" + (coupon.price_limit / 100);
+        } else {
+          price_limit = "任意金额";
+        }
+        return coupon.desc + "(" + price_limit + "减" + (coupon.amount / 100) + ")";
       }
     },
     methods: {
@@ -214,6 +225,10 @@ $(function(){
         this.$nextTick(function(){
           $(".search-input-container input").focus();
         });
+      },
+      forward_to_order: function() {
+        this.selected_coupon = null;
+        this.forward_to('order');
       },
       keyword_keypress_handler: function(event) {
         if (event.keyCode === 13) {
@@ -463,9 +478,14 @@ $(function(){
       },
 
       // 选择优惠券
+      can_select_coupon: function(coupon) {
+        return this.total_price >= coupon.price_limit;
+      },
       select_coupon: function(coupon) {
-        this.selected_coupon = coupon;
-        this.show_coupon_selector = false;
+        if (coupon === null || this.can_select_coupon(coupon)) {
+          this.selected_coupon = coupon;
+          this.show_coupon_selector = false;
+        }
       },
       submit_order: function() {
         if (this.selected_address === undefined) {

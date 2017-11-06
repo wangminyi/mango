@@ -680,6 +680,9 @@
       &.selected {
         color: $theme-green;
       }
+      &.inactive {
+        color: $theme-light-gray;
+      }
     }
   }
 

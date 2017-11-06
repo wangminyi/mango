@@ -56,7 +56,7 @@ class Order < ApplicationRecord
     end
 
     # 优惠
-    total -= self.coupon.amount if self.coupon
+    total -= self.coupon.amount if self.coupon && total >= self.coupon.price_limit
 
     total = [total, 1].max
 
@@ -173,7 +173,7 @@ class Order < ApplicationRecord
         self.user.referee.coupons.create(
           desc: "邀请优惠券",
           amount: 500,
-          price_limit: 1000,
+          price_limit: 3900,
           coupon_type: :referral,
           valid_begin_at: Time.now.beginning_of_day,
           valid_end_at: Time.now.beginning_of_day.since(1.week),

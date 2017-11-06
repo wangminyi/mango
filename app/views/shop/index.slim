@@ -90,7 +90,7 @@ template#shop-template
             .shopping-price-container
               .total-price
                 | {{ total_price | price_text }}
-            .footer-btn v-on:click="forward_to('order')"
+            .footer-btn v-on:click="forward_to_order"
               | 去结算
 
         / .dish-method-container.modal-panel v-if="selected_description !== undefined" v-on:click.self="selected_description = undefined"
@@ -256,7 +256,7 @@ template#shop-template
                 .option {
                   v-for="coupon in coupons"
                   @click="select_coupon(coupon)"
-                  :class="{ selected: coupon === selected_coupon }"
+                  :class="{ selected: coupon === selected_coupon, inactive: !can_select_coupon(coupon) }"
                 }
                   | {{ coupon | coupon_text }}
 
