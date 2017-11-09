@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   root to: "home#index"
 
   get "trigger_error", to: "home#trigger_error"
+  get "speak_to_robot", to: "home#speak_to_robot"
 
   get "auth/wechat/callback", to: "wx#oauth_callback"
   get "auth/failure", to: "wx#oauth_failure"
