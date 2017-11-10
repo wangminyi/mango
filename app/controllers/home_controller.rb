@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:speak_to_robot]
+
   def index
 
   end
@@ -9,7 +11,8 @@ class HomeController < ApplicationController
 
   def speak_to_robot
     message = params[:message]
-    result = JSON.parse(RestClient.get "http://www.tuling123.com/openapi/api", {:params => { :key => '6c78bae3a1fc2e4b2b7ca3b70dd195c1', :info => message}})
+    result = JSON.parse(RestClient.get "http://47.94.75.98/openapi/api", {:params => { :key => '6c78bae3a1fc2e4b2b7ca3b70dd195c1', :info => message}})
+
     render json: {
       message: result["text"]
     }
