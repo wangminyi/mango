@@ -46,7 +46,7 @@ $(function(){
         remark: "", // 备注
         referral_code: "",
         coupons: gon.coupons,
-        campaigns: gon.campaigns,
+        selected_campaign: null,
           // 局部变量
         temp_selected_date: undefined, // 选择控件的日期值 [今天，2017-4-6]
         temp_selected_time: undefined, // 选择控件的时间值 [16:00 ~ 18:00, "16:00"]
@@ -116,11 +116,6 @@ $(function(){
           count += item.count;
         });
         return count;
-      },
-      selected_campaign: function () {
-        return this.campaigns.find(function(campaign) {
-          return campaign.code === this.campaign_code
-        }.bind(this));
       },
       // 选购商品的总价
       total_price: function(){
@@ -506,7 +501,14 @@ $(function(){
         }
       },
       campaign_code_input_handler: function(event) {
-        this.campaign_code = $.trim(event.currentTarget.value).toUpperCase();
+        this.campaign_code = $.trim(event.currentTarget.value);
+        if (this.campaign_code !== "") {
+          $.get("search_campaign", {
+            campaign_code: this.campaign_code
+          }).done(function(data) {
+            this.selected_campaign = data.campaign
+          }.bind(this))
+        }
       },
       submit_order: function() {
         if (this.selected_address === undefined) {
@@ -544,8 +546,8 @@ $(function(){
                   receiver_garden: addr.garden,
                   receiver_address: addr.garden + addr.house_number,
                   remark: this.remark,
-                  coupon_id: this.selected_coupon && this.selected_coupon.id,
-                  campaign_code: this.campaign_code,
+                  coupon_id: this.selected_coupon ? this.selected_coupon.id : null,
+                  campaign_id: this.selected_campaign ? this.selected_campaign.id : null
                 }
               }).done(function(data) {
                 if (wx_ready) {

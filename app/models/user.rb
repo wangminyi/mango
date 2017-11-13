@@ -51,4 +51,8 @@ class User < ApplicationRecord
     self.set_referral_code
     self.save
   end
+
+  def no_paid_order?
+    self.role.admin? || self.orders.with_pay_status(:paid).empty?
+  end
 end

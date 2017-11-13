@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     get :index
     get :wholesale
     get :wholesale_instances
+    get :search_campaign
   end
 
   namespace :addresses do

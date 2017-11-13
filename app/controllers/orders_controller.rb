@@ -69,7 +69,7 @@ class OrdersController < ApplicationController
         :distribution_price,
         :free_distribution_reason,
         :coupon_id,
-        :campaign_code,
+        :campaign_id,
         :receiver_name,
         :receiver_garden,
         :receiver_phone,

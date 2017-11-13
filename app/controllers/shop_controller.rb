@@ -27,14 +27,11 @@ class ShopController < ApplicationController
       categories.push(base_info)
     end
 
-    first_order = current_user.role.admin? || current_user.orders.with_pay_status(:paid).empty?
+    first_order = current_user.no_paid_order?
     gon.categories = categories.reject{|c| c[:items].blank?}
     gon.addresses = current_user.addresses_json
     gon.is_admin = current_user.role.admin?
     gon.coupons = current_user.coupons.visible.order(amount: :DESC).map(&:to_json)
-    gon.campaigns = Settings.campaign_array.reject do |config|
-      !first_order && config["first_order"]
-    end
 
     if first_order
       gon.first_order = true
@@ -81,6 +78,19 @@ class ShopController < ApplicationController
 
     render json: {
       instances: WholesaleEntry.find(params[:id]).visible_wholesale_instances.map(&:as_json)
+    }
+  end
+
+  def search_campaign
+    code = params[:campaign_code]&.upcase
+
+    first_order = no_paid_order?
+    campaign = Campaign.visible.where(code: code).map(&:to_json).reject do |campaign|
+      campaign["first_order"] && !first_order
+    end.first
+
+    render json: {
+      campaign: campaign
     }
   end
 end

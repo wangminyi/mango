@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171113143133) do
+ActiveRecord::Schema.define(version: 20171113145330) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -56,6 +56,13 @@ ActiveRecord::Schema.define(version: 20171113143133) do
     t.datetime "end_at"
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+  end
+
+  create_table "campaigns_users", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "campaign_id", null: false
+    t.integer "user_id",     null: false
+    t.index ["campaign_id"], name: "index_campaigns_users_on_campaign_id", using: :btree
+    t.index ["user_id"], name: "index_campaigns_users_on_user_id", using: :btree
   end
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -202,8 +209,9 @@ ActiveRecord::Schema.define(version: 20171113143133) do
     t.text     "item_list",                limit: 65535
     t.text     "admin_remark",             limit: 65535
     t.integer  "coupon_id"
-    t.string   "campaign_code"
     t.integer  "referee_id"
+    t.integer  "campaign_id"
+    t.index ["campaign_id"], name: "index_orders_on_campaign_id", using: :btree
     t.index ["distribute_at"], name: "index_orders_on_distribute_at", using: :btree
     t.index ["distributer_id"], name: "index_orders_on_distributer_id", using: :btree
     t.index ["order_no"], name: "index_orders_on_order_no", unique: true, using: :btree

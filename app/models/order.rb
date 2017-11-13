@@ -27,6 +27,7 @@ class Order < ApplicationRecord
   ## associations
   belongs_to :user
   belongs_to :coupon
+  belongs_to :campaign
 
   ## callbacks
   before_create :generate_order_no
@@ -43,10 +44,6 @@ class Order < ApplicationRecord
     self.user.role.admin? || self.user.orders.with_pay_status(:paid).where.not(id: self.id).empty?
   end
 
-  def campaign
-    Settings.campaign_array.find{|campaign| campaign["code"] == self.campaign_code}
-  end
-
   def check_coupon
     if self.coupon && self.user.coupons.visible.exclude?(self.coupon)
       self.errors.add :coupon_id, "优惠券不可用"
@@ -60,11 +57,11 @@ class Order < ApplicationRecord
 
     original_total = total
 
-    _campaign = self.campaign
-    if _campaign
-      if !_campaign[:first_order] || self.first_order? # 第一单优惠判断
-        if _campaign[:type] == "discount" # 优惠类型
-          total = (total * _campaign[:rate]).floor
+    if self.campaign && self.campaign.is_active? && !self.campaign.is_used?(self.user) # 通用判断
+      configs = self.campaign.configs
+      if !configs["first_order"] || self.first_order? # 第一单优惠判断
+        if configs["type"] == "discount" # 优惠类型
+          total = (total * configs["rate"]).floor
         end
       end
     end
@@ -75,10 +72,10 @@ class Order < ApplicationRecord
     end
 
     # 优惠
-    total -= self.coupon.amount if self.coupon && total >= self.coupon.price_limit
+    total -= self.coupon.amount if self.coupon && original_total >= self.coupon.price_limit
 
     total = [total, 1].max
-    binding.pry
+
     if total != self.total_price.to_i
       self.errors.add :total_price, "订单金额不符"
     end
@@ -161,6 +158,8 @@ class Order < ApplicationRecord
       set_stock
       # 更新优惠券使用信息
       self.coupon&.update(used_at: Time.now)
+      # 更新优惠码使用信息
+      self.campaign.users << self.user
 
       SlackNotifier.notify_order(self)
     end

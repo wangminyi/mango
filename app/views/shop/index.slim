@@ -184,12 +184,15 @@ template#shop-template
               | 优惠券
               i.fa.fa-chevron-right.right-side
 
-            .panel-block {
-              v-if="campaigns.length > 0"
-            }
-              | 活动码
+            .panel-block
+              | 优惠码
               .campaign-input.right-side
-                = text_field_tag "campaign", nil, "v-bind:value" => "campaign_code", "v-on:input" => "campaign_code_input_handler"
+                input {
+                  type="text"
+                  :value="campaign_code"
+                  @change="campaign_code_input_handler"
+                  placeholder="关注店主微信，获得优惠码"
+                }
 
             .panel-block
               | 备注

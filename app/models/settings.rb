@@ -45,13 +45,5 @@ class Settings
         new_gardens: self.gardens, # 结构化小区
       }
     end
-
-    def campaign_array
-      Campaign.visible.map do |campaign|
-        campaign.configs.merge(
-          "code" => campaign.code
-        )
-      end
-    end
   end
 end
