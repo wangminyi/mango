@@ -33,7 +33,7 @@ class ShopController < ApplicationController
     gon.is_admin = current_user.role.admin?
     gon.coupons = current_user.coupons.visible.order(amount: :DESC).map(&:to_json)
     gon.campaigns = Settings.campaign_array.reject do |config|
-      !first_order && config[:first_order]
+      !first_order && config["first_order"]
     end
 
     if first_order

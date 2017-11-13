@@ -44,7 +44,7 @@ class Order < ApplicationRecord
   end
 
   def campaign
-    Settings.campaign_array.find{|campaign| campaign[:code] == self.campaign_code}
+    Settings.campaign_array.find{|campaign| campaign["code"] == self.campaign_code}
   end
 
   def check_coupon
