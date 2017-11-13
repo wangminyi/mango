@@ -5,6 +5,7 @@ class Coupon < ApplicationRecord
 
   enumerize :coupon_type, in: [
     :referral,
+    :referee,
   ], scope: true
 
   serialize :extra_info, JSON

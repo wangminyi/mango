@@ -155,9 +155,13 @@ class Order < ApplicationRecord
   def paid!
     if self.pay_status.unpaid?
       self.update(pay_status: :paid)
-      create_referee_coupon
+      # 创建邀请关联
+      set_referral_info
+      # 更新库存
       set_stock
+      # 更新优惠券使用信息
       self.coupon&.update(used_at: Time.now)
+
       SlackNotifier.notify_order(self)
     end
   end
@@ -187,17 +191,30 @@ class Order < ApplicationRecord
       end
     end
 
-    def create_referee_coupon
-      if self.first_order? && self.user.referee
+    def set_referral_info
+      if self.first_order? && self.referee_id
+        self.user.update(referee_id: self.referee_id)
         self.user.referee.coupons.create(
           desc: "邀请优惠券",
+          amount: 500,
+          price_limit: 3900,
+          coupon_type: :referee,
+          valid_begin_at: Time.now.beginning_of_day,
+          valid_end_at: Time.now.beginning_of_day.since(1.week),
+          extra_info: {
+            referrer_id: self.user_id
+          }
+        )
+
+        self.user.coupons.create(
+          desc: "新用户优惠券",
           amount: 500,
           price_limit: 3900,
           coupon_type: :referral,
           valid_begin_at: Time.now.beginning_of_day,
           valid_end_at: Time.now.beginning_of_day.since(1.week),
           extra_info: {
-            referrer_id: self.user_id
+            referee_id: self.user.referee_id
           }
         )
       end

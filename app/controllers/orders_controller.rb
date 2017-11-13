@@ -17,16 +17,19 @@ class OrdersController < ApplicationController
   def create
     is_first = current_user.role.admin? || current_user.orders.with_pay_status(:paid).empty?
     order = current_user.orders.build order_param
+
     gifts = is_first ? JSON.parse(params[:order][:gifts]) : []
+    referee_id = if is_first && (code = params[:referral_code]).present? && (referee = User.find_by(referral_code: code)).present?
+      referee.id
+    end
+
     order.assign_attributes(
       item_list: JSON.parse(params[:order][:item_list]),
       gifts: gifts,
+      referee_id: referee_id
     )
-    if order.save
-      if is_first && (code = params[:referral_code]).present? && (referee = User.find_by(referral_code: code)).present?
-        current_user.update(referee: referee)
-      end
 
+    if order.save
       js_pay_req = order.apply_prepay
       if js_pay_req.present?
         render json: {
