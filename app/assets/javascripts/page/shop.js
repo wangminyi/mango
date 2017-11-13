@@ -194,15 +194,16 @@ $(function(){
         return Math.max( result, 1 );
       },
       ordered_coupons: function () {
-        var result = []
+        var active_result = [],
+            inactive_result = [];
         $.each(this.coupons, function (index, coupon) {
           if (this.can_select_coupon(coupon)) {
-            result.unshift(coupon);
+            active_result.push(coupon);
           } else {
-            result.push(coupon);
+            inactive_result.push(coupon);
           }
         }.bind(this));
-        return result;
+        return active_result.concat(inactive_result);
       }
     },
     filters: {

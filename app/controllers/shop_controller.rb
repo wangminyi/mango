@@ -30,7 +30,7 @@ class ShopController < ApplicationController
     gon.categories = categories.reject{|c| c[:items].blank?}
     gon.addresses = current_user.addresses_json
     gon.is_admin = current_user.role.admin?
-    gon.coupons = current_user.coupons.visible.map(&:to_json)
+    gon.coupons = current_user.coupons.visible.order(amount: :DESC).map(&:to_json)
 
     if current_user.orders.with_pay_status(:paid).empty?
       gon.first_order = true

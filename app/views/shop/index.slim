@@ -254,7 +254,7 @@ template#shop-template
                 }
                   | 不使用优惠券
                 .option {
-                  v-for="coupon in coupons"
+                  v-for="coupon in ordered_coupons"
                   @click="select_coupon(coupon)"
                   :class="{ selected: coupon === selected_coupon, inactive: !can_select_coupon(coupon) }"
                 }
