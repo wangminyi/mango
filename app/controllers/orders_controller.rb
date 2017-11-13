@@ -2,7 +2,9 @@ class OrdersController < ApplicationController
   before_action :require_login, only: [:index, :show]
 
   def index
-    @orders = current_user.orders.order(created_at: :desc)
+    orders = current_user.orders
+    wholesale_orders = current_user.wholesale_orders
+    @orders = (orders + wholesale_orders).sort_by(&:created_at).reverse
   end
 
   def show
