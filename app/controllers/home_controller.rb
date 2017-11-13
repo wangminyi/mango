@@ -11,7 +11,11 @@ class HomeController < ApplicationController
 
   def speak_to_robot
     message = params[:message]
-    result = JSON.parse(RestClient.get "http://47.94.75.98/openapi/api", {:params => { :key => '6c78bae3a1fc2e4b2b7ca3b70dd195c1', :info => message}})
+    result = JSON.parse(RestClient.post "http://47.94.75.98/openapi/api", {
+      :key => '6c78bae3a1fc2e4b2b7ca3b70dd195c1',
+      :info => message,
+      :userid => "19871228"
+    })
 
     render json: {
       message: result["text"]
