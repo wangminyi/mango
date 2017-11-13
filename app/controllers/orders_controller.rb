@@ -15,7 +15,7 @@ class OrdersController < ApplicationController
   end
 
   def create
-    is_first = current_user.orders.with_pay_status(:paid).empty?
+    is_first = current_user.role.admin? || current_user.orders.with_pay_status(:paid).empty?
     order = current_user.orders.build order_param
     gifts = is_first ? JSON.parse(params[:order][:gifts]) : []
     order.assign_attributes(
@@ -66,6 +66,7 @@ class OrdersController < ApplicationController
         :distribution_price,
         :free_distribution_reason,
         :coupon_id,
+        :campaign_code,
         :receiver_name,
         :receiver_garden,
         :receiver_phone,

@@ -184,6 +184,13 @@ template#shop-template
               | 优惠券
               i.fa.fa-chevron-right.right-side
 
+            .panel-block {
+              v-if="campaigns.length > 0"
+            }
+              | 活动码
+              .campaign-input.right-side
+                = text_field_tag "campaign", nil, "v-bind:value" => "campaign_code", "v-on:input" => "campaign_code_input_handler"
+
             .panel-block
               | 备注
               .remark-input.right-side
@@ -209,6 +216,11 @@ template#shop-template
                   | {{ distribute_price | price_text }}
                 template v-else=true
                   | 请先选择地址
+            .panel-block v-if="selected_campaign"
+              span.price-label
+                | 活动优惠
+              .price-tag.right-side
+                | {{ selected_campaign.desc }}
             .panel-block v-if="selected_coupon"
               span.price-label
                 | 优惠券

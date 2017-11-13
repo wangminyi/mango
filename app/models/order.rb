@@ -39,6 +39,14 @@ class Order < ApplicationRecord
   validate :check_stock, on: [:create]
   validates_presence_of :receiver_name, :receiver_address, :receiver_phone, :distribute_at
 
+  def first_order?
+    self.user.role.admin? || self.user.orders.with_pay_status(:paid).where.not(id: self.id).empty?
+  end
+
+  def campaign
+    Settings.campaign_array.find{|campaign| campaign[:code] == self.campaign_code}
+  end
+
   def check_coupon
     if self.coupon && self.user.coupons.visible.exclude?(self.coupon)
       self.errors.add :coupon_id, "优惠券不可用"
@@ -50,8 +58,19 @@ class Order < ApplicationRecord
       i.price * count
     end.sum
 
+    original_total = total
+
+    _campaign = self.campaign
+    if _campaign
+      if !_campaign[:first_order] || self.first_order? # 第一单优惠判断
+        if _campaign[:type] == "discount" # 优惠类型
+          total = (total * _campaign[:rate]).floor
+        end
+      end
+    end
+
     garden = Garden.find_by(name: self.receiver_garden)
-    if total < garden.free_price
+    if original_total < garden.free_price
       total += garden.distribution_price
     end
 
@@ -59,7 +78,7 @@ class Order < ApplicationRecord
     total -= self.coupon.amount if self.coupon && total >= self.coupon.price_limit
 
     total = [total, 1].max
-
+    binding.pry
     if total != self.total_price.to_i
       self.errors.add :total_price, "订单金额不符"
     end
@@ -169,7 +188,7 @@ class Order < ApplicationRecord
     end
 
     def create_referee_coupon
-      if self.user.orders.with_pay_status(:paid).one? && self.user.referee
+      if self.first_order? && self.user.referee
         self.user.referee.coupons.create(
           desc: "邀请优惠券",
           amount: 500,

@@ -45,5 +45,17 @@ class Settings
         new_gardens: self.gardens, # 结构化小区
       }
     end
+
+    def campaign_array
+      [
+        {
+          code: "CISL",
+          first_order: true,
+          type: "discount",
+          rate: 0.9,
+          desc: "关注微信，首单九折"
+        }
+      ]
+    end
   end
 end

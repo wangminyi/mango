@@ -41,10 +41,12 @@ $(function(){
         selected_date: undefined, // 选择的送货日期 [今天，2017-4-6]
         selected_time: undefined, // 选择的送货时间 [16:00 ~ 18:00, "16:00"]
         selected_coupon: null,
+        campaign_code: "",
         // pay_mode: "cod", // cod(cash on delivery) || wechat
         remark: "", // 备注
         referral_code: "",
         coupons: gon.coupons,
+        campaigns: gon.campaigns,
           // 局部变量
         temp_selected_date: undefined, // 选择控件的日期值 [今天，2017-4-6]
         temp_selected_time: undefined, // 选择控件的时间值 [16:00 ~ 18:00, "16:00"]
@@ -114,6 +116,11 @@ $(function(){
           count += item.count;
         });
         return count;
+      },
+      selected_campaign: function () {
+        return this.campaigns.find(function(campaign) {
+          return campaign.code === this.campaign_code
+        }.bind(this));
       },
       // 选购商品的总价
       total_price: function(){
@@ -186,11 +193,21 @@ $(function(){
         }
       },
       order_price: function() {
-        var result = this.total_price + this.distribute_price;
+        var result = this.total_price,
+            campaign = this.selected_campaign;
+
+        if (campaign) {
+          if (campaign.type === 'discount') {
+            result = Math.floor(result * campaign.rate)
+          }
+        }
+
+        result += this.distribute_price
 
         if (this.selected_coupon) {
           result -= this.selected_coupon.amount;
         }
+
         return Math.max( result, 1 );
       },
       ordered_coupons: function () {
@@ -488,6 +505,9 @@ $(function(){
           this.show_coupon_selector = false;
         }
       },
+      campaign_code_input_handler: function(event) {
+        this.campaign_code = $.trim(event.currentTarget.value).toUpperCase();
+      },
       submit_order: function() {
         if (this.selected_address === undefined) {
           this.show_confirm_dialog({
@@ -525,6 +545,7 @@ $(function(){
                   receiver_address: addr.garden + addr.house_number,
                   remark: this.remark,
                   coupon_id: this.selected_coupon && this.selected_coupon.id,
+                  campaign_code: this.campaign_code,
                 }
               }).done(function(data) {
                 if (wx_ready) {

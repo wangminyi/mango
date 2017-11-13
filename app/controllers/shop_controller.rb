@@ -27,12 +27,16 @@ class ShopController < ApplicationController
       categories.push(base_info)
     end
 
+    first_order = current_user.role.admin? || current_user.orders.with_pay_status(:paid).empty?
     gon.categories = categories.reject{|c| c[:items].blank?}
     gon.addresses = current_user.addresses_json
     gon.is_admin = current_user.role.admin?
     gon.coupons = current_user.coupons.visible.order(amount: :DESC).map(&:to_json)
+    gon.campaigns = Settings.campaign_array.reject do |config|
+      !first_order && config[:first_order]
+    end
 
-    if current_user.orders.with_pay_status(:paid).empty?
+    if first_order
       gon.first_order = true
       gon.gifts = [
         {
