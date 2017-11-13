@@ -84,7 +84,7 @@ class ShopController < ApplicationController
   def search_campaign
     code = params[:campaign_code]&.upcase
 
-    first_order = no_paid_order?
+    first_order = current_user.no_paid_order?
     campaign = Campaign.visible.where(code: code).map(&:to_json).reject do |campaign|
       campaign["first_order"] && !first_order
     end.first

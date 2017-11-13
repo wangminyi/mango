@@ -19,8 +19,14 @@ class OrdersController < ApplicationController
     order = current_user.orders.build order_param
 
     gifts = is_first ? JSON.parse(params[:order][:gifts]) : []
-    referee_id = if is_first && (code = params[:referral_code]).present? && (referee = User.find_by(referral_code: code)).present?
-      referee.id
+
+    referee_id = nil
+    if is_first && (code = params[:referral_code]).present?
+      referee_id = if (referee = User.find_by(referral_code: code)).present?
+        referee.id
+      else
+        -1
+      end
     end
 
     order.assign_attributes(
@@ -41,7 +47,7 @@ class OrdersController < ApplicationController
       end
     else
       render json: {
-        error: order.errors.full_messages[0]
+        error: order.errors.values.flatten.first
       }, status: :unprocessable_entity
     end
   end

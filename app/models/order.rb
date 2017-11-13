@@ -36,12 +36,21 @@ class Order < ApplicationRecord
 
   ## validates
   validate :check_coupon, on: [:create]
+  validate :check_referee, on: [:create]
   validate :check_price, on: [:create]
   validate :check_stock, on: [:create]
   validates_presence_of :receiver_name, :receiver_address, :receiver_phone, :distribute_at
 
   def first_order?
     self.user.role.admin? || self.user.orders.with_pay_status(:paid).where.not(id: self.id).empty?
+  end
+
+  def check_referee
+    if self.referee_id <= 0
+      self.errors.add :referee_id, "邀请码错误"
+    elsif self.referee_id == self.user_id
+      self.errors.add :referee_id, "不能邀请自己"
+    end
   end
 
   def check_coupon
