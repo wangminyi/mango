@@ -2,6 +2,17 @@ class DataFactory
   require "csv"
 
   class << self
+    def refact_categories
+      Ingredient.all.each do |i|
+        CategoriesIngredient.create(
+          category_id: i.category_id,
+          ingredient_id: i.id,
+          secondary_tag: i.secondary_tag,
+          priority: i.priority
+        )
+      end
+    end
+
     def import_gardens
       CSV.foreach("./data_files/gardens.csv", headers: :first_row) do |line|
         # distance = line[3].match(/[0-9\.]*/).to_s.to_f

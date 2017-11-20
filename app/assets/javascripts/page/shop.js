@@ -11,7 +11,7 @@ $(function(){
   });
 
   moment.locale("zh-CN");
-  var categories = add_calculated_category(gon.categories);
+  var categories = add_calculated_category(gon.categories, gon.ingredients);
 
   window.vue = new Vue({
     el: "#shop-vue-anchor",
@@ -54,26 +54,12 @@ $(function(){
       }
     },
     computed: {
-      // 选中类型的商品
-      selected_items: function() {
-        return this.selected_category.items;
-      },
       // 二级分类后的商品
       // { "叶菜": [{..}, {..}, ...]}
       items_for_render: function() {
-        var _items_json = {}
-        if (this.selected_category.with_secondary_tag) {
-          $.each(this.selected_items, function(index, item) {
-            var _tag = item.secondary_tag || "其他";
-            if (_items_json[_tag] === undefined) {
-              _items_json[_tag] = [];
-            }
-            _items_json[_tag].push(item);
-          });
-        } else {
-          _items_json["其他"] = this.selected_items;
-        }
-        return _items_json;
+        return this.selected_category.items_for_render || {
+          "其他": this.selected_category.items
+        };
       },
       secondary_tags: function() {
         return Object.keys(this.items_for_render);
@@ -548,20 +534,34 @@ $(function(){
     }
   });
 
-  function add_calculated_category(categories) {
+  function add_calculated_category(categories, ingredients) {
     var hot_items = [],
         limited_items = [],
         parse_categories = categories;
+
     $.each(categories, function(_, category) {
-      $.each(category.items, function(_, item) {
-        if (item.is_hot) {
-          hot_items.push(item);
+      var with_secondary_tag = false;
+      category.items_for_render = {};
+      $.each(category.item_relations, function(_, relation) {
+        ingredient = ingredients[relation.ingredient_id];
+        if (ingredient) {
+          category.items.push(ingredient)
+          var secondary_tag = relation.secondary_tag || "其他"
+          var a = (category.items_for_render[secondary_tag] = category.items_for_render[secondary_tag] || []);
+          a.push(ingredient)
         }
-        if (item.stock_count > 0) {
-          limited_items.push(item);
-        }
-      })
+      });
+      category.with_secondary_tag = Object.keys(category.items_for_render).length > 1
     });
+
+    $.each(ingredients, function(_, ingredient) {
+      if (ingredient.is_hot) {
+        hot_items.push(ingredient);
+      }
+      if (ingredient.stock_count > 0) {
+        limited_items.push(ingredient);
+      }
+    })
 
     if (hot_items.length > 0) {
       parse_categories.unshift({

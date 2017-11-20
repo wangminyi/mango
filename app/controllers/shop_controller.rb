@@ -2,8 +2,6 @@ class ShopController < ApplicationController
   before_action :require_login, only: [:index, :wholesale]
 
   def index
-    categories = []
-
     # 每日推荐
     # categories.push(
     #   name: "每日推荐",
@@ -11,23 +9,31 @@ class ShopController < ApplicationController
     # )
 
     # 普通食材
-    Category.order(updated_at: :desc).each do |category|
-      visible_ingredients = category.ingredients
-        .where.not(price: nil)
-        .where.not(image: nil)
-        .where("ingredients.stock_count IS NULL OR ingredients.stock_count > 0")
-        .preload(:dishes).order(priority: :desc, id: :asc).map(&:as_json)
-      base_info = {
+    categories = Category.order(updated_at: :desc).map do |category|
+      ingredients = category.categories_ingredients.order(priority: :desc, id: :asc).map(&:as_json)
+      {
         id: category.id,
         name: category.name,
-        items: visible_ingredients,
-        with_secondary_tag: visible_ingredients.any?{|vi| vi[:secondary_tag].present?},
+        item_relations: ingredients,
+        items: [],
       }
-
-      categories.push(base_info)
     end
 
-    gon.categories = categories.reject{|c| c[:items].blank?}
+    gon.ingredients = Ingredient
+      .ransack(
+        price_not_null: true,
+        image_not_null: true,
+      ).result
+      .ransack(
+        m: 'or',
+        stock_count_null: true,
+        stock_count_gt: 0,
+      ).result
+      .preload(:dishes).map do |i|
+        [i.id, i.as_json]
+      end.to_h
+
+    gon.categories = categories
     gon.addresses = current_user.addresses_json
     gon.is_admin = current_user.role.admin?
 

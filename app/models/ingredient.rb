@@ -1,7 +1,8 @@
 class Ingredient < ApplicationRecord
   extend Enumerize
 
-  belongs_to :category, optional: true
+  has_many :categories_ingredients
+  has_many :categories, through: :categories_ingredients
   has_many :dishes_ingredients, dependent: :destroy
   has_many :dishes, through: :dishes_ingredients
 
