@@ -2,6 +2,58 @@ class DataFactory
   require "csv"
 
   class << self
+    def import_huoguo_ingredient
+      current_secondary_tag = nil
+      category = Category.create(name: "火锅专区")
+      dir_path = File.join(Rails.root + "app/assets/images")
+      CSV.foreach("./data_files/huoguo.csv") do |line|
+        current_secondary_tag = line[1] if line[1]
+        name = line[3]
+        weight, unit_text = line[4].split("/")
+        price = line[5]
+        alias_text = "#{name} #{weight}"
+
+        if price
+          temp_path = "ingredients/火锅/#{name}.jpg"
+          file = File.join(dir_path, temp_path)
+
+          if File.exists? file
+            # puts "#{name} - 新-添加商品"
+            ingredient = Ingredient.create(
+              name: name,
+              alias: alias_text,
+              unit_text: unit_text,
+              price: price.to_f * 100,
+              image: temp_path,
+            )
+            category.categories_ingredients.create(
+              ingredient: ingredient,
+              secondary_tag: current_secondary_tag,
+              priority: 0
+            )
+          end
+        else
+          ingredient = Ingredient.find_by(name: name)
+          category.categories_ingredients.create(
+            ingredient: ingredient,
+            secondary_tag: current_secondary_tag,
+            priority: 0
+          )
+        end
+      end
+    end
+
+    def refact_categories
+      Ingredient.all.each do |i|
+        CategoriesIngredient.create(
+          category_id: i.category_id,
+          ingredient_id: i.id,
+          secondary_tag: i.secondary_tag,
+          priority: i.priority
+        )
+      end
+    end
+
     def import_gardens
       CSV.foreach("./data_files/gardens.csv", headers: :first_row) do |line|
         # distance = line[3].match(/[0-9\.]*/).to_s.to_f
