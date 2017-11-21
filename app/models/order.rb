@@ -99,7 +99,7 @@ class Order < ApplicationRecord
   # ingredient => count
   def ingredients_hash
     @__ingredients_hash ||= begin
-      ingredients = Ingredient.where(id: self.item_list.map{|h| h["id"]}).preload(:category)
+      ingredients = Ingredient.where(id: self.item_list.map{|h| h["id"]})
       self.item_list.map do |i|
         [ingredients.find{|ingredient| ingredient.id == i["id"]}, i["count"]]
       end.to_h
