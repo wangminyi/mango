@@ -537,22 +537,7 @@ $(function(){
   function add_calculated_category(categories, ingredients) {
     var hot_items = [],
         limited_items = [],
-        parse_categories = categories;
-
-    $.each(categories, function(_, category) {
-      var with_secondary_tag = false;
-      category.items_for_render = {};
-      $.each(category.item_relations, function(_, relation) {
-        ingredient = ingredients[relation.ingredient_id];
-        if (ingredient) {
-          category.items.push(ingredient)
-          var secondary_tag = relation.secondary_tag || "其他"
-          var a = (category.items_for_render[secondary_tag] = category.items_for_render[secondary_tag] || []);
-          a.push(ingredient)
-        }
-      });
-      category.with_secondary_tag = Object.keys(category.items_for_render).length > 1
-    });
+        parse_categories = [];
 
     $.each(ingredients, function(_, ingredient) {
       if (ingredient.is_hot) {
@@ -564,7 +549,7 @@ $(function(){
     })
 
     if (hot_items.length > 0) {
-      parse_categories.unshift({
+      parse_categories.push({
         id: null,
         name: "每日特价",
         items: hot_items,
@@ -573,7 +558,7 @@ $(function(){
     }
 
     if (limited_items.length > 0) {
-      parse_categories.unshift({
+      parse_categories.push({
         id: null,
         name: "限量抢购",
         items: limited_items,
@@ -581,7 +566,26 @@ $(function(){
       })
     }
 
-    return categories;
+    $.each(categories, function(_, category) {
+      var with_secondary_tag = false;
+      category.items_for_render = {};
+      $.each(category.item_relations, function(_, relation) {
+        ingredient = ingredients[relation.ingredient_id];
+        if (ingredient) {
+          category.items.push(ingredient)
+          var secondary_tag = relation.secondary_tag || "其他"
+          category.items_for_render[secondary_tag] = category.items_for_render[secondary_tag] || [];
+          category.items_for_render[secondary_tag].push(ingredient)
+        }
+      });
+
+      if (category.items.length > 0) {
+        category.with_secondary_tag = Object.keys(category.items_for_render).length > 1;
+        parse_categories.push(category);
+      }
+    });
+
+    return parse_categories;
   }
 
   function add_to_shopping_cart(event) {
