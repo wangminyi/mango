@@ -131,15 +131,25 @@ $(function(){
       },
       // 赠品计算逻辑
       gift_list: function(){
-        var result = [],
-            that = this;
+        var result = {};
         $.each(this.gifts, function(index, gift) {
-          if (that.total_price >= gift.limit) {
-            result.push(gift);
-            return false;
+          if (gift.first_order && !this.first_order) {
+            return;
           }
-        });
-        return result;
+
+          var condition_price = 0
+
+          if (gift.ingredient_ids) {
+            condition_price = this.scoped_total_price(gift.ingredient_ids);
+          } else {
+            condition_price = this.total_price;
+          }
+
+          if (condition_price >= gift.limit) {
+            result[gift.key] = gift;
+          }
+        }.bind(this));
+        return Object.values(result);
       },
       selected_date_time_text: function() {
         if (this.selected_date !== undefined && this.selected_time !== undefined) {
@@ -305,6 +315,15 @@ $(function(){
       },
       item_price: function(item) {
         return item.price;
+      },
+      scoped_total_price: function (ingredient_ids) {
+        var price = 0;
+        $.each(this.shopping_cart_list, function(_, item) {
+          if (ingredient_ids.indexOf(item.id) >= 0) {
+            price += item.count * this.item_price(item);
+          }
+        }.bind(this));
+        return price;
       },
       can_increase: function(item, number) {
         var result_count = item.count + (number || 1);

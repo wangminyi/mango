@@ -9,8 +9,6 @@ table.table.table-hover.table-bordered.table-striped
     th
       | 销量
     th
-      | 二级分类
-    th
       | 是否特价
     th
       | 原价
@@ -25,8 +23,6 @@ table.table.table-hover.table-bordered.table-striped
           = format_price_without_unit(i.price)
         td
           = i.sales_volume
-        td
-          = i.secondary_tag
         td
           = i.is_hot? ? "是" : "否"
         td

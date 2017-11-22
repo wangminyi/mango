@@ -7,9 +7,9 @@ tr.detail.hidden
       .item = "#{i["name"]} x #{i["count"]} -- #{format_price(i["price"])} #{i["unit_text"]}"
 
     - if order.gifts.present?
-      - g = order.gifts.last
       br
-      .item = "赠品：#{g["name"]} x #{g["count"]} -- 满#{format_price(g["limit"])}"
+      - order.gifts.each do |g|
+        .item = "赠品：#{g["name"]} x #{g["count"]} -- 满#{format_price(g["limit"])}"
 
     - if order.remark
       .item = "附加信息：#{order.remark}"

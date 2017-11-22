@@ -36,25 +36,34 @@ class ShopController < ApplicationController
     gon.categories = categories
     gon.addresses = current_user.addresses_json
     gon.is_admin = current_user.role.admin?
-
-    if !(Rails.env.production? && current_user.orders.with_pay_status(:paid).exists?)
-      gon.first_order = true
-      gon.gifts = [
+    gon.gifts = [
         {
           image: ActionController::Base.helpers.asset_url("gifts/gift_1.jpg"),
           limit: 3000,
           name: "中号沥水篮",
           count: 1,
+          first_order: true,
+          key: "first_order",
         },
         {
           image: ActionController::Base.helpers.asset_url("gifts/gift_2.jpg"),
           limit: 8000,
           name: "加厚沥水篮",
           count: 1,
+          first_order: true,
+          key: "first_order",
+        },
+        {
+          image: ActionController::Base.helpers.asset_url("gifts/gift_3.jpg"),
+          limit: 3900,
+          ingredient_ids: Category.find_by(name: "火锅专区").categories_ingredients.where(secondary_tag: "精品丸类").pluck(:ingredient_id),
+          name: "精美小碗",
+          count: 1,
+          key: "balls",
         }
-      ].sort_by{|gift| -gift[:limit]}
-    end
+      ]
 
+    gon.first_order = !(Rails.env.production? && current_user.orders.with_pay_status(:paid).exists?)
     gon.settings = Settings.as_json
     gon.js_config_params = Wx.js_config_params(shop_index_url)
   end
