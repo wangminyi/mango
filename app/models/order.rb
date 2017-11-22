@@ -112,14 +112,15 @@ class Order < ApplicationRecord
 
   # 批量订单的采购清单
   def self.bulk_ingredients
-    category_hash = Hash.new{|h, k| h[k] = Hash.new{|h2, k2| h2[k2] = 0}}
+    ingredient_hash = Hash.new{|h, k| h[k] = 0}
+
     all.each do |order|
       order.ingredients_hash.each do |ingredient, count|
         key = "#{ingredient.alias} -- ￥#{(ingredient.price || 0) / 100.0} / #{ingredient.unit_text}"
-        category_hash[ingredient.category.name][key] += count
+        ingredient_hash[key] += count
       end
     end
-    category_hash
+    ingredient_hash
   end
 
   def paid!
