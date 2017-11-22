@@ -77,7 +77,11 @@ $(function(){
         return hash;
       },
       items_list: function () {
-        return Object.values(this.items_hash);
+        var result = [];
+        $.each(this.items_hash, function (_, item) {
+          result.push(item);
+        })
+        return result;
       },
       // 选购的商品
       shopping_cart_list: function() {
@@ -152,7 +156,12 @@ $(function(){
             result[gift.key] = gift;
           }
         }.bind(this));
-        return Object.values(result);
+
+        var list = [];
+        $.each(result, function (_, gift) {
+          list.push(gift);
+        })
+        return list;
       },
       selected_date_time_text: function() {
         if (this.selected_date !== undefined && this.selected_time !== undefined) {
