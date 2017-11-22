@@ -39,7 +39,7 @@ class Admin::IngredientsController < Admin::BaseController
         :price,
         :original_price,
         :sales_volume,
-        :secondary_tag,
+        # :secondary_tag,
         :is_hot,
       )
     end
