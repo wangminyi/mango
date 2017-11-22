@@ -76,6 +76,9 @@ $(function(){
         });
         return hash;
       },
+      items_list: function () {
+        return Object.values(this.items_hash);
+      },
       // 选购的商品
       shopping_cart_list: function() {
         var buy_items = [];
@@ -216,14 +219,9 @@ $(function(){
             action_type: "ingredients_search",
             details: keyword,
           })
-          $.each(this.categories, function(index, category) {
-            if (category.id) { // 跳过今日特价
-              $.each(category.items, function(index, item) {
-                if (item.name.indexOf(keyword) >= 0) {
-                  items_array.push(item);
-                }
-              })
-            }
+
+          items_array = $.grep(this.items_list, function(item) {
+            return item.name.indexOf(keyword) >= 0
           });
         }
         this.searched_items = items_array;
