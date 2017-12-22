@@ -373,21 +373,21 @@ $(function(){
       selectable_date: function() {
         var result = [],
             hour = moment().hour();
-        if (hour < 15) {
-          result.push(
-            [
-              "今天",
-              moment().format("YYYY-MM-DD")
-            ]
-          );
-        }
+        // if (hour < 15) {
+        //   result.push(
+        //     [
+        //       "今天",
+        //       moment().format("YYYY-MM-DD")
+        //     ]
+        //   );
+        // }
 
-        result.push(
-          [
-            "明天",
-            moment().add(1, "d").format("YYYY-MM-DD")
-          ]
-        );
+        // result.push(
+        //   [
+        //     "明天",
+        //     moment().add(1, "d").format("YYYY-MM-DD")
+        //   ]
+        // );
 
         return result;
       },
