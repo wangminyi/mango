@@ -13,6 +13,13 @@ Rails.application.routes.draw do
   get "auth/wechat/callback", to: "wx#oauth_callback"
   get "auth/failure", to: "wx#oauth_failure"
 
+  namespace :weixin do
+    get :test_weixin
+    get :current_status
+    post :start_recording
+    post :stop_recording
+  end
+
   namespace :wx do
     post :notify
   end

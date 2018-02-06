@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171120142811) do
+ActiveRecord::Schema.define(version: 20180206100511) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -154,7 +154,7 @@ ActiveRecord::Schema.define(version: 20171120142811) do
     t.index ["wholesale_order_id"], name: "index_history_logs_on_wholesale_order_id", using: :btree
   end
 
-  create_table "ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string   "name"
     t.string   "alias"
     t.string   "image"
@@ -174,11 +174,11 @@ ActiveRecord::Schema.define(version: 20171120142811) do
     t.string   "secondary_tag"
     t.boolean  "is_hot",                       default: false
     t.integer  "stock_count"
-    t.index ["alias"], name: "index_ingredients_on_alias", using: :btree
+    t.index ["alias"], name: "index_ingredients_on_alias", length: { alias: 191 }, using: :btree
     t.index ["category_id"], name: "index_ingredients_on_category_id", using: :btree
-    t.index ["name"], name: "index_ingredients_on_name", using: :btree
+    t.index ["name"], name: "index_ingredients_on_name", length: { name: 191 }, using: :btree
     t.index ["priority"], name: "index_ingredients_on_priority", using: :btree
-    t.index ["tags"], name: "index_ingredients_on_tags", using: :btree
+    t.index ["tags"], name: "index_ingredients_on_tags", length: { tags: 191 }, using: :btree
   end
 
   create_table "order_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -230,6 +230,18 @@ ActiveRecord::Schema.define(version: 20171120142811) do
     t.index ["pay_status"], name: "index_orders_on_pay_status", using: :btree
     t.index ["receiver_garden"], name: "index_orders_on_receiver_garden", using: :btree
     t.index ["user_id"], name: "index_orders_on_user_id", using: :btree
+  end
+
+  create_table "timeslots", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.string   "slot_type"
+    t.string   "slot_state"
+    t.string   "description"
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["user_id"], name: "index_timeslots_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

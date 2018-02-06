@@ -18,6 +18,15 @@ class User < ApplicationRecord
   has_many :addresses
   has_many :history_logs
   has_many :articles
+  has_many :timeslots
+
+  def recording_timeslots
+    self.timeslots.where(slot_state: :recording)
+  end
+
+  def is_recording?
+    self.recording_timeslots.present?
+  end
 
   def email_required?
     false
