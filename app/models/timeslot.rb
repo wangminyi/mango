@@ -34,8 +34,9 @@ class Timeslot < ApplicationRecord
       id: self.id,
       slot_type: self.slot_type_text,
       slot_state: self.slot_state_text,
-      started_at: self.started_at.strftime("%F %T"),
-      ended_at: (self.ended_at.strftime("%F %T") if self.ended_at),
+      started_at: self.started_at.strftime("%Y/%m/%d %T"),
+      ended_at: (self.ended_at.strftime("%Y/%m/%d %T") if self.ended_at),
+      current_time: Time.current.strftime("%Y/%m/%d %T"),
     }
   end
 end
