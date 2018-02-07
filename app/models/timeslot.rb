@@ -32,11 +32,11 @@ class Timeslot < ApplicationRecord
   def as_json
     {
       id: self.id,
-      slot_type: self.slot_type_text,
-      slot_state: self.slot_state_text,
-      started_at: self.started_at.strftime("%Y/%m/%d %T"),
-      ended_at: (self.ended_at.strftime("%Y/%m/%d %T") if self.ended_at),
-      current_time: Time.current.strftime("%Y/%m/%d %T"),
+      slot_type: self.slot_type,
+      slot_state: self.slot_state,
+      started_at: self.started_at.strftime("%F %T"),
+      ended_at: (self.ended_at.strftime("%F %T") if self.ended_at),
+      current_duration: Time.current.to_i - self.started_at.to_i
     }
   end
 end

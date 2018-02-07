@@ -29,7 +29,7 @@ class WeixinController < ApplicationController
     timeslot = current_user.recording_timeslots.find(params[:id])
     if timeslot.stop
       render json: {
-        data: timeslot.as_json
+        current_slot: timeslot.as_json
       }
     else
       head :unprocessable_entity
